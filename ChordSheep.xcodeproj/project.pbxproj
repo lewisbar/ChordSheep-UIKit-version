@@ -3,18 +3,38 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FA0E674B86A28AB87BB26E8 /* Pods_ChordSheep_ChordSheepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C4669A6C70925A17744F9F5 /* Pods_ChordSheep_ChordSheepUITests.framework */; };
 		7C158CB123C7D0940059795F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CB023C7D0940059795F /* AppDelegate.swift */; };
 		7C158CB323C7D0940059795F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CB223C7D0940059795F /* SceneDelegate.swift */; };
-		7C158CB523C7D0940059795F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CB423C7D0940059795F /* ViewController.swift */; };
-		7C158CB823C7D0940059795F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C158CB623C7D0940059795F /* Main.storyboard */; };
+		7C158CB523C7D0940059795F /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CB423C7D0940059795F /* MainVC.swift */; };
 		7C158CBA23C7D0950059795F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C158CB923C7D0950059795F /* Assets.xcassets */; };
 		7C158CBD23C7D0950059795F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C158CBB23C7D0950059795F /* LaunchScreen.storyboard */; };
 		7C158CC823C7D0960059795F /* ChordSheepTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CC723C7D0960059795F /* ChordSheepTests.swift */; };
 		7C158CD323C7D0960059795F /* ChordSheepUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CD223C7D0960059795F /* ChordSheepUITests.swift */; };
+		7C158CE123C7DCE80059795F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C158CE023C7DCE80059795F /* GoogleService-Info.plist */; };
+		7C158CE323CCD7810059795F /* PageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CE223CCD7810059795F /* PageVC.swift */; };
+		7C158CE523CCD7EB0059795F /* OverviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CE423CCD7EB0059795F /* OverviewVC.swift */; };
+		7C158CE723CCD8170059795F /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CE623CCD8170059795F /* ListVC.swift */; };
+		7C158CE923CCDA020059795F /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CE823CCDA010059795F /* ListCell.swift */; };
+		7C158CEB23CCDB880059795F /* DiscreteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CEA23CCDB880059795F /* DiscreteButton.swift */; };
+		7C158CED23CCDB970059795F /* SongVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CEC23CCDB970059795F /* SongVC.swift */; };
+		7C158CF123CCDC420059795F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CF023CCDC420059795F /* Song.swift */; };
+		7C158CF823CCDCDE0059795F /* TextViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CF523CCDCDD0059795F /* TextViewVC.swift */; };
+		7C158CF923CCDCDE0059795F /* EditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CF623CCDCDE0059795F /* EditVC.swift */; };
+		7C158CFA23CCDCDE0059795F /* AddVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CF723CCDCDE0059795F /* AddVC.swift */; };
+		7C158CFC23CCE03F0059795F /* ModalBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CFB23CCE03F0059795F /* ModalBar.swift */; };
+		7C158CFE23CCE0680059795F /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CFD23CCE0670059795F /* Style.swift */; };
+		7C158D0023CCE0850059795F /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CFF23CCE0850059795F /* SongCell.swift */; };
+		7C158D0223CCE09A0059795F /* ButtonHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0123CCE09A0059795F /* ButtonHeader.swift */; };
+		7C158D0523CDFE150059795F /* Songlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0423CDFE150059795F /* Songlist.swift */; };
+		7C158D0723CE02830059795F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0623CE02830059795F /* User.swift */; };
+		7C158D0923CE02920059795F /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0823CE02920059795F /* Band.swift */; };
+		7C25F9896C1C57F9BF95B658 /* Pods_ChordSheepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BA924CDD8224EB2233E6FA /* Pods_ChordSheepTests.framework */; };
+		8C07AD4DF53A40C3B3051855 /* Pods_ChordSheep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DF16B36AF3E54F0842606AD /* Pods_ChordSheep.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,11 +55,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2793A651137C41F3B598907D /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep-ChordSheepUITests.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		3DF16B36AF3E54F0842606AD /* Pods_ChordSheep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		456778D99CFBEB0B60CA8A2A /* Pods-ChordSheepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheepTests.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheepTests/Pods-ChordSheepTests.debug.xcconfig"; sourceTree = "<group>"; };
+		57BA924CDD8224EB2233E6FA /* Pods_ChordSheepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C158CAD23C7D0940059795F /* ChordSheep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChordSheep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C158CB023C7D0940059795F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C158CB223C7D0940059795F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		7C158CB423C7D0940059795F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		7C158CB723C7D0940059795F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7C158CB423C7D0940059795F /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		7C158CB923C7D0950059795F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7C158CBC23C7D0950059795F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C158CBE23C7D0950059795F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +72,29 @@
 		7C158CCE23C7D0960059795F /* ChordSheepUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChordSheepUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C158CD223C7D0960059795F /* ChordSheepUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordSheepUITests.swift; sourceTree = "<group>"; };
 		7C158CD423C7D0960059795F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7C158CE023C7DCE80059795F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7C158CE223CCD7810059795F /* PageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageVC.swift; sourceTree = "<group>"; };
+		7C158CE423CCD7EB0059795F /* OverviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewVC.swift; sourceTree = "<group>"; };
+		7C158CE623CCD8170059795F /* ListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
+		7C158CE823CCDA010059795F /* ListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
+		7C158CEA23CCDB880059795F /* DiscreteButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscreteButton.swift; sourceTree = "<group>"; };
+		7C158CEC23CCDB970059795F /* SongVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongVC.swift; sourceTree = "<group>"; };
+		7C158CF023CCDC420059795F /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		7C158CF523CCDCDD0059795F /* TextViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewVC.swift; sourceTree = "<group>"; };
+		7C158CF623CCDCDE0059795F /* EditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVC.swift; sourceTree = "<group>"; };
+		7C158CF723CCDCDE0059795F /* AddVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVC.swift; sourceTree = "<group>"; };
+		7C158CFB23CCE03F0059795F /* ModalBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalBar.swift; sourceTree = "<group>"; };
+		7C158CFD23CCE0670059795F /* Style.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
+		7C158CFF23CCE0850059795F /* SongCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongCell.swift; sourceTree = "<group>"; };
+		7C158D0123CCE09A0059795F /* ButtonHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonHeader.swift; sourceTree = "<group>"; };
+		7C158D0423CDFE150059795F /* Songlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Songlist.swift; sourceTree = "<group>"; };
+		7C158D0623CE02830059795F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		7C158D0823CE02920059795F /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
+		7C4669A6C70925A17744F9F5 /* Pods_ChordSheep_ChordSheepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheep_ChordSheepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9173DFBDE9476C76DD347EF2 /* Pods-ChordSheep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheep/Pods-ChordSheep.debug.xcconfig"; sourceTree = "<group>"; };
+		9E8A1E816C9D67800A7B990D /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep-ChordSheepUITests.release.xcconfig"; path = "Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests.release.xcconfig"; sourceTree = "<group>"; };
+		9F3A269C488B7C4E6635ECE3 /* Pods-ChordSheep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep.release.xcconfig"; path = "Target Support Files/Pods-ChordSheep/Pods-ChordSheep.release.xcconfig"; sourceTree = "<group>"; };
+		A5EDA05B1F0188B0FE7E5F9A /* Pods-ChordSheepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheepTests.release.xcconfig"; path = "Target Support Files/Pods-ChordSheepTests/Pods-ChordSheepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C07AD4DF53A40C3B3051855 /* Pods_ChordSheep.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C25F9896C1C57F9BF95B658 /* Pods_ChordSheepTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,12 +118,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FA0E674B86A28AB87BB26E8 /* Pods_ChordSheep_ChordSheepUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0372D635F51A17D61424D3D6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9173DFBDE9476C76DD347EF2 /* Pods-ChordSheep.debug.xcconfig */,
+				9F3A269C488B7C4E6635ECE3 /* Pods-ChordSheep.release.xcconfig */,
+				2793A651137C41F3B598907D /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */,
+				9E8A1E816C9D67800A7B990D /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */,
+				456778D99CFBEB0B60CA8A2A /* Pods-ChordSheepTests.debug.xcconfig */,
+				A5EDA05B1F0188B0FE7E5F9A /* Pods-ChordSheepTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		7C158CA423C7D0940059795F = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +145,8 @@
 				7C158CC623C7D0960059795F /* ChordSheepTests */,
 				7C158CD123C7D0960059795F /* ChordSheepUITests */,
 				7C158CAE23C7D0940059795F /* Products */,
+				0372D635F51A17D61424D3D6 /* Pods */,
+				9747215C72EB81B20B452A22 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,11 +165,14 @@
 			children = (
 				7C158CB023C7D0940059795F /* AppDelegate.swift */,
 				7C158CB223C7D0940059795F /* SceneDelegate.swift */,
-				7C158CB423C7D0940059795F /* ViewController.swift */,
-				7C158CB623C7D0940059795F /* Main.storyboard */,
+				7C158D0323CDFBE70059795F /* Data */,
+				7C158CFD23CCE0670059795F /* Style.swift */,
+				7C158CF323CCDC9B0059795F /* View Controllers */,
+				7C158CF423CCDCCD0059795F /* Views */,
 				7C158CB923C7D0950059795F /* Assets.xcassets */,
 				7C158CBB23C7D0950059795F /* LaunchScreen.storyboard */,
 				7C158CBE23C7D0950059795F /* Info.plist */,
+				7C158CE023C7DCE80059795F /* GoogleService-Info.plist */,
 			);
 			path = ChordSheep;
 			sourceTree = "<group>";
@@ -128,6 +195,54 @@
 			path = ChordSheepUITests;
 			sourceTree = "<group>";
 		};
+		7C158CF323CCDC9B0059795F /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7C158CB423C7D0940059795F /* MainVC.swift */,
+				7C158CE223CCD7810059795F /* PageVC.swift */,
+				7C158CEC23CCDB970059795F /* SongVC.swift */,
+				7C158CE423CCD7EB0059795F /* OverviewVC.swift */,
+				7C158CE623CCD8170059795F /* ListVC.swift */,
+				7C158CF723CCDCDE0059795F /* AddVC.swift */,
+				7C158CF623CCDCDE0059795F /* EditVC.swift */,
+				7C158CF523CCDCDD0059795F /* TextViewVC.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		7C158CF423CCDCCD0059795F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7C158CFF23CCE0850059795F /* SongCell.swift */,
+				7C158CE823CCDA010059795F /* ListCell.swift */,
+				7C158CEA23CCDB880059795F /* DiscreteButton.swift */,
+				7C158D0123CCE09A0059795F /* ButtonHeader.swift */,
+				7C158CFB23CCE03F0059795F /* ModalBar.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7C158D0323CDFBE70059795F /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				7C158D0623CE02830059795F /* User.swift */,
+				7C158D0823CE02920059795F /* Band.swift */,
+				7C158CF023CCDC420059795F /* Song.swift */,
+				7C158D0423CDFE150059795F /* Songlist.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		9747215C72EB81B20B452A22 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3DF16B36AF3E54F0842606AD /* Pods_ChordSheep.framework */,
+				7C4669A6C70925A17744F9F5 /* Pods_ChordSheep_ChordSheepUITests.framework */,
+				57BA924CDD8224EB2233E6FA /* Pods_ChordSheepTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,9 +250,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C158CD723C7D0960059795F /* Build configuration list for PBXNativeTarget "ChordSheep" */;
 			buildPhases = (
+				54175D826B58F6B3BF19B0A1 /* [CP] Check Pods Manifest.lock */,
 				7C158CA923C7D0940059795F /* Sources */,
 				7C158CAA23C7D0940059795F /* Frameworks */,
 				7C158CAB23C7D0940059795F /* Resources */,
+				E5B8F9C7E8CEE4A361C766A7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -152,6 +269,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C158CDA23C7D0960059795F /* Build configuration list for PBXNativeTarget "ChordSheepTests" */;
 			buildPhases = (
+				750CA2A7DFFE52DBAB918089 /* [CP] Check Pods Manifest.lock */,
 				7C158CBF23C7D0960059795F /* Sources */,
 				7C158CC023C7D0960059795F /* Frameworks */,
 				7C158CC123C7D0960059795F /* Resources */,
@@ -170,9 +288,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C158CDD23C7D0960059795F /* Build configuration list for PBXNativeTarget "ChordSheepUITests" */;
 			buildPhases = (
+				C3710670A2118599552D1CA8 /* [CP] Check Pods Manifest.lock */,
 				7C158CCA23C7D0960059795F /* Sources */,
 				7C158CCB23C7D0960059795F /* Frameworks */,
 				7C158CCC23C7D0960059795F /* Resources */,
+				E78A18432BC29ACE540E4B6F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -234,7 +354,7 @@
 			files = (
 				7C158CBD23C7D0950059795F /* LaunchScreen.storyboard in Resources */,
 				7C158CBA23C7D0950059795F /* Assets.xcassets in Resources */,
-				7C158CB823C7D0940059795F /* Main.storyboard in Resources */,
+				7C158CE123C7DCE80059795F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,14 +374,134 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		54175D826B58F6B3BF19B0A1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChordSheep-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		750CA2A7DFFE52DBAB918089 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChordSheepTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C3710670A2118599552D1CA8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChordSheep-ChordSheepUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E5B8F9C7E8CEE4A361C766A7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E78A18432BC29ACE540E4B6F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		7C158CA923C7D0940059795F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C158CB523C7D0940059795F /* ViewController.swift in Sources */,
+				7C158D0023CCE0850059795F /* SongCell.swift in Sources */,
+				7C158CE723CCD8170059795F /* ListVC.swift in Sources */,
+				7C158D0923CE02920059795F /* Band.swift in Sources */,
+				7C158CE523CCD7EB0059795F /* OverviewVC.swift in Sources */,
+				7C158CB523C7D0940059795F /* MainVC.swift in Sources */,
+				7C158CE923CCDA020059795F /* ListCell.swift in Sources */,
+				7C158D0223CCE09A0059795F /* ButtonHeader.swift in Sources */,
+				7C158CFE23CCE0680059795F /* Style.swift in Sources */,
+				7C158CF123CCDC420059795F /* Song.swift in Sources */,
+				7C158CE323CCD7810059795F /* PageVC.swift in Sources */,
+				7C158CF823CCDCDE0059795F /* TextViewVC.swift in Sources */,
+				7C158CFC23CCE03F0059795F /* ModalBar.swift in Sources */,
+				7C158CFA23CCDCDE0059795F /* AddVC.swift in Sources */,
+				7C158CED23CCDB970059795F /* SongVC.swift in Sources */,
 				7C158CB123C7D0940059795F /* AppDelegate.swift in Sources */,
+				7C158D0523CDFE150059795F /* Songlist.swift in Sources */,
+				7C158CEB23CCDB880059795F /* DiscreteButton.swift in Sources */,
+				7C158CF923CCDCDE0059795F /* EditVC.swift in Sources */,
 				7C158CB323C7D0940059795F /* SceneDelegate.swift in Sources */,
+				7C158D0723CE02830059795F /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,14 +537,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		7C158CB623C7D0940059795F /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7C158CB723C7D0940059795F /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		7C158CBB23C7D0950059795F /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -432,6 +664,7 @@
 		};
 		7C158CD823C7D0960059795F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9173DFBDE9476C76DD347EF2 /* Pods-ChordSheep.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -450,6 +683,7 @@
 		};
 		7C158CD923C7D0960059795F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F3A269C488B7C4E6635ECE3 /* Pods-ChordSheep.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -468,6 +702,7 @@
 		};
 		7C158CDB23C7D0960059795F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 456778D99CFBEB0B60CA8A2A /* Pods-ChordSheepTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -490,6 +725,7 @@
 		};
 		7C158CDC23C7D0960059795F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A5EDA05B1F0188B0FE7E5F9A /* Pods-ChordSheepTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -512,6 +748,7 @@
 		};
 		7C158CDE23C7D0960059795F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2793A651137C41F3B598907D /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -532,6 +769,7 @@
 		};
 		7C158CDF23C7D0960059795F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E8A1E816C9D67800A7B990D /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

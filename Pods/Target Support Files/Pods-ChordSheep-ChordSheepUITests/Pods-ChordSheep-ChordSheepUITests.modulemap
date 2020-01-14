@@ -1,0 +1,6 @@
+framework module Pods_ChordSheep_ChordSheepUITests {
+  umbrella header "Pods-ChordSheep-ChordSheepUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

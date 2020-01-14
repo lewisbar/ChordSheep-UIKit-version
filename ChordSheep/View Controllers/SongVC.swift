@@ -1,0 +1,115 @@
+//
+//  SongVC.swift
+//  Choly
+//
+//  Created by Lennart Wisbar on 13.02.19.
+//  Copyright © 2019 Lennart Wisbar. All rights reserved.
+//
+
+import UIKit
+
+//protocol SongVCDelegate: AnyObject {
+//    func receiveUpdate(for: Song)
+//}
+
+class SongVC: UIViewController {
+    
+    // weak var delegate: SongVCDelegate?
+    var songLabel = UILabel()
+    var song: Song? {
+        didSet {
+            songLabel.attributedText = Style.styledText(for: song?.body ?? "")
+        }
+    }
+    var index = 0
+    
+    convenience init(with song: Song, index: Int) {
+        self.init()
+        self.song = song
+        self.index = index
+        songLabel.attributedText = Style.styledText(for: song.body ?? "")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .black
+        let scrollView = UIScrollView()
+        
+        songLabel.lineBreakMode = .byWordWrapping
+        songLabel.numberOfLines = 0
+        songLabel.textColor = .white
+        
+        scrollView.addSubview(songLabel)
+        view.addSubview(scrollView)
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        songLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        var constraints = [
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            songLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 16),
+            songLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            songLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            songLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ]
+        
+        let bottomConstraint = songLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20)
+        bottomConstraint.priority = .defaultLow
+        constraints.append(bottomConstraint)
+        
+        // Use Safe Area for top if available
+        if #available(iOS 11, *) {
+            constraints.append(scrollView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1.0))
+        } else {
+            constraints.append(scrollView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 8))
+        }
+        
+        NSLayoutConstraint.activate(constraints)
+    }
+
+    
+    @IBAction func pinchedOnSongLabel(_ sender: UIPinchGestureRecognizer) {
+        var pointSize = songLabel.font.pointSize * sender.scale
+        
+        // To prevent exponential scaling, reset the scale for each call, but only while the pinch lasts (state == .changed). For the states .began and .ended, don't reset the scale, so the last scale value will be saved for the next pinch, so the scale doesn't jump the next time the user pinches.
+        if sender.state == .changed { sender.scale = 1.0 }
+        
+        let upperBound: CGFloat = 70
+        let lowerBound: CGFloat = 10
+        
+        if pointSize < lowerBound {
+            pointSize = lowerBound
+        }
+        else if pointSize > upperBound {
+            pointSize = upperBound
+        }
+        
+        songLabel.font = UIFont(name: songLabel.font.fontName, size: pointSize)
+    }
+    
+//    @IBAction func listButtonPressed(_ sender: UIButton) {
+//        if let mainVC =  mainVC,
+//            let container = mainVC.listContainer,
+//            let stackView = mainVC.containerStackView {
+//            
+//            UIView.animate(withDuration: 0.3) {
+//                container.isHidden = !container.isHidden
+//                stackView.layoutIfNeeded()
+//            }
+//        }
+//    }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let nav = segue.destination as? UINavigationController,
+//            let editVC = nav.topViewController as? EditVC,
+//            let song = self.song {
+//            editVC.song = song
+//        }
+//    }
+//
+//    @IBAction func unwindToSongVC(_ segue: UIStoryboardSegue) {
+//        // Needs to be here to be able to have an unwind segue
+//    }
+}
