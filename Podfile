@@ -13,6 +13,7 @@ target 'ChordSheep' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'Firebase/Performance'
+  pod 'FirebaseUI'
 
   target 'ChordSheepTests' do
     inherit! :search_paths

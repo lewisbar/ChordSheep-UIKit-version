@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import FirebaseUI
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
 
     var window: UIWindow?
 
@@ -22,12 +23,38 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
 
             let window = UIWindow(windowScene: windowScene)
-            let mainVC = MainVC()
-
-            window.rootViewController = mainVC
+            
+            if Auth.auth().currentUser == nil {
+                guard let authUI = FUIAuth.defaultAuthUI() else { print("AuthUI couldn't be created"); fatalError() }
+                authUI.delegate = self
+                let providers: [FUIAuthProvider] = [
+                    FUIEmailAuth()
+                ]
+                authUI.providers = providers
+                let authVC = authUI.authViewController()
+                window.rootViewController = authVC
+            } else {
+                // For debugging: try! Auth.auth().signOut()
+                window.rootViewController = MainVC()
+            }
 
             self.window = window
             window.makeKeyAndVisible()
+        }
+    }
+
+    func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
+        if let error = error {
+            print(error.localizedDescription)
+        }
+        
+        if let user = authUI.auth?.currentUser {
+            // Show MainVC
+            if let window = self.window {
+                window.rootViewController = MainVC()
+                window.makeKeyAndVisible()
+            }
+            // TODO: Connect with user database
         }
     }
 
