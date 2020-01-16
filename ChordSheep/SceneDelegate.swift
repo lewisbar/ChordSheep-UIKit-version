@@ -34,7 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
                 let authVC = authUI.authViewController()
                 window.rootViewController = authVC
             } else {
-                // For debugging: try! Auth.auth().signOut()
+                try! Auth.auth().signOut()
                 window.rootViewController = MainVC()
             }
 
@@ -48,14 +48,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
             print(error.localizedDescription)
         }
         
-        if let user = authUI.auth?.currentUser {
-            // TODO: Connect with user database
-            user.uid
+        guard let user = authDataResult?.user else { fatalError("Sign in didn't work. No user returned.") }  // TODO: Notify user and go back to sign in page to try again
+        let db = Firestore.firestore()
+        if authDataResult?.additionalUserInfo?.isNewUser ?? false {
+            print("Storing uid")
+            db.collection("users").addDocument(data: ["uid": user.uid])
         }
-
+        
         // Show MainVC
         window!.rootViewController = MainVC()
         window!.makeKeyAndVisible()
+        
+        // TODO: Display songs and lists from the users's database
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
