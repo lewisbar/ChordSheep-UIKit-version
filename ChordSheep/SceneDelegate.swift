@@ -49,13 +49,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
         }
         
         if let user = authUI.auth?.currentUser {
-            // Show MainVC
-            if let window = self.window {
-                window.rootViewController = MainVC()
-                window.makeKeyAndVisible()
-            }
             // TODO: Connect with user database
+            user.uid
         }
+
+        // Show MainVC
+        window!.rootViewController = MainVC()
+        window!.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
