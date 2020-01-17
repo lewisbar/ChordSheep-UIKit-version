@@ -52,7 +52,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
         let db = Firestore.firestore()
         if authDataResult?.additionalUserInfo?.isNewUser ?? false {
             print("Storing uid")
-            db.collection("users").addDocument(data: ["uid": user.uid])
+            // db.collection("users").addDocument(data: ["uid": user.uid])
+            db.collection("users").document(user.uid).setData(["name": user.displayName ?? ""])  // TODO: Prompt user to enter display name if there is none
         }
         
         // Show MainVC
