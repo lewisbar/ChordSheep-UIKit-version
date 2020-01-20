@@ -132,9 +132,10 @@ extension ListVC: AddVCDelegate {
 
 extension ListVC: EditVCDelegate {
     func updateSong(with text: String) {
+        // TODO: Do we still need this? The song should be directly updated in the database. This VC should have a listener installed to update the song via the database.
         guard let oldRow = selection else { print("No song selected"); return }
         guard let song = songs?[oldRow] else { print("Song doesn't exist"); return }
-        song.text = text
+        // song.text = text
         guard let newRow = songs?.index(of: song) else { print("Song not in list"); return }
 
         let oldPath = IndexPath(row: oldRow, section: 0)

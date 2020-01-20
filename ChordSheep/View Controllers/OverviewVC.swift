@@ -12,10 +12,16 @@ import Firebase
 class OverviewVC: UITableViewController {
 
     var mainVC: MainVC?
+    var db: Firestore!
+    var bandID = "bWKUThcaXl3RX9ElTELf"  // TODO: Don't hardcode
+    var songlists = [Songlist]()
+    var snapshotListener: ListenerRegistration?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        db = Firestore.firestore()
+        
         tableView.register(ListCell.self, forCellReuseIdentifier: "listCell")
         
         // Uncomment the following line to preserve selection between presentations
@@ -23,7 +29,24 @@ class OverviewVC: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        // loadData()
     }
+    
+//    func loadData() {
+//        db.collection("bands").document(bandID).collection("lists").getDocuments() {
+//            querySnapshot, error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                return
+//            }
+//            self.songlists = querySnapshot!.documents.compactMap({ Songlist(dictionary: $0.data()) })
+//            print(self.songlists.count)
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -34,7 +57,20 @@ class OverviewVC: UITableViewController {
         // Show no song
         mainVC?.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
         
-        tableView.reloadData()
+        snapshotListener = db.collection("bands").document(bandID).collection("lists").addSnapshotListener() {snapshot, error in
+            guard let snapshot = snapshot?.documents else {
+                print(error!.localizedDescription)
+                return
+            }
+            self.songlists = snapshot.map { Songlist(from: $0.data()) }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        snapshotListener?.remove()
     }
 
     
@@ -45,7 +81,7 @@ class OverviewVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // TODO: return number of lists in database
-        return 0
+        return songlists.count + 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,9 +91,8 @@ class OverviewVC: UITableViewController {
         switch indexPath.row {
         case 0:
             cell.textLabel?.text = "All Songs"
-        // TODO: Use list titles from database
         default:
-            break
+            cell.textLabel?.text = songlists[indexPath.row - 1].title
         }
         
         return cell

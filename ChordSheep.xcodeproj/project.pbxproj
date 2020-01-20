@@ -34,6 +34,7 @@
 		7C158D0723CE02830059795F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0623CE02830059795F /* User.swift */; };
 		7C158D0923CE02920059795F /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0823CE02920059795F /* Band.swift */; };
 		7C25F9896C1C57F9BF95B658 /* Pods_ChordSheepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BA924CDD8224EB2233E6FA /* Pods_ChordSheepTests.framework */; };
+		7C990FB723D64251008544C7 /* DocumentSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C990FB623D64251008544C7 /* DocumentSerializable.swift */; };
 		8C07AD4DF53A40C3B3051855 /* Pods_ChordSheep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DF16B36AF3E54F0842606AD /* Pods_ChordSheep.framework */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,7 @@
 		7C158D0623CE02830059795F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7C158D0823CE02920059795F /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
 		7C4669A6C70925A17744F9F5 /* Pods_ChordSheep_ChordSheepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheep_ChordSheepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C990FB623D64251008544C7 /* DocumentSerializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSerializable.swift; sourceTree = "<group>"; };
 		9173DFBDE9476C76DD347EF2 /* Pods-ChordSheep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheep/Pods-ChordSheep.debug.xcconfig"; sourceTree = "<group>"; };
 		9E8A1E816C9D67800A7B990D /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep-ChordSheepUITests.release.xcconfig"; path = "Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9F3A269C488B7C4E6635ECE3 /* Pods-ChordSheep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep.release.xcconfig"; path = "Target Support Files/Pods-ChordSheep/Pods-ChordSheep.release.xcconfig"; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				7C158D0823CE02920059795F /* Band.swift */,
 				7C158CF023CCDC420059795F /* Song.swift */,
 				7C158D0423CDFE150059795F /* Songlist.swift */,
+				7C990FB623D64251008544C7 /* DocumentSerializable.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -519,6 +522,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C158D0023CCE0850059795F /* SongCell.swift in Sources */,
+				7C990FB723D64251008544C7 /* DocumentSerializable.swift in Sources */,
 				7C158CE723CCD8170059795F /* ListVC.swift in Sources */,
 				7C158D0923CE02920059795F /* Band.swift in Sources */,
 				7C158CE523CCD7EB0059795F /* OverviewVC.swift in Sources */,

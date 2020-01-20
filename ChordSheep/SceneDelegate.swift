@@ -34,7 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
                 let authVC = authUI.authViewController()
                 window.rootViewController = authVC
             } else {
-                try! Auth.auth().signOut()
+                // try! Auth.auth().signOut()
                 window.rootViewController = MainVC()
             }
 

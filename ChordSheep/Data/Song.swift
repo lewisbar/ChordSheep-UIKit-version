@@ -8,17 +8,14 @@
 
 import Foundation
 
-class Song: Equatable, Comparable {
-    static func == (lhs: Song, rhs: Song) -> Bool {
-        return lhs.text == rhs.text
-    }
-    
-    static func < (lhs: Song, rhs: Song) -> Bool {
-        return lhs.text < rhs.text
-    }
+struct Song {
     
     // TODO: Create my own data types for key and signature?
-    var text = ""
+    var text = "" {
+        didSet {
+            evaluateText()
+        }
+    }
     var title = ""
     var artist: String?
     var key: String?
@@ -46,12 +43,9 @@ class Song: Equatable, Comparable {
     }
     
     
-    // Using this initializer automatically adds the song to the database
-    convenience init(with text: String) {
-        self.init()
+    init(with text: String) {
         self.text = text
-        // TODO: Add to database
-        evaluateText()
+        // evaluateText()
     }
     
     enum Key: String {
@@ -131,7 +125,7 @@ class Song: Equatable, Comparable {
         }
     }
     
-    func evaluateText() {
+    mutating func evaluateText() {
         let lines = text.components(separatedBy: .newlines)
         var lineIndex = -1
         
@@ -194,5 +188,30 @@ class Song: Equatable, Comparable {
     
     func delete() {
         // TODO: Delete from database. But does this really need this wrapper function?
+    }
+}
+
+
+extension Song: DocumentSerializable {
+    init(from dict: [String: Any]) {
+        self.text = dict["text"] as? String ?? ""
+        self.title = dict["title"] as? String ?? ""
+        self.artist = dict["artist"] as? String
+        self.key = dict["key"] as? String
+        self.tempo = dict["tempo"] as? Int
+        self.signature = dict["signature"] as? String
+        self.body = dict["body"] as? String
+    }
+}
+
+
+extension Song: Equatable, Comparable {
+    
+    static func == (lhs: Song, rhs: Song) -> Bool {
+        return lhs.text == rhs.text
+    }
+    
+    static func < (lhs: Song, rhs: Song) -> Bool {
+        return lhs.text < rhs.text
     }
 }
