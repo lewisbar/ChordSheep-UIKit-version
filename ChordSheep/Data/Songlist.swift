@@ -14,27 +14,9 @@ struct Songlist {
     
     var title = ""
     var songRefs = [DocumentReference]()
-    lazy var songs: [Song] = computeSongs()
     var date: Date?
+    var ref: DocumentReference
     
-    func computeSongs() -> [Song] {
-        var songs = [Song]()
-        for songRef in songRefs {
-            songRef.getDocument() {
-                songDoc, error in
-                guard let songDoc = songDoc else {
-                    print(error!.localizedDescription)
-                    return
-                }
-                guard let songData = songDoc.data() else {
-                    print("Song document is empty")
-                    return
-                }
-                songs.append(Song(from: songData))
-            }
-        }
-        return songs
-    }
 //    var dictionary: [String: Any] {
 //        if let date = date {
 //            return [
@@ -52,10 +34,11 @@ struct Songlist {
 
 extension Songlist: DocumentSerializable {
     
-    init(from dict: [String : Any]) {
+    init(from dict: [String : Any], reference: DocumentReference) {
         self.title = dict["title"] as? String ?? ""
         self.date = dict["date"] as? Date
         self.songRefs = dict["songs"] as? [DocumentReference] ?? []
+        self.ref = reference
     }
 }
 

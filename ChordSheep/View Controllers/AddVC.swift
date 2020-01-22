@@ -18,7 +18,9 @@ class AddVC: TextViewVC {
     
     override func doneButtonPressed() {
         songTextView.resignFirstResponder()  // Otherwise the keyboard disappears a bit after the AddVC
-        self.delegate?.receive(newSong: Song(with: self.songTextView.text))
+        
+        // TODO: Write directly to database
+        // self.delegate?.receive(newSong: Song(with: self.songTextView.text))
         dismiss(animated: true)
     }
 }

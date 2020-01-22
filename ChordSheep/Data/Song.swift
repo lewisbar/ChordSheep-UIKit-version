@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 struct Song {
     
@@ -22,6 +23,7 @@ struct Song {
     var tempo: Int?
     var signature: String?
     var body: String?
+    var ref: DocumentReference
     
     
     // Compose a summary of all meta data for the detail label in the songlist
@@ -43,10 +45,11 @@ struct Song {
     }
     
     
-    init(with text: String) {
-        self.text = text
-        // evaluateText()
-    }
+//    init(with text: String) {
+//        self.text = text
+//        // evaluateText()
+//        self.ref = DocumentReference()  // TODO: Where should the real reference be obtained?
+//    }
     
     enum Key: String {
         case c = "C"
@@ -193,7 +196,7 @@ struct Song {
 
 
 extension Song: DocumentSerializable {
-    init(from dict: [String: Any]) {
+    init(from dict: [String: Any], reference: DocumentReference) {
         self.text = dict["text"] as? String ?? ""
         self.title = dict["title"] as? String ?? ""
         self.artist = dict["artist"] as? String
@@ -201,6 +204,7 @@ extension Song: DocumentSerializable {
         self.tempo = dict["tempo"] as? Int
         self.signature = dict["signature"] as? String
         self.body = dict["body"] as? String
+        self.ref = reference
     }
 }
 

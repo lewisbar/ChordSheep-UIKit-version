@@ -11,7 +11,7 @@ import Firebase
 
 class OverviewVC: UITableViewController {
 
-    var mainVC: MainVC?
+    var mainVC: MainVC!
     var db: Firestore!
     var bandID = "bWKUThcaXl3RX9ElTELf"  // TODO: Don't hardcode
     var songlists = [Songlist]()
@@ -52,17 +52,17 @@ class OverviewVC: UITableViewController {
         super.viewWillAppear(animated)
         
         // Hide Edit Button
-        mainVC?.pageVC.editButton.isHidden = true
+        mainVC.pageVC.editButton.isHidden = true
         
         // Show no song
-        mainVC?.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
+        mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
         
         snapshotListener = db.collection("bands").document(bandID).collection("lists").addSnapshotListener() {snapshot, error in
             guard let snapshot = snapshot?.documents else {
                 print(error!.localizedDescription)
                 return
             }
-            self.songlists = snapshot.map { Songlist(from: $0.data()) }
+            self.songlists = snapshot.map { Songlist(from: $0.data(), reference: $0.reference) }
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -70,6 +70,7 @@ class OverviewVC: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         snapshotListener?.remove()
     }
 
@@ -105,8 +106,9 @@ class OverviewVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        // TODO: Navigate to selected list
+        let songlist = songlists[indexPath.row - 1]
+        let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
+        navigationController?.pushViewController(listVC, animated: true)
     }
     
     // Override to support conditional editing of the table view.

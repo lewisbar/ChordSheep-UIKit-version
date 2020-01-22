@@ -15,35 +15,84 @@ import Firebase
 
 class ListVC: UITableViewController {
 
-    weak var mainVC: MainVC?
-    weak var pageVC: PageVC?
-    var songs: [Song]? { return nil }
-    var listTitle = ""
+    weak var mainVC: MainVC!
+    weak var pageVC: PageVC!
+    var db: Firestore!
+    var snapshotListener: ListenerRegistration?
+    var songlist: Songlist!
+    var songs = [Song]()
     var selection: Int? {
         return tableView.indexPathForSelectedRow?.row
     }
     let tapToDismissKeyboard = UITapGestureRecognizer()
 
+    convenience init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist) {
+        self.init()
+        self.mainVC = mainVC
+        self.pageVC = pageVC
+        self.songlist = songlist
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        db = Firestore.firestore()
+        computeSongs()
+
         tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
         
         self.clearsSelectionOnViewWillAppear = false
         self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    func computeSongs() {
+        for songRef in songlist.songRefs {
+            songRef.getDocument() {
+                songDoc, error in
+                guard let songDoc = songDoc else {
+                    print(error!.localizedDescription)
+                    return
+                }
+                guard let songData = songDoc.data() else {
+                    print("Song document is empty")
+                    return
+                }
+                self.songs.append(Song(from: songData, reference: songRef))
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        super.viewWillAppear(animated)
         
+        snapshotListener = songlist.ref.addSnapshotListener() {snapshot, error in
+            guard let document = snapshot else {
+                print(error!.localizedDescription)
+                return
+            }
+            guard let data = document.data() else {
+                print("Document data was empty.")
+                return
+            }
+            self.songlist = Songlist(from: data, reference: document.reference)
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+                
         // isMovingToParent: Only true on first appearance, not when AddVC is dismissed, so after adding a song, that new song will be selected
-        if isMovingToParent, let songs = self.songs, songs.count > 0 {
+        if isMovingToParent, self.songs.count > 0 {
             pageVC?.view.layoutSubviews() // Else, on first appearance, the song doesn't slide in all the way
             pageVC?.didSelectSongAtRow(0)
             tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
             pageVC?.editButton.isHidden = false
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        snapshotListener?.remove()
     }
     
     // MARK: - Table view data source
@@ -52,20 +101,19 @@ class ListVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songs?.count ?? 0
+        return songs.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "songCell", for: indexPath)
-        if let song = songs?[indexPath.row] {
-            cell.textLabel?.text = song.title
-            cell.detailTextLabel?.text = song.metadataDescription
-        }
+        let song = songs[indexPath.row]
+        cell.textLabel?.text = song.title
+        cell.detailTextLabel?.text = song.metadataDescription
         return cell
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return ButtonHeader(title: listTitle, target: self, selector: #selector(addButtonPressed))
+        return ButtonHeader(title: songlist.title, target: self, selector: #selector(addButtonPressed))
     }
     
     @objc func addButtonPressed() {
@@ -121,7 +169,7 @@ extension ListVC {
 // MARK: Handle new songs and song updates
 extension ListVC: AddVCDelegate {
     func receive(newSong song: Song) {
-        guard let row = songs?.index(of: song) else { return }
+        guard let row = songs.index(of: song) else { return }
         let path = IndexPath(row: row, section: 0)
         tableView.insertRows(at: [path], with: .automatic)
         tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
@@ -134,9 +182,9 @@ extension ListVC: EditVCDelegate {
     func updateSong(with text: String) {
         // TODO: Do we still need this? The song should be directly updated in the database. This VC should have a listener installed to update the song via the database.
         guard let oldRow = selection else { print("No song selected"); return }
-        guard let song = songs?[oldRow] else { print("Song doesn't exist"); return }
+        let song = songs[oldRow]
         // song.text = text
-        guard let newRow = songs?.index(of: song) else { print("Song not in list"); return }
+        guard let newRow = songs.index(of: song) else { print("Song not in list"); return }
 
         let oldPath = IndexPath(row: oldRow, section: 0)
         let newPath = IndexPath(row: newRow, section: 0)

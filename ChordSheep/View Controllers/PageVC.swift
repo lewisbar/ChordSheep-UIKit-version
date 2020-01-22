@@ -117,7 +117,7 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
 // MARK: Handle cell selection in ListVC
 extension PageVC {
     func didSelectSongAtRow(_ index: Int) {
-        guard let song = listVC?.songs?[index] else { return }
+        guard let song = listVC?.songs[index] else { return }
         
         // If nothing is selected yet, the ListVC is just about to appear, so let the song slide in from the right
         guard let selection = listVC?.selection else {

@@ -7,7 +7,8 @@
 //
 
 import Foundation
+import Firebase
 
 protocol DocumentSerializable {
-    init(from dict:[String: Any])
+    init(from dict:[String: Any], reference: DocumentReference)
 }
