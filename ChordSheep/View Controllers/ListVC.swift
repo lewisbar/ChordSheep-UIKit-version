@@ -37,12 +37,12 @@ class ListVC: UITableViewController {
         super.viewDidLoad()
         
         db = Firestore.firestore()
-        computeSongs()
 
         tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
-        
         self.clearsSelectionOnViewWillAppear = false
         self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        computeSongs()
     }
     
     func computeSongs() {
@@ -58,7 +58,9 @@ class ListVC: UITableViewController {
                     return
                 }
                 self.songs.append(Song(from: songData, reference: songRef))
-                self.tableView.reloadData()
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()  //.reloadRows(at: [IndexPath(row: i, section: 0)], with: .automatic) // TODO: For every single song, the whole TableView is reloaded, at least the visible part. But reloadRows didn't work for some reason. Maybe I'll try again later.
+                }
             }
         }
     }
@@ -80,7 +82,7 @@ class ListVC: UITableViewController {
                 self.tableView.reloadData()
             }
         }
-                
+                        
         // isMovingToParent: Only true on first appearance, not when AddVC is dismissed, so after adding a song, that new song will be selected
         if isMovingToParent, self.songs.count > 0 {
             pageVC?.view.layoutSubviews() // Else, on first appearance, the song doesn't slide in all the way
