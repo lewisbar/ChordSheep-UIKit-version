@@ -43,15 +43,15 @@ extension Songlist: DocumentSerializable {
 }
 
 
-extension Songlist: Equatable, Comparable {
-    
-    static func == (lhs: Songlist, rhs: Songlist) -> Bool {
-        return (lhs.title == rhs.title) &&
-            (lhs.songRefs == rhs.songRefs) &&
-            (lhs.date == rhs.date)
-    }
-    
-    static func < (lhs: Songlist, rhs: Songlist) -> Bool {
-        return lhs.title < rhs.title
-    }
-}
+//extension Songlist: Equatable, Comparable {
+//    
+//    static func == (lhs: Songlist, rhs: Songlist) -> Bool {
+//        return (lhs.title == rhs.title) &&
+//            (lhs.songRefs == rhs.songRefs) &&
+//            (lhs.date == rhs.date)
+//    }
+//    
+//    static func < (lhs: Songlist, rhs: Songlist) -> Bool {
+//        return lhs.title < rhs.title
+//    }
+//}

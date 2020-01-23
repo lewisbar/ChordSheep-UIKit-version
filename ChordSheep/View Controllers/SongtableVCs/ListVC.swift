@@ -13,18 +13,9 @@ import Firebase
 //    func didSelectSongAtRow(_ index: Int)
 //}
 
-class ListVC: UITableViewController {
+class ListVC: SongtableVC {
 
-    weak var mainVC: MainVC!
-    weak var pageVC: PageVC!
-    var db: Firestore!
-    var snapshotListener: ListenerRegistration?
     var songlist: Songlist!
-    var songs = [Song]()
-    var selection: Int? {
-        return tableView.indexPathForSelectedRow?.row
-    }
-    let tapToDismissKeyboard = UITapGestureRecognizer()
 
     convenience init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist) {
         self.init()
@@ -33,53 +24,31 @@ class ListVC: UITableViewController {
         self.songlist = songlist
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        db = Firestore.firestore()
-
-        tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
-        self.clearsSelectionOnViewWillAppear = false
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
-        computeSongs()
-    }
-    
-    func computeSongs() {
-        for songRef in songlist.songRefs {
-            songRef.getDocument() {
-                songDoc, error in
-                guard let songDoc = songDoc else {
-                    print(error!.localizedDescription)
-                    return
-                }
-                guard let songData = songDoc.data() else {
-                    print("Song document is empty")
-                    return
-                }
-                self.songs.append(Song(from: songData, reference: songRef))
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()  //.reloadRows(at: [IndexPath(row: i, section: 0)], with: .automatic) // TODO: For every single song, the whole TableView is reloaded, at least the visible part. But reloadRows didn't work for some reason. Maybe I'll try again later.
-                }
-            }
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         snapshotListener = songlist.ref.addSnapshotListener() {snapshot, error in
-            guard let document = snapshot else {
+            guard let snapshot = snapshot else {
                 print(error!.localizedDescription)
                 return
             }
-            guard let data = document.data() else {
-                print("Document data was empty.")
+            guard let songlist = snapshot.get("songs") as? [DocumentReference] else {
+                print("No songs in this list.")
                 return
             }
-            self.songlist = Songlist(from: data, reference: document.reference)
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+            // self.songlist = Songlist(from: data, reference: document.reference)
+
+            for songRef in songlist {
+                songRef.getDocument { document, error in
+                    if let document = document, let data = document.data() {
+                        self.songs.append(Song(from: data, reference: songRef))
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    } else {
+                        print(error!.localizedDescription)
+                    }
+                }
             }
         }
                         
@@ -92,28 +61,8 @@ class ListVC: UITableViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        snapshotListener?.remove()
-    }
     
     // MARK: - Table view data source
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songs.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "songCell", for: indexPath)
-        let song = songs[indexPath.row]
-        cell.textLabel?.text = song.title
-        cell.detailTextLabel?.text = song.metadataDescription
-        return cell
-    }
-    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return ButtonHeader(title: songlist.title, target: self, selector: #selector(addButtonPressed))
     }

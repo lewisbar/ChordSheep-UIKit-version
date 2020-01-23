@@ -6,18 +6,24 @@
 //  Copyright © 2020 Lennart Wisbar. All rights reserved.
 //
 
-import Foundation
+// TODO: It could be that I don't need this class.
 
-class Band: Equatable, Comparable {
-    static func == (lhs: Band, rhs: Band) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    static func < (lhs: Band, rhs: Band) -> Bool {
-        return lhs.name < rhs.name
-    }
-    
-    
+import Foundation
+import Firebase
+
+class Band {
     var name = ""
-    var id: String!
+    // var id: String!
+    var members = [String: Int]()
 }
+
+
+//extension Band: Equatable, Comparable {
+//    static func == (lhs: Band, rhs: Band) -> Bool {
+//        return lhs.id == rhs.id
+//    }
+//
+//    static func < (lhs: Band, rhs: Band) -> Bool {
+//        return lhs.name < rhs.name
+//    }
+//}

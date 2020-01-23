@@ -57,7 +57,7 @@ class OverviewVC: UITableViewController {
         // Show no song
         mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
         
-        snapshotListener = db.collection("bands").document(bandID).collection("lists").addSnapshotListener() {snapshot, error in
+        snapshotListener = db.collection("bands").document(bandID).collection("lists").addSnapshotListener() { snapshot, error in
             guard let snapshot = snapshot?.documents else {
                 print(error!.localizedDescription)
                 return
