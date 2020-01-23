@@ -43,6 +43,7 @@ class ListVC: SongtableVC {
                     if let document = document, let data = document.data() {
                         self.songs.append(Song(from: data, reference: songRef))
                         DispatchQueue.main.async {
+                            // self.tableView.insertRows(at: [IndexPath(row: i, section: 0)], with: .automatic)  // TODO: Try to only reload one row. This line doesn't work.
                             self.tableView.reloadData()
                         }
                     } else {
