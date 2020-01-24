@@ -27,27 +27,26 @@ class ListVC: SongtableVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        snapshotListener = songlist.ref.addSnapshotListener() {snapshot, error in
-            guard let snapshot = snapshot else {
+        snapshotListener = songlist.ref.collection("songs").addSnapshotListener() {snapshot, error in
+            guard let documents = snapshot?.documents else {
                 print(error!.localizedDescription)
                 return
             }
-            guard let songlist = snapshot.get("songs") as? [DocumentReference] else {
-                print("No songs in this list.")
+            guard let songRefs = (documents.map { $0["songRef"] } as? [DocumentReference]) else { print("Songs couldn't be read.")
                 return
             }
-            // self.songlist = Songlist(from: data, reference: document.reference)
-
-            for songRef in songlist {
+            
+            for songRef in songRefs {
                 songRef.getDocument { document, error in
-                    if let document = document, let data = document.data() {
-                        self.songs.append(Song(from: data, reference: songRef))
-                        DispatchQueue.main.async {
-                            // self.tableView.insertRows(at: [IndexPath(row: i, section: 0)], with: .automatic)  // TODO: Try to only reload one row. This line doesn't work.
-                            self.tableView.reloadData()
-                        }
-                    } else {
+                    guard let data = document?.data() else {
                         print(error!.localizedDescription)
+                        return
+                    }
+                    
+                    self.songs.append(Song(from: data, reference: songRef))
+                    DispatchQueue.main.async {
+                        // self.tableView.insertRows(at: [IndexPath(row: i, section: 0)], with: .automatic)  // TODO: Try to only reload one row. This line doesn't work.
+                        self.tableView.reloadData()
                     }
                 }
             }

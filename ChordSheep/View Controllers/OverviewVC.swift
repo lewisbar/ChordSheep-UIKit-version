@@ -107,8 +107,8 @@ class OverviewVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            // TODO: Show all songs
-            print("All Songs is not implemented yet.")
+            let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: db.collection("bands/\(bandID)/songs"))
+            navigationController?.pushViewController(allSongsVC, animated: true)
             return
         }
         let songlist = songlists[indexPath.row - 1]

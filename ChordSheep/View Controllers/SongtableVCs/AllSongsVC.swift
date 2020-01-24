@@ -11,13 +11,13 @@ import Firebase
 
 class AllSongsVC: SongtableVC {
     
-    var bandRef: DocumentReference!
+    var songsRef: CollectionReference!
     
-    convenience init(mainVC: MainVC, pageVC: PageVC, bandRef: DocumentReference) {
+    convenience init(mainVC: MainVC, pageVC: PageVC, songsRef: CollectionReference) {
         self.init()
         self.mainVC = mainVC
         self.pageVC = pageVC
-        self.bandRef = bandRef
+        self.songsRef = songsRef
     }
     
 //    override func computeSongs() {
@@ -36,12 +36,12 @@ class AllSongsVC: SongtableVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        snapshotListener = bandRef.collection("songs").addSnapshotListener() {snapshot, error in
-            guard let snapshot = snapshot?.documents else {
+        snapshotListener = songsRef.order(by: "title").addSnapshotListener() {snapshot, error in
+            guard let documents = snapshot?.documents else {
                 print(error!.localizedDescription)
                 return
             }
-            self.songs = snapshot.map { Song(from: $0.data(), reference: $0.reference) }
+            self.songs = documents.map { Song(from: $0.data(), reference: $0.reference) }
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
