@@ -23,7 +23,7 @@ struct Song {
     var tempo: Int?
     var signature: String?
     var body: String?
-    var ref: DocumentReference
+    var ref: DocumentReference!
     
     
     // Compose a summary of all meta data for the detail label in the songlist
@@ -45,11 +45,10 @@ struct Song {
     }
     
     
-//    init(with text: String) {
-//        self.text = text
-//        // evaluateText()
-//        self.ref = DocumentReference()  // TODO: Where should the real reference be obtained?
-//    }
+    init(with text: String) {
+        self.text = text
+        evaluateText()
+    }
     
     enum Key: String {
         case c = "C"
@@ -205,6 +204,29 @@ extension Song: DocumentSerializable {
         self.signature = dict["signature"] as? String
         self.body = dict["body"] as? String
         self.ref = reference
+    }
+    
+    var dict: [String: Any] {
+        var dict: [String: Any] = [
+            "text": self.text,
+            "title": self.title,
+        ]
+        if let artist = self.artist {
+            dict["artist"] = artist
+        }
+        if let key = self.key {
+            dict["key"] = key
+        }
+        if let tempo = self.tempo {
+            dict["tempo"] = tempo
+        }
+        if let signature = self.signature {
+            dict["signature"] = signature
+        }
+        if let body = self.body {
+            dict["body"] = body
+        }
+        return dict
     }
 }
 

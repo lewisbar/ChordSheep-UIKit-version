@@ -59,8 +59,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
         // Show MainVC
         window!.rootViewController = MainVC()
         window!.makeKeyAndVisible()
-        
-        // TODO: Display songs and lists from the users's database
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

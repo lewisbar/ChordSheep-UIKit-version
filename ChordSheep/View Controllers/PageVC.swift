@@ -10,7 +10,7 @@ import UIKit
 
 class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
 
-    weak var listVC: ListVC?
+    weak var songtableVC: SongtableVC?
     weak var mainVC: MainVC?
     let listButton = DiscreteButton(title: "=", target: self, action: #selector(listButtonPressed(_:)))
     let editButton = DiscreteButton(title: "/", target: self, action: #selector(editButtonPressed(_:)))
@@ -67,13 +67,13 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
         let editVC = EditVC()
         guard let song = (viewControllers?.first as? SongVC)?.song else { return }
         editVC.songTextView.text = song.text
-        editVC.delegate = listVC
+        editVC.delegate = songtableVC
         self.present(editVC, animated: true)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
-        guard let songs = listVC?.songs,
+        guard let songs = songtableVC?.songs,
             let currentVC = viewController as? SongVC
             else { return nil }
         
@@ -87,7 +87,7 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
-        guard let songs = listVC?.songs,
+        guard let songs = songtableVC?.songs,
             let currentVC = viewController as? SongVC
             else { return nil }
         
@@ -100,16 +100,16 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-        listVC?.tableView.isUserInteractionEnabled = false  // Otherwise tapping the list during the transition causes strange behavior
+        songtableVC?.tableView.isUserInteractionEnabled = false  // Otherwise tapping the list during the transition causes strange behavior
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         
-        listVC?.tableView.isUserInteractionEnabled = true  // Has been disabled in func pageViewController(_:willTransitionTo:)
+        songtableVC?.tableView.isUserInteractionEnabled = true  // Has been disabled in func pageViewController(_:willTransitionTo:)
 
         guard let newVC = pageViewController.viewControllers?.first as? SongVC else { return }
         if completed {
-            listVC?.swipedToPosition(newVC.index)
+            songtableVC?.swipedToPosition(newVC.index)
         }
     }
 }
@@ -117,10 +117,10 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
 // MARK: Handle cell selection in ListVC
 extension PageVC {
     func didSelectSongAtRow(_ index: Int) {
-        guard let song = listVC?.songs[index] else { return }
+        guard let song = songtableVC?.songs[index] else { return }
         
         // If nothing is selected yet, the ListVC is just about to appear, so let the song slide in from the right
-        guard let selection = listVC?.selection else {
+        guard let selection = songtableVC?.selection else {
             setViewControllers([SongVC(with: song, index: index)], direction: .forward, animated: true)
             return
         }

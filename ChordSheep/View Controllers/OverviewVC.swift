@@ -31,6 +31,37 @@ class OverviewVC: UITableViewController {
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         // loadData()
+        let song = Song(with:
+        """
+Treu (Du bleibst an meiner Seite)
+Tobias Gerster
+Key: E
+
+Strophe (a):
+   E
+Du bleibst an meiner Seite
+   F#m7
+Du schämst dich nicht für mich
+   A
+Du weißt: Ich bin untreu
+    B
+Und dennoch gehst du nicht
+Du stehst zu unsrer Freundschaft
+Obwohl ich schwierig bin
+Hältst du mir die Treue
+Gehst mit mir durch dick und dünn
+
+Refrain (am):
+        E              A
+Du bist treu, Herr, an jedem neuen Tag
+        E           F#m7             B
+Du bist treu, Herr, auch wenn ich versag
+        E           A
+Bist du treu, Herr, unerschütterlich
+     F#m7        B                    E
+Hält deine Treue mich, du bleibst mir treu
+""")
+        db.collection("bands").document(bandID).collection("songs").addDocument(data: song.dict)
     }
     
 //    func loadData() {
@@ -108,11 +139,13 @@ class OverviewVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: db.collection("bands/\(bandID)/songs"))
+            mainVC.pageVC.songtableVC = allSongsVC
             navigationController?.pushViewController(allSongsVC, animated: true)
             return
         }
         let songlist = songlists[indexPath.row - 1]
         let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
+        mainVC.pageVC.songtableVC = listVC
         navigationController?.pushViewController(listVC, animated: true)
     }
     
