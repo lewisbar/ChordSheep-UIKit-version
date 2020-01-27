@@ -31,37 +31,40 @@ class OverviewVC: UITableViewController {
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         // loadData()
-        let song = Song(with:
-        """
-Treu (Du bleibst an meiner Seite)
-Tobias Gerster
-Key: E
-
-Strophe (a):
-   E
-Du bleibst an meiner Seite
-   F#m7
-Du schämst dich nicht für mich
-   A
-Du weißt: Ich bin untreu
-    B
-Und dennoch gehst du nicht
-Du stehst zu unsrer Freundschaft
-Obwohl ich schwierig bin
-Hältst du mir die Treue
-Gehst mit mir durch dick und dünn
-
-Refrain (am):
-        E              A
-Du bist treu, Herr, an jedem neuen Tag
-        E           F#m7             B
-Du bist treu, Herr, auch wenn ich versag
-        E           A
-Bist du treu, Herr, unerschütterlich
-     F#m7        B                    E
-Hält deine Treue mich, du bleibst mir treu
-""")
-        db.collection("bands").document(bandID).collection("songs").addDocument(data: song.dict)
+//        Importer.text("""
+//Wege vor mir
+//Samuel Harfst
+//Key: F#m
+//Capo: 2
+//
+//  Em        Em/D Cmaj7             Am
+//1. So viele Wege liegen, Herr, vor mir
+//Em        Em/D Cmaj7          Am
+// So wenig Wege führen mich zu dir
+//Em        Em/D    Cmaj7            Am
+// So viele Wege versprechen mir das Glück
+//    Em         Em/D     Cmaj7            Am
+//Doch wohin ich gehe, da führt kein Weg zurück
+//
+//  Em       Em/D      Cmaj7          Am
+//2. Große Gedanken verlaufen sich im Sand
+//Em         Em/D         Cmaj7         Am
+// Geben dem nächsten die Klinke in die Hand
+//Em          Em/D         Cmaj7             Am
+// Vergöttern Wissen, doch wissen nichts von Gott
+//Em        Em/D       Cmaj7           Am
+// Heute am Blühen und morgen schon verdorrt
+//
+//Refrain:
+//Em              D/F#  G6             Am7          Em
+//Herr, an deinem Segen ist mir mehr gelegen als an Gold
+//           D              Cmaj7Bm7
+//Auf deinen Wegen will ich gehn
+//Em              D     Cmaj7          Bm7          Em
+//Herr, an deinen Wegen ist mir mehr gelegen als an Gold
+//           D              Cmaj7Bm7
+//Mit deinem Segen will ich gehn
+//""", bandID: bandID)
     }
     
 //    func loadData() {
