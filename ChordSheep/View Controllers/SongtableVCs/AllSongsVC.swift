@@ -20,19 +20,6 @@ class AllSongsVC: SongtableVC {
         self.songsRef = songsRef
     }
     
-//    override func computeSongs() {
-//        bandRef.collection("songs").addSnapshotListener() { snapshot, error in
-//            guard let snapshot = snapshot?.documents else {
-//                print(error!.localizedDescription)
-//                return
-//            }
-//            self.songs = snapshot.map { Songlist(from: $0.data(), reference: $0.reference) }
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
-//    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -60,17 +47,17 @@ class AllSongsVC: SongtableVC {
     }
     */
 
-    /*
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            let song = self.songs[indexPath.row]
+            song.ref.delete()
+            // tableView.deleteRows(at: [indexPath], with: .fade)
+        } // else if editingStyle == .insert {
+//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//        }
     }
-    */
 
     /*
     // Override to support rearranging the table view.
