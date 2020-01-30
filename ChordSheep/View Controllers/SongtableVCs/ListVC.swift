@@ -50,29 +50,6 @@ class ListVC: SongtableVC {
                     }
                 }
             }
-            
-//            guard let songRefs = snapshot?["songs"] as? [DocumentReference] else {
-//                print("Songs couldn't be read.")
-//                return
-//            }
-            
-//            for songRef in songlist.songRefs {
-//                songRef.getDocument { document, error in
-//                    guard let data = document?.data() else {
-//                        print(songRef.path)
-//                        print(error!.localizedDescription)
-//                        return
-//                    }
-//
-//                    songDict.append(data)
-//
-//                    DispatchQueue.main.async {
-//                        // self.tableView.insertRows(at: [IndexPath(row: i, section: 0)], with: .automatic)  // TODO: Try to only reload one row. This line doesn't work.
-//                        self.tableView.reloadData()
-//                    }
-//                }
-//            }
-//            self.songs = songs
         }
                         
         // isMovingToParent: Only true on first appearance, not when AddVC is dismissed, so after adding a song, that new song will be selected
@@ -90,6 +67,7 @@ class ListVC: SongtableVC {
 //        return ButtonHeader(title: songlist.title, target: self, selector: #selector(addButtonPressed))
 //    }
     
+    // TODO: When adding songs of reordering, maybe the easiest approach is to reinitialize the songlist using the songs array, giving every song the correct index for the map/dict.
     @objc func addButtonPressed() {
         let addVC = AddVC()
         addVC.delegate = self
