@@ -10,12 +10,14 @@ import UIKit
 
 class DiscreteButton: UIButton {
     
-    convenience init(title: String, target: Any?, action: Selector) {
-        self.init(type: .system)
-        self.setTitle(title, for: .normal)
+    convenience init(type: UIButton.ButtonType = UIButton.ButtonType.system, title: String? = nil, target: Any?, action: Selector) {
+        self.init(type: type)
+        if let title = title {
+            self.setTitle(title, for: .normal)
+        }
         self.addTarget(target, action: action, for: .touchUpInside)
-        self.titleLabel?.textColor = .black
-        self.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+        self.tintColor = .black
+        self.backgroundColor = .gunMetal // UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     }
     
     override func layoutSubviews() {

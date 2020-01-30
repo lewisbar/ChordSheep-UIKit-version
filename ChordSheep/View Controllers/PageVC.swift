@@ -12,7 +12,7 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
 
     weak var songtableVC: SongtableVC?
     weak var mainVC: MainVC?
-    let listButton = DiscreteButton(title: "=", target: self, action: #selector(listButtonPressed(_:)))
+    let listButton = DiscreteButton(type: UIButton.ButtonType.close, target: self, action: #selector(listButtonPressed(_:)))
     let editButton = DiscreteButton(title: "/", target: self, action: #selector(editButtonPressed(_:)))
     let pageControl = UIPageControl()  // TODO
     
@@ -61,6 +61,7 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
     
     @objc func listButtonPressed(_ sender: UIButton) {
         mainVC?.toggleList()
+        // TODO: Change listButton style when the list is closed.
     }
     
     @objc func editButtonPressed(_ sender: UIButton) {
