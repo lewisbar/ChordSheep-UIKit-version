@@ -37,8 +37,16 @@ extension Songlist: DocumentSerializable {
     init(from dict: [String : Any], reference: DocumentReference) {
         self.title = dict["title"] as? String ?? ""
         self.date = dict["date"] as? Date
-        self.songRefs = dict["songs"] as? [DocumentReference] ?? []
+        self.songRefs = Songlist.refArray(from: (dict["songs"] as! [String: DocumentReference]))
         self.ref = reference
+    }
+    
+    static func refArray(from dict: [String: DocumentReference]) -> [DocumentReference] {
+        var refs = [DocumentReference]()
+        for i in 0...dict.count-1 {
+            refs.append(dict[String(i)]!)
+        }
+        return refs
     }
 }
 
