@@ -48,6 +48,14 @@ extension Songlist: DocumentSerializable {
         }
         return refs
     }
+    
+    var songRefDict: [String: DocumentReference] {
+        var dict = [String: DocumentReference]()
+        for i in 0...self.songRefs.count-1 {
+            dict[String(i)] = self.songRefs[i]
+        }
+        return dict
+    }
 }
 
 

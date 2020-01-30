@@ -81,14 +81,11 @@ class ListVC: SongtableVC {
 
     
     
-    // TODO: Deleting songs. If last song is deleted, hide edit button
+    // TODO: If last song is deleted, hide edit button?
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            print(indexPath.row)
-            print(songlist.songRefs.count)
-            // songlist.songRefs[indexPath.row].delete()
             songlist.songRefs.remove(at: indexPath.row)
-            songlist.ref.updateData(["songs": songlist.songRefs])
+            songlist.ref.updateData(["songs": songlist.songRefDict])
         }
     }
     
