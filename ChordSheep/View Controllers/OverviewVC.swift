@@ -30,6 +30,10 @@ class OverviewVC: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         
+        // Make the Back button only be an arrow, without a title
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+
+        
         // loadData()
 //        Importer.text("""
 //Wege vor mir
