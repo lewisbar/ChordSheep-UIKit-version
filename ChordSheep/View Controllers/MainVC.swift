@@ -17,7 +17,7 @@ class MainVC: UIViewController {
         super.viewDidLoad()
         
         pageVC.mainVC = self
-        let overviewVC = OverviewVC()
+        let overviewVC = OverviewVC(style: .insetGrouped)
         overviewVC.mainVC = self
         let navVC = UINavigationController(rootViewController: overviewVC)
         navVC.navigationBar.tintColor = .white

@@ -14,7 +14,7 @@ class AllSongsVC: SongtableVC {
     var songsRef: CollectionReference!
     
     convenience init(mainVC: MainVC, pageVC: PageVC, songsRef: CollectionReference) {
-        self.init()
+        self.init(style: .insetGrouped)
         self.mainVC = mainVC
         self.pageVC = pageVC
         self.songsRef = songsRef

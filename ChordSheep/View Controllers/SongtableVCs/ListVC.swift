@@ -18,7 +18,7 @@ class ListVC: SongtableVC {
     var songlist: Songlist!
 
     convenience init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist) {
-        self.init()
+        self.init(style: .insetGrouped)
         self.mainVC = mainVC
         self.pageVC = pageVC
         self.songlist = songlist
