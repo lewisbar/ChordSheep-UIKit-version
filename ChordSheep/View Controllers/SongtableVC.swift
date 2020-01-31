@@ -24,7 +24,7 @@ class SongtableVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = .gunMetal
+        tableView.backgroundColor = .blueCharcoal
         
         db = Firestore.firestore()
 

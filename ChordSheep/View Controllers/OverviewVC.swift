@@ -91,7 +91,7 @@ class OverviewVC: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableView.backgroundColor = .gunMetal
+        tableView.backgroundColor = .blueCharcoal
         
         // Hide Song Edit Button
         mainVC.pageVC.editButton.isHidden = true

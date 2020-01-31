@@ -17,7 +17,7 @@ class DiscreteButton: UIButton {
         }
         self.addTarget(target, action: action, for: .touchUpInside)
         self.tintColor = .black
-        self.backgroundColor = .gunMetal // UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+        self.backgroundColor = .blueCharcoal // UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     }
     
     override func layoutSubviews() {
