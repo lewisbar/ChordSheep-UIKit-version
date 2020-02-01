@@ -65,17 +65,15 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
         let isListVisible = mainVC.toggleList()
 
         // Flip button
-        UIView.animate(withDuration: 1) {
-            if isListVisible {
-                UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromRight, animations: {
-                    self.listButton.setBackgroundImage(PaintCode.imageOfHideListButton, for: .normal)
-                })
-
-            } else {
-                UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromLeft, animations: {
-                    self.listButton.setBackgroundImage(PaintCode.imageOfShowListButton, for: .normal)
-                })
-            }
+        if isListVisible {
+            UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromRight, animations: {
+                self.listButton.setBackgroundImage(PaintCode.imageOfHideListButton, for: .normal)
+            })
+            
+        } else {
+            UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromLeft, animations: {
+                self.listButton.setBackgroundImage(PaintCode.imageOfShowListButton, for: .normal)
+            })
         }
     }
     
