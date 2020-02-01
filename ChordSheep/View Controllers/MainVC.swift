@@ -12,6 +12,7 @@ class MainVC: UIViewController {
     
     let stackView = UIStackView()
     let pageVC = PageVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
+    let listWidthMultiplier: CGFloat = 0.25  // This could be set in the user settings later
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +39,9 @@ class MainVC: UIViewController {
         navVC.view.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
+        let listWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) * self.listWidthMultiplier
         NSLayoutConstraint.activate([
-            navVC.view.widthAnchor.constraint(equalTo: navVC.view.heightAnchor, multiplier: 2 / 10),
+            navVC.view.widthAnchor.constraint(equalToConstant: listWidth),
             stackView.topAnchor.constraint(equalTo: view.topAnchor),
             stackView.rightAnchor.constraint(equalTo: view.rightAnchor),
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
