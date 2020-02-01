@@ -94,7 +94,7 @@ class OverviewVC: UITableViewController {
         tableView.backgroundColor = .blueCharcoal
         
         // Hide Song Edit Button
-        mainVC.pageVC.editButton.isHidden = true
+        // mainVC.pageVC.editButton.isHidden = true
         
         // Show no song
         mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)

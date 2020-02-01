@@ -47,12 +47,14 @@ class MainVC: UIViewController {
             ])
     }
     
-    func toggleList() {
+    func toggleList() -> Bool {
+        guard let list = self.stackView.arrangedSubviews.last else { fatalError("List view controller not found in stack view.") }
         UIView.animate(withDuration: 0.3) {
-            guard let list = self.stackView.arrangedSubviews.last else { return }
             list.isHidden = !list.isHidden
             self.stackView.layoutIfNeeded()
         }
+        // Returns true if the list is visible after toggling
+        return !list.isHidden
     }
 }
 

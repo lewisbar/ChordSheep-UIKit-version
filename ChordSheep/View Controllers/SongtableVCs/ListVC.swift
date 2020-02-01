@@ -57,7 +57,7 @@ class ListVC: SongtableVC {
             pageVC?.view.layoutSubviews() // Else, on first appearance, the song doesn't slide in all the way
             pageVC?.didSelectSongAtRow(0)
             tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
-            pageVC?.editButton.isHidden = false
+            // pageVC?.editButton.isHidden = false
         }
     }
     

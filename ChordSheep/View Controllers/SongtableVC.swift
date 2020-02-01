@@ -125,7 +125,7 @@ extension SongtableVC: AddVCDelegate {
         tableView.insertRows(at: [path], with: .automatic)
         tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
         pageVC?.didSelectSongAtRow(row)
-        pageVC?.editButton.isHidden = false  // In case the list has been empty
+        // pageVC?.editButton.isHidden = false  // In case the list has been empty
     }
 }
 

@@ -12,8 +12,8 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
 
     weak var songtableVC: SongtableVC?
     weak var mainVC: MainVC?
-    let listButton = DiscreteButton(type: UIButton.ButtonType.close, target: self, action: #selector(listButtonPressed(_:)))
-    let editButton = DiscreteButton(title: "/", target: self, action: #selector(editButtonPressed(_:)))
+    var listButton = UIButton.discreteButton(backgroundImage: PaintCode.imageOfHideListButton, target: self, action: #selector(listButtonPressed(_:)))
+    // let editButton = DiscreteButton(title: "/", target: self, action: #selector(editButtonPressed(_:)))
     let pageControl = UIPageControl()  // TODO
     
     override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
@@ -36,32 +36,47 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
     
     func addButtons() {
         view.addSubview(listButton)
-        view.addSubview(editButton)
+        // view.addSubview(editButton)
         listButton.translatesAutoresizingMaskIntoConstraints = false
-        editButton.translatesAutoresizingMaskIntoConstraints = false
+        // editButton.translatesAutoresizingMaskIntoConstraints = false
         
         var buttonConstraints = [
             listButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             listButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -8),
-            listButton.heightAnchor.constraint(equalToConstant: 40),
-            listButton.widthAnchor.constraint(equalToConstant: 40),
-            editButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            editButton.heightAnchor.constraint(equalToConstant: 40),
-            editButton.widthAnchor.constraint(equalToConstant: 40)
+            listButton.heightAnchor.constraint(equalToConstant: 44),
+            listButton.widthAnchor.constraint(equalToConstant: 44),
+//            editButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+//            editButton.heightAnchor.constraint(equalToConstant: 44),
+//            editButton.widthAnchor.constraint(equalToConstant: 44)
         ]
-        // Use Safe Area for top if available
-        if #available(iOS 11, *) {
-            buttonConstraints.append(editButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1.0))
-        } else {
-            buttonConstraints.append(editButton.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 8))
-        }
+        // buttonConstraints.append(editButton.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1.0))
+
+//        // Use Safe Area for top if available
+//        if #available(iOS 11, *) {
+//        } else {
+//            buttonConstraints.append(editButton.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 8))
+//        }
         
         NSLayoutConstraint.activate(buttonConstraints)
     }
     
     @objc func listButtonPressed(_ sender: UIButton) {
-        mainVC?.toggleList()
-        // TODO: Change listButton style when the list is closed.
+        guard let mainVC = mainVC else { return }
+        let isListVisible = mainVC.toggleList()
+
+        // Flip button
+        UIView.animate(withDuration: 1) {
+            if isListVisible {
+                UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromRight, animations: {
+                    self.listButton.setBackgroundImage(PaintCode.imageOfHideListButton, for: .normal)
+                })
+
+            } else {
+                UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromLeft, animations: {
+                    self.listButton.setBackgroundImage(PaintCode.imageOfShowListButton, for: .normal)
+                })
+            }
+        }
     }
     
     @objc func editButtonPressed(_ sender: UIButton) {
