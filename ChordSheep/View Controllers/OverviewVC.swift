@@ -13,9 +13,25 @@ class OverviewVC: UITableViewController {
 
     var mainVC: MainVC!
     var db: Firestore!
-    var bandID = "bWKUThcaXl3RX9ElTELf"  // TODO: Don't hardcode
-    var songlists = [Songlist]()
-    var snapshotListener: ListenerRegistration?
+    var currentBandRef: DocumentReference? {
+        if bands.count > 0 {
+            return self.bands[self.activeSection].ref
+        }
+        return nil
+    }
+    var currentBand: Band? {
+        if bands.count > 0 {
+            return bands[activeSection]
+        }
+        return nil
+    }
+    // var bandID = "bWKUThcaXl3RX9ElTELf"  // TODO: Don't hardcode
+    // var bandRefs = [DocumentReference]()
+    // var songlists = [Songlist]()
+    var snapshotListeners = [ListenerRegistration]()
+    var user = User()
+    var bands = [Band]()
+    var activeSection = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,32 +115,65 @@ class OverviewVC: UITableViewController {
         // Show no song
         mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
         
-        snapshotListener = db.collection("bands").document(bandID).collection("lists").addSnapshotListener() { snapshot, error in
-            guard let snapshot = snapshot?.documents else {
-                print(error!.localizedDescription)
-                return
+        // Listen for the currently logged in user
+        let authHandle = Auth.auth().addStateDidChangeListener { (auth, user) in
+            guard let user = user else { print("No user logged in"); return }
+            self.user.name = user.displayName ?? user.email ?? user.phoneNumber ?? "Unknown User"
+            self.user.uid = user.uid
+//            self.user.transpositions = user.transpositions
+//            self.user.notes = user.notes
+//            self.user.zoomLevels = user.zoomLevels
+            
+            // Listen to the bands the user is in
+            let bandListener = self.db.collection("bands").whereField("members.\(user.uid)", isGreaterThan: -1).addSnapshotListener() { querySnapshot, error in
+                guard let userBands = querySnapshot?.documents else {
+                    print("The user's bands could not be fetched.")
+                    return
+                }
+                
+                // For every one of the user's bands, listen to the bands lists
+                // self.bands.removeAll()
+                self.bands = userBands.map { Band(name: $0.data()["name"] as! String, ref: $0.reference) }
+                for band in self.bands {
+                    // guard let bandName = band.data()["name"] as? String else { continue }
+                    // var currentBand = Band(name: bandName, ref: band.reference)
+                    // self.bands.append(currentBand)
+                    
+                    let listListener = band.ref.collection("lists").addSnapshotListener() { snapshot, error in
+                        guard let snapshot = snapshot?.documents else {
+                            print(error!.localizedDescription)
+                            return
+                        }
+                        band.songlists = snapshot.map { Songlist(from: $0.data(), reference: $0.reference) }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+                    self.snapshotListeners.append(listListener)
+                }
             }
-            self.songlists = snapshot.map { Songlist(from: $0.data(), reference: $0.reference) }
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+            self.snapshotListeners.append(bandListener)
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        snapshotListener?.remove()
+        for snapshotListener in snapshotListeners {
+            snapshotListener.remove()
+        }
     }
 
     
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return bands.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // TODO: return number of lists in database
-        return songlists.count + 1
+        if activeSection == section, let count = currentBand?.songlists.count {
+            return count + 1
+        }
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -135,10 +184,24 @@ class OverviewVC: UITableViewController {
         case 0:
             cell.textLabel?.text = "All Songs"
         default:
-            cell.textLabel?.text = songlists[indexPath.row - 1].title
+            cell.textLabel?.text = currentBand?.songlists[indexPath.row - 1].title
         }
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let button = UIButton()
+        button.setTitle(bands[section].name, for: .normal)
+        button.frame.size.height = 60
+        button.tag = section
+        button.addTarget(self, action: #selector(openSection(sender:)), for: .touchUpInside)
+        return button
+    }
+    
+    @objc func openSection(sender: UIButton) {
+        activeSection = sender.tag
+        tableView.reloadData()
     }
 
     
@@ -148,13 +211,14 @@ class OverviewVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let bandRef = currentBandRef, let band = currentBand else { return }
         if indexPath.row == 0 {
-            let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: db.collection("bands/\(bandID)/songs"))
+            let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: bandRef.collection("songs"))  // db.collection("bands/\(bandID)/songs"))
             mainVC.pageVC.songtableVC = allSongsVC
             navigationController?.pushViewController(allSongsVC, animated: true)
             return
         }
-        let songlist = songlists[indexPath.row - 1]
+        let songlist = band.songlists[indexPath.row - 1]
         let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
         mainVC.pageVC.songtableVC = listVC
         navigationController?.pushViewController(listVC, animated: true)

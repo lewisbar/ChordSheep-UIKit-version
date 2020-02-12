@@ -12,9 +12,17 @@ import Foundation
 import Firebase
 
 class Band {
-    var name = ""
+    var name: String
+    var ref: DocumentReference
+    var songlists: [Songlist]
     // var id: String!
-    var members = [String: Int]()
+    // var members = [String: Int]()
+    
+    init(name: String, ref: DocumentReference, songlists: [Songlist] = [Songlist]()) {
+        self.name = name
+        self.ref = ref
+        self.songlists = songlists
+    }
 }
 
 
