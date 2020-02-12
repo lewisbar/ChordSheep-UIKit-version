@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct User: Equatable, Comparable {
+class User: Equatable, Comparable {
     static func == (lhs: User, rhs: User) -> Bool {
         return lhs.uid == rhs.uid
     }
