@@ -16,7 +16,7 @@ class OverviewVC: UITableViewController {
     var snapshotListeners = [ListenerRegistration]()
     var user = User()
     var bands = [Band]()
-    var openSections = Set<Int>()
+    var closedSections = Set<Int>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -157,7 +157,7 @@ class OverviewVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if openSections.contains(section) {
+        if !closedSections.contains(section) {
             return bands[section].songlists.count + 1
         }
         return 0
@@ -190,13 +190,12 @@ class OverviewVC: UITableViewController {
     }
     
     @objc func toggleOpenSection(sender: UIButton) {
-        if openSections.contains(sender.tag) {
-            // If the tapped section is already open, close it
-            openSections.remove(sender.tag)
+        if closedSections.contains(sender.tag) {
+            closedSections.remove(sender.tag)
         } else {
-            openSections.insert(sender.tag)
+            closedSections.insert(sender.tag)
         }
-        tableView.reloadData()
+        tableView.reloadSections(IndexSet(integer: sender.tag), with: .automatic)
     }
 
     
