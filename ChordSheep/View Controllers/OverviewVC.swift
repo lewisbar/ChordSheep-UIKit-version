@@ -195,12 +195,17 @@ class OverviewVC: UITableViewController {
         button.setTitle(bands[section].name, for: .normal)
         button.frame.size.height = 60
         button.tag = section
-        button.addTarget(self, action: #selector(openSection(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(toggleOpenSection(sender:)), for: .touchUpInside)
         return button
     }
     
-    @objc func openSection(sender: UIButton) {
-        activeSection = sender.tag
+    @objc func toggleOpenSection(sender: UIButton) {
+        if activeSection == sender.tag {
+            // If the tapped section is already open, close it
+            activeSection = -1
+        } else {
+            activeSection = sender.tag
+        }
         tableView.reloadData()
     }
 
