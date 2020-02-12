@@ -13,25 +13,10 @@ class OverviewVC: UITableViewController {
 
     var mainVC: MainVC!
     var db: Firestore!
-    var currentBandRef: DocumentReference? {
-        if bands.count > 0 {
-            return self.bands[self.activeSection].ref
-        }
-        return nil
-    }
-    var currentBand: Band? {
-        if bands.count > 0 {
-            return bands[activeSection]
-        }
-        return nil
-    }
-    // var bandID = "bWKUThcaXl3RX9ElTELf"  // TODO: Don't hardcode
-    // var bandRefs = [DocumentReference]()
-    // var songlists = [Songlist]()
     var snapshotListeners = [ListenerRegistration]()
     var user = User()
     var bands = [Band]()
-    var activeSection = 0
+    var openSections = Set<Int>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,8 +157,8 @@ class OverviewVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if activeSection == section, let count = currentBand?.songlists.count {
-            return count + 1
+        if openSections.contains(section) {
+            return bands[section].songlists.count + 1
         }
         return 0
     }
@@ -186,7 +171,7 @@ class OverviewVC: UITableViewController {
         case 0:
             cell.textLabel?.text = "All Songs"
         default:
-            cell.textLabel?.text = currentBand?.songlists[indexPath.row - 1].title
+            cell.textLabel?.text = bands[indexPath.section].songlists[indexPath.row - 1].title
         }
         
         return cell
@@ -205,11 +190,11 @@ class OverviewVC: UITableViewController {
     }
     
     @objc func toggleOpenSection(sender: UIButton) {
-        if activeSection == sender.tag {
+        if openSections.contains(sender.tag) {
             // If the tapped section is already open, close it
-            activeSection = -1
+            openSections.remove(sender.tag)
         } else {
-            activeSection = sender.tag
+            openSections.insert(sender.tag)
         }
         tableView.reloadData()
     }
@@ -221,9 +206,11 @@ class OverviewVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let bandRef = currentBandRef, let band = currentBand else { return }
+        // guard let bandRef = currentBandRef, let band = currentBand else { return }
+        let band = bands[indexPath.section]
         if indexPath.row == 0 {
-            let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: bandRef.collection("songs"))  // db.collection("bands/\(bandID)/songs"))
+            let songsRef = band.ref.collection("songs")
+            let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: songsRef)  // db.collection("bands/\(bandID)/songs"))
             mainVC.pageVC.songtableVC = allSongsVC
             navigationController?.pushViewController(allSongsVC, animated: true)
             return
