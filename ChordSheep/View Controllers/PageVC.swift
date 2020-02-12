@@ -31,7 +31,7 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
         setViewControllers([SongVC()], direction: .forward, animated: false)
         addButtons()
         
-        self.view.backgroundColor = .black  // Without color, added gesture recognizers don't work
+        self.view.backgroundColor = .csDark  // Without color, added gesture recognizers don't work
     }
     
     func addButtons() {

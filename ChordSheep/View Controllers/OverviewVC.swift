@@ -40,6 +40,8 @@ class OverviewVC: UITableViewController {
         
         tableView.register(ListCell.self, forCellReuseIdentifier: "listCell")
         
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 20))
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -107,7 +109,7 @@ class OverviewVC: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableView.backgroundColor = .blueCharcoal
+        tableView.backgroundColor = .csMediumDark
         
         // Hide Song Edit Button
         // mainVC.pageVC.editButton.isHidden = true
@@ -193,7 +195,10 @@ class OverviewVC: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let button = UIButton()
         button.setTitle(bands[section].name, for: .normal)
-        button.frame.size.height = 60
+        button.contentEdgeInsets.top = 10
+        button.contentEdgeInsets.bottom = 10
+        button.backgroundColor = .csMedium
+        button.layer.cornerRadius = 5
         button.tag = section
         button.addTarget(self, action: #selector(toggleOpenSection(sender:)), for: .touchUpInside)
         return button

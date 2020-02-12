@@ -109,5 +109,7 @@ struct Style {
 }
 
 extension UIColor {
-    static let blueCharcoal = UIColor(hue: 0.58, saturation: 1.00, brightness: 0.12, alpha: 1.00)
+    static let csMedium = UIColor(hue: 0.58, saturation: 0.50, brightness: 0.20, alpha: 1.00)
+    static let csMediumDark = UIColor(hue: 0.58, saturation: 1.00, brightness: 0.12, alpha: 1.00)
+    static let csDark = UIColor.black
 }
