@@ -22,7 +22,8 @@ class MainVC: UIViewController {
         overviewVC.mainVC = self
         let navVC = UINavigationController(rootViewController: overviewVC)
         navVC.navigationBar.tintColor = .white
-        navVC.navigationBar.backgroundColor = .csMediumDark
+        navVC.navigationBar.barTintColor = .csMediumDark
+        navVC.navigationBar.isTranslucent = false
         
         self.addChild(pageVC)
         self.addChild(navVC)
