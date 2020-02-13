@@ -40,6 +40,11 @@ class AllSongsVC: SongtableVC {
         }
     }
     
+    @objc override func addButtonPressed() {
+        let addVC = AddVC()
+        addVC.delegate = self
+        self.present(addVC, animated: true)
+    }
 
     // MARK: - Table view data source
 
@@ -56,7 +61,7 @@ class AllSongsVC: SongtableVC {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let song = self.songs[indexPath.row]
-            song.ref.delete()
+            song.ref?.delete()
         }
     }
 
@@ -83,6 +88,16 @@ class AllSongsVC: SongtableVC {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
-    */
-
+     */
+    
+    override func receive(newSong song: Song) {
+        // Add song to database
+        songsRef.addDocument(data: song.dict)
+        
+        //        guard let row = songs.index(of: song) else { return }
+        //        let path = IndexPath(row: row, section: 0)
+        //        tableView.insertRows(at: [path], with: .automatic)
+        //        tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
+        //        pageVC?.didSelectSongAtRow(row)
+    }
 }

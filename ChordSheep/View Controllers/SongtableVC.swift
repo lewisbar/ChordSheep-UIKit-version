@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class SongtableVC: UITableViewController {
+class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
 
     weak var mainVC: MainVC!
     weak var pageVC: PageVC!
@@ -37,9 +37,17 @@ class SongtableVC: UITableViewController {
 
         tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
         self.clearsSelectionOnViewWillAppear = false
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        let addButton = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addButtonPressed))
+        navigationItem.rightBarButtonItem = addButton
+        navigationItem.rightBarButtonItems = [editButtonItem, addButton]
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         tableView.tableHeaderView = header  // Subclasses can set header.text to set the title
+    }
+    
+    @objc func addButtonPressed() {
+        // Must be implemented by subclasses
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -115,32 +123,13 @@ class SongtableVC: UITableViewController {
     }
     */
 
-}
-
-// MARK: Handle PageVC swipes
-extension SongtableVC {
-    func swipedToPosition(_ index: Int) {
-        let path = IndexPath(row: index, section: 0)
-        tableView.selectRow(at: path, animated: false, scrollPosition: .none) // .none does no scrolling in this method
-        tableView.scrollToNearestSelectedRow(at: .none, animated: true) // because .none does no scrolling in selectRow(...)
-    }
-}
-
-// MARK: Handle new songs and song updates
-extension SongtableVC: AddVCDelegate {
+    
+    // MARK: - Handle new songs and song updates
     func receive(newSong song: Song) {
-        guard let row = songs.index(of: song) else { return }
-        let path = IndexPath(row: row, section: 0)
-        tableView.insertRows(at: [path], with: .automatic)
-        tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
-        pageVC?.didSelectSongAtRow(row)
-        // pageVC?.editButton.isHidden = false  // In case the list has been empty
+        // Implement in subclass
     }
-}
-
-extension SongtableVC: EditVCDelegate {
+    
     func updateSong(with text: String) {
-        // TODO: Do we still need this? The song should be directly updated in the database. This VC should have a listener installed to update the song via the database.
         guard let oldRow = selection else { print("No song selected"); return }
         let song = songs[oldRow]
         // song.text = text
@@ -155,6 +144,16 @@ extension SongtableVC: EditVCDelegate {
         pageVC?.didSelectSongAtRow(newRow)
     }
 }
+
+// MARK: Handle PageVC swipes
+extension SongtableVC {
+    func swipedToPosition(_ index: Int) {
+        let path = IndexPath(row: index, section: 0)
+        tableView.selectRow(at: path, animated: false, scrollPosition: .none) // .none does no scrolling in this method
+        tableView.scrollToNearestSelectedRow(at: .none, animated: true) // because .none does no scrolling in selectRow(...)
+    }
+}
+
 
 extension SongtableVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {

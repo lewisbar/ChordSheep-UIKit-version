@@ -23,7 +23,7 @@ struct Song {
     var tempo: Int?
     var signature: String?
     var body: String?
-    var ref: DocumentReference!
+    var ref: DocumentReference?
     
     
     // Compose a summary of all meta data for the detail label in the songlist

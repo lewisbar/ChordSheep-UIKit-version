@@ -46,7 +46,9 @@ class ListVC: SongtableVC {
                 songRef.getDocument { document, error in
                     guard let data = document?.data() else {
                         print(songRef.path)
-                        print(error!.localizedDescription)
+                        if let error = error {
+                            print(error.localizedDescription)
+                        }
                         return
                     }
                     self.songs[i] = Song(from: data, reference: songRef)
@@ -73,11 +75,8 @@ class ListVC: SongtableVC {
 //    }
     
     // TODO: When adding songs of reordering, maybe the easiest approach is to reinitialize the songlist using the songs array, giving every song the correct index for the map/dict.
-    @objc func addButtonPressed() {
-        let addVC = AddVC()
-        addVC.delegate = self
-        self.present(addVC, animated: true)
-    }
+    // I don't understand my own TODO anymore. I don't know if it's outdated.
+
     
 //    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 //        return 60
