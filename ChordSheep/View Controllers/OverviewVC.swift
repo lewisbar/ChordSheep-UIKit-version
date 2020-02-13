@@ -25,7 +25,10 @@ class OverviewVC: UITableViewController {
         
         tableView.register(ListCell.self, forCellReuseIdentifier: "listCell")
         
+        // Add a padding above the first section
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 20))
+        
+        tableView.backgroundColor = .csMediumDark
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -93,9 +96,7 @@ class OverviewVC: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        tableView.backgroundColor = .csMediumDark
-        
+                
         // Hide Song Edit Button
         // mainVC.pageVC.editButton.isHidden = true
         
