@@ -20,6 +20,13 @@ class SongtableVC: UITableViewController {
         return tableView.indexPathForSelectedRow?.row
     }
     let tapToDismissKeyboard = UITapGestureRecognizer()
+    let header: UILabel = {
+        let header = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
+        header.font = UIFont.systemFont(ofSize: 24)
+        header.textAlignment = .center
+        header.adjustsFontSizeToFitWidth = true
+        return header
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +38,8 @@ class SongtableVC: UITableViewController {
         tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
         self.clearsSelectionOnViewWillAppear = false
         self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        tableView.tableHeaderView = header  // Subclasses can set header.text to set the title
     }
     
     override func viewWillDisappear(_ animated: Bool) {

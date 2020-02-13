@@ -24,6 +24,11 @@ class ListVC: SongtableVC {
         self.songlist = songlist
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        header.text = songlist.title
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -79,7 +84,10 @@ class ListVC: SongtableVC {
 //    }
     
 
-    
+    // TODO: Implement blocks (like worship blocks) with titles. Uses those titles here
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return blocks[section].title
+//    }
     
     // TODO: If last song is deleted, hide edit button?
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

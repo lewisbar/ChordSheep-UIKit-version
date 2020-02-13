@@ -20,6 +20,11 @@ class AllSongsVC: SongtableVC {
         self.songsRef = songsRef
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        header.text = "All Songs"
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
