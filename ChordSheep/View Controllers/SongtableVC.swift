@@ -27,11 +27,12 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         header.adjustsFontSizeToFitWidth = true
         return header
     }()
+    let editButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = .csMediumDark
+        tableView.backgroundColor = PaintCode.mediumDark
         
         db = Firestore.firestore()
 
@@ -39,8 +40,12 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         self.clearsSelectionOnViewWillAppear = false
         
         let addButton = UIBarButtonItem(image: PaintCode.imageOfPlusIcon, style: .plain, target: self, action: #selector(addButtonPressed))
-        let editButton = UIBarButtonItem(image: PaintCode.imageOfEditIcon, style: .plain, target: self, action: #selector(editButtonPressed))
-        navigationItem.rightBarButtonItems = [editButton, addButton]
+        // let editButton = UIBarButtonItem(image: PaintCode.imageOfEditIcon, style: .plain, target: self, action: #selector(editButtonPressed))
+        editButton.setBackgroundImage(PaintCode.imageOfEditIcon, for: .normal)
+        editButton.setBackgroundImage(PaintCode.imageOfEditIconActive, for: .selected)
+        editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
+        let editButtonItem = UIBarButtonItem(customView: editButton)
+        navigationItem.rightBarButtonItems = [editButtonItem, addButton]
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         tableView.tableHeaderView = header  // Subclasses can set header.text to set the title
@@ -51,7 +56,13 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     }
     
     @objc func editButtonPressed() {
-        tableView.setEditing(!tableView.isEditing, animated: true)
+        if !tableView.isEditing {
+            tableView.setEditing(true, animated: true)
+            editButton.isSelected = true
+        } else {
+            tableView.setEditing(false, animated: true)
+            editButton.isSelected = false
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

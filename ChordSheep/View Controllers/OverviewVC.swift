@@ -17,6 +17,7 @@ class OverviewVC: UITableViewController {
     var user = User()
     var bands = [Band]()
     var closedSections = Set<Int>()
+    let editButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,15 +29,15 @@ class OverviewVC: UITableViewController {
         // Add a padding above the first section
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 20))
         
-        tableView.backgroundColor = .csMediumDark
+        tableView.backgroundColor = PaintCode.mediumDark
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        // self.editButtonItem.title = "\u{2630}"  // TODO: Use an image
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        editButton.setBackgroundImage(PaintCode.imageOfEditIcon, for: .normal)
+        editButton.setBackgroundImage(PaintCode.imageOfEditIconActive, for: .selected)
+        editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editButton)
         
         // Make the Back button only be an arrow, without a title
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -93,6 +94,16 @@ class OverviewVC: UITableViewController {
 //            }
 //        }
 //    }
+    
+    @objc func editButtonPressed() {
+        if !tableView.isEditing {
+            tableView.setEditing(true, animated: true)
+            editButton.isSelected = true
+        } else {
+            tableView.setEditing(false, animated: true)
+            editButton.isSelected = false
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -183,7 +194,7 @@ class OverviewVC: UITableViewController {
         button.setTitle(bands[section].name, for: .normal)
         button.contentEdgeInsets.top = 10
         button.contentEdgeInsets.bottom = 10
-        button.backgroundColor = .csMedium
+        button.backgroundColor = PaintCode.medium
         button.layer.cornerRadius = 5
         button.tag = section
         button.addTarget(self, action: #selector(toggleOpenSection(sender:)), for: .touchUpInside)

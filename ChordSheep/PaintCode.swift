@@ -18,8 +18,11 @@ public class PaintCode : NSObject {
     //// Cache
 
     private struct Cache {
-        static let backgroundColor: UIColor = UIColor(red: 0.000, green: 0.063, blue: 0.122, alpha: 1.000)
-        static let iconColor: UIColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+        static let light: UIColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+        static let highlight: UIColor = UIColor(red: 0.250, green: 0.640, blue: 1.000, alpha: 1.000)
+        static let medium: UIColor = UIColor(red: 0.100, green: 0.152, blue: 0.200, alpha: 1.000)
+        static let mediumDark: UIColor = UIColor(red: 0.000, green: 0.062, blue: 0.120, alpha: 1.000)
+        static let dark: UIColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
         static var imageOfHideListButton: UIImage?
         static var hideListButtonTargets: [AnyObject]?
         static var imageOfCancelButton: UIImage?
@@ -30,16 +33,25 @@ public class PaintCode : NSObject {
         static var showListButtonTargets: [AnyObject]?
         static var imageOfAddButton: UIImage?
         static var addButtonTargets: [AnyObject]?
+        static var imageOfPlusIconComic: UIImage?
+        static var plusIconComicTargets: [AnyObject]?
+        static var imageOfEditIconComic: UIImage?
+        static var editIconComicTargets: [AnyObject]?
         static var imageOfPlusIcon: UIImage?
         static var plusIconTargets: [AnyObject]?
         static var imageOfEditIcon: UIImage?
         static var editIconTargets: [AnyObject]?
+        static var imageOfEditIconActive: UIImage?
+        static var editIconActiveTargets: [AnyObject]?
     }
 
     //// Colors
 
-    @objc dynamic public class var backgroundColor: UIColor { return Cache.backgroundColor }
-    @objc dynamic public class var iconColor: UIColor { return Cache.iconColor }
+    @objc dynamic public class var light: UIColor { return Cache.light }
+    @objc dynamic public class var highlight: UIColor { return Cache.highlight }
+    @objc dynamic public class var medium: UIColor { return Cache.medium }
+    @objc dynamic public class var mediumDark: UIColor { return Cache.mediumDark }
+    @objc dynamic public class var dark: UIColor { return Cache.dark }
 
     //// Drawing Methods
 
@@ -63,7 +75,7 @@ public class PaintCode : NSObject {
         bezierPath.addCurve(to: CGPoint(x: 22, y: 44), controlPoint1: CGPoint(x: 0, y: 34.15), controlPoint2: CGPoint(x: 9.85, y: 44))
         bezierPath.close()
         bezierPath.usesEvenOddFillRule = true
-        PaintCode.backgroundColor.setFill()
+        PaintCode.mediumDark.setFill()
         bezierPath.fill()
 
 
@@ -78,7 +90,7 @@ public class PaintCode : NSObject {
         bezier2Path.addCurve(to: CGPoint(x: 29, y: 22), controlPoint1: CGPoint(x: 18.92, y: 12), controlPoint2: CGPoint(x: 29, y: 21.57))
         bezier2Path.close()
         bezier2Path.usesEvenOddFillRule = true
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         bezier2Path.fill()
         
         context.restoreGState()
@@ -105,7 +117,7 @@ public class PaintCode : NSObject {
         bezierPath.addCurve(to: CGPoint(x: 22, y: 44), controlPoint1: CGPoint(x: 0, y: 34.15), controlPoint2: CGPoint(x: 9.85, y: 44))
         bezierPath.close()
         bezierPath.usesEvenOddFillRule = true
-        PaintCode.backgroundColor.setFill()
+        PaintCode.mediumDark.setFill()
         bezierPath.fill()
 
 
@@ -126,7 +138,7 @@ public class PaintCode : NSObject {
         bezier2Path.addCurve(to: CGPoint(x: 13.96, y: 14), controlPoint1: CGPoint(x: 13.5, y: 14), controlPoint2: CGPoint(x: 13.5, y: 14))
         bezier2Path.close()
         bezier2Path.usesEvenOddFillRule = true
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         bezier2Path.fill()
         
         context.restoreGState()
@@ -153,7 +165,7 @@ public class PaintCode : NSObject {
         bezierPath.addCurve(to: CGPoint(x: 22, y: 44), controlPoint1: CGPoint(x: 0, y: 34.15), controlPoint2: CGPoint(x: 9.85, y: 44))
         bezierPath.close()
         bezierPath.usesEvenOddFillRule = true
-        PaintCode.backgroundColor.setFill()
+        PaintCode.mediumDark.setFill()
         bezierPath.fill()
 
 
@@ -168,7 +180,7 @@ public class PaintCode : NSObject {
         bezier2Path.addCurve(to: CGPoint(x: 20, y: 29.5), controlPoint1: CGPoint(x: 34, y: 15.42), controlPoint2: CGPoint(x: 20.43, y: 29.5))
         bezier2Path.close()
         bezier2Path.usesEvenOddFillRule = true
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         bezier2Path.fill()
         
         context.restoreGState()
@@ -195,7 +207,7 @@ public class PaintCode : NSObject {
         bezierPath.addCurve(to: CGPoint(x: 22, y: 44), controlPoint1: CGPoint(x: 0, y: 34.15), controlPoint2: CGPoint(x: 9.85, y: 44))
         bezierPath.close()
         bezierPath.usesEvenOddFillRule = true
-        PaintCode.backgroundColor.setFill()
+        PaintCode.mediumDark.setFill()
         bezierPath.fill()
 
 
@@ -210,7 +222,7 @@ public class PaintCode : NSObject {
         bezier2Path.addCurve(to: CGPoint(x: 15, y: 22), controlPoint1: CGPoint(x: 25.08, y: 32), controlPoint2: CGPoint(x: 15, y: 22.43))
         bezier2Path.close()
         bezier2Path.usesEvenOddFillRule = true
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         bezier2Path.fill()
         
         context.restoreGState()
@@ -237,7 +249,7 @@ public class PaintCode : NSObject {
         bezierPath.addCurve(to: CGPoint(x: 22, y: 44), controlPoint1: CGPoint(x: 0, y: 34.15), controlPoint2: CGPoint(x: 9.85, y: 44))
         bezierPath.close()
         bezierPath.usesEvenOddFillRule = true
-        PaintCode.backgroundColor.setFill()
+        PaintCode.mediumDark.setFill()
         bezierPath.fill()
 
 
@@ -262,7 +274,7 @@ public class PaintCode : NSObject {
         bezier2Path.addCurve(to: CGPoint(x: -8.04, y: -8), controlPoint1: CGPoint(x: -8.5, y: -8), controlPoint2: CGPoint(x: -8.5, y: -8))
         bezier2Path.close()
         bezier2Path.usesEvenOddFillRule = true
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         bezier2Path.fill()
 
         context.restoreGState()
@@ -271,7 +283,7 @@ public class PaintCode : NSObject {
 
     }
 
-    @objc dynamic public class func drawPlusIcon(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {
+    @objc dynamic public class func drawPlusIconComic(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()!
         
@@ -313,7 +325,7 @@ public class PaintCode : NSObject {
 
         //// Rectangle Drawing
         let rectanglePath = UIBezierPath(rect: CGRect(x: -5, y: -5, width: 34, height: 34))
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         rectanglePath.fill()
 
 
@@ -324,7 +336,7 @@ public class PaintCode : NSObject {
 
     }
 
-    @objc dynamic public class func drawEditIcon(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {
+    @objc dynamic public class func drawEditIconComic(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()!
         
@@ -345,7 +357,7 @@ public class PaintCode : NSObject {
         bezierPath.addCurve(to: CGPoint(x: 23.79, y: 11.71), controlPoint1: CGPoint(x: 24.06, y: 11.39), controlPoint2: CGPoint(x: 24.02, y: 11.44))
         bezierPath.close()
         bezierPath.usesEvenOddFillRule = true
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         bezierPath.fill()
 
 
@@ -359,7 +371,7 @@ public class PaintCode : NSObject {
         bezier2Path.addCurve(to: CGPoint(x: 23.79, y: 19.71), controlPoint1: CGPoint(x: 24.06, y: 19.39), controlPoint2: CGPoint(x: 24.02, y: 19.44))
         bezier2Path.close()
         bezier2Path.usesEvenOddFillRule = true
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         bezier2Path.fill()
 
 
@@ -373,7 +385,7 @@ public class PaintCode : NSObject {
         bezier3Path.addCurve(to: CGPoint(x: 23.79, y: 3.71), controlPoint1: CGPoint(x: 24.06, y: 3.39), controlPoint2: CGPoint(x: 24.02, y: 3.44))
         bezier3Path.close()
         bezier3Path.usesEvenOddFillRule = true
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         bezier3Path.fill()
 
 
@@ -396,7 +408,7 @@ public class PaintCode : NSObject {
 
         //// Rectangle Drawing
         let rectanglePath = UIBezierPath(rect: CGRect(x: -5.03, y: -2, width: 12.05, height: 12))
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         rectanglePath.fill()
 
 
@@ -423,7 +435,7 @@ public class PaintCode : NSObject {
 
         //// Rectangle 2 Drawing
         let rectangle2Path = UIBezierPath(rect: CGRect(x: -5.03, y: 6, width: 12.05, height: 12))
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
         rectangle2Path.fill()
 
 
@@ -450,7 +462,334 @@ public class PaintCode : NSObject {
 
         //// Rectangle 3 Drawing
         let rectangle3Path = UIBezierPath(rect: CGRect(x: -5.03, y: 14, width: 12.05, height: 12))
-        PaintCode.iconColor.setFill()
+        PaintCode.light.setFill()
+        rectangle3Path.fill()
+
+
+        context.endTransparencyLayer()
+        context.restoreGState()
+        
+        context.restoreGState()
+
+    }
+
+    @objc dynamic public class func drawPlusIcon(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()!
+        
+        //// Resize to Target Frame
+        context.saveGState()
+        let resizedFrame: CGRect = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)
+        context.translateBy(x: resizedFrame.minX, y: resizedFrame.minY)
+        context.scaleBy(x: resizedFrame.width / 24, y: resizedFrame.height / 24)
+
+
+        //// Group
+        context.saveGState()
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
+
+        //// Clip Clip
+        let clipPath = UIBezierPath()
+        clipPath.move(to: CGPoint(x: 23.74, y: 12.33))
+        clipPath.addCurve(to: CGPoint(x: 12.54, y: 12.45), controlPoint1: CGPoint(x: 23.46, y: 12.6), controlPoint2: CGPoint(x: 15.14, y: 12.55))
+        clipPath.addLine(to: CGPoint(x: 12.55, y: 12.98))
+        clipPath.addCurve(to: CGPoint(x: 12.32, y: 23.74), controlPoint1: CGPoint(x: 12.6, y: 16), controlPoint2: CGPoint(x: 12.58, y: 23.48))
+        clipPath.addLine(to: CGPoint(x: 12.18, y: 23.88))
+        clipPath.addCurve(to: CGPoint(x: 11.69, y: 23.76), controlPoint1: CGPoint(x: 11.99, y: 24.06), controlPoint2: CGPoint(x: 11.95, y: 24.01))
+        clipPath.addCurve(to: CGPoint(x: 11.47, y: 12.62), controlPoint1: CGPoint(x: 11.38, y: 23.45), controlPoint2: CGPoint(x: 11.78, y: 12.93))
+        clipPath.addCurve(to: CGPoint(x: 0.24, y: 12.31), controlPoint1: CGPoint(x: 11.16, y: 12.31), controlPoint2: CGPoint(x: 0.55, y: 12.62))
+        clipPath.addCurve(to: CGPoint(x: 0.26, y: 11.68), controlPoint1: CGPoint(x: -0.07, y: 12.01), controlPoint2: CGPoint(x: -0.07, y: 12.01))
+        clipPath.addCurve(to: CGPoint(x: 11.64, y: 11.55), controlPoint1: CGPoint(x: 0.53, y: 11.41), controlPoint2: CGPoint(x: 9.04, y: 11.45))
+        clipPath.addLine(to: CGPoint(x: 11.63, y: 11.21))
+        clipPath.addCurve(to: CGPoint(x: 11.69, y: 0.25), controlPoint1: CGPoint(x: 11.56, y: 8.31), controlPoint2: CGPoint(x: 11.43, y: 0.51))
+        clipPath.addLine(to: CGPoint(x: 11.83, y: 0.12))
+        clipPath.addCurve(to: CGPoint(x: 12.32, y: 0.23), controlPoint1: CGPoint(x: 12.02, y: -0.06), controlPoint2: CGPoint(x: 12.07, y: -0.02))
+        clipPath.addCurve(to: CGPoint(x: 12.71, y: 11.38), controlPoint1: CGPoint(x: 12.63, y: 0.54), controlPoint2: CGPoint(x: 12.4, y: 11.07))
+        clipPath.addCurve(to: CGPoint(x: 23.76, y: 11.69), controlPoint1: CGPoint(x: 13.01, y: 11.69), controlPoint2: CGPoint(x: 23.45, y: 11.39))
+        clipPath.addLine(to: CGPoint(x: 23.88, y: 11.83))
+        clipPath.addCurve(to: CGPoint(x: 23.74, y: 12.33), controlPoint1: CGPoint(x: 24.05, y: 12.01), controlPoint2: CGPoint(x: 24.01, y: 12.06))
+        clipPath.close()
+        clipPath.usesEvenOddFillRule = true
+        clipPath.addClip()
+
+
+        //// Rectangle Drawing
+        let rectanglePath = UIBezierPath(rect: CGRect(x: -4.98, y: -5, width: 33.95, height: 34))
+        PaintCode.light.setFill()
+        rectanglePath.fill()
+
+
+        context.endTransparencyLayer()
+        context.restoreGState()
+        
+        context.restoreGState()
+
+    }
+
+    @objc dynamic public class func drawEditIcon(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()!
+        
+        //// Resize to Target Frame
+        context.saveGState()
+        let resizedFrame: CGRect = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)
+        context.translateBy(x: resizedFrame.minX, y: resizedFrame.minY)
+        context.scaleBy(x: resizedFrame.width / 24, y: resizedFrame.height / 24)
+
+
+        //// Bezier Drawing
+        let bezierPath = UIBezierPath()
+        bezierPath.move(to: CGPoint(x: 23.75, y: 4.33))
+        bezierPath.addCurve(to: CGPoint(x: 4.2, y: 4.33), controlPoint1: CGPoint(x: 23.51, y: 4.6), controlPoint2: CGPoint(x: 4.46, y: 4.63))
+        bezierPath.addCurve(to: CGPoint(x: 4.21, y: 3.69), controlPoint1: CGPoint(x: 3.93, y: 4.02), controlPoint2: CGPoint(x: 3.93, y: 4.02))
+        bezierPath.addCurve(to: CGPoint(x: 23.76, y: 3.69), controlPoint1: CGPoint(x: 4.45, y: 3.42), controlPoint2: CGPoint(x: 23.5, y: 3.39))
+        bezierPath.addLine(to: CGPoint(x: 23.87, y: 3.82))
+        bezierPath.addCurve(to: CGPoint(x: 23.75, y: 4.33), controlPoint1: CGPoint(x: 24.02, y: 4.01), controlPoint2: CGPoint(x: 23.98, y: 4.05))
+        bezierPath.close()
+        bezierPath.usesEvenOddFillRule = true
+        PaintCode.light.setFill()
+        bezierPath.fill()
+
+
+        //// Bezier 2 Drawing
+        let bezier2Path = UIBezierPath()
+        bezier2Path.move(to: CGPoint(x: 23.75, y: 12.35))
+        bezier2Path.addCurve(to: CGPoint(x: 4.2, y: 12.35), controlPoint1: CGPoint(x: 23.51, y: 12.63), controlPoint2: CGPoint(x: 4.46, y: 12.66))
+        bezier2Path.addCurve(to: CGPoint(x: 4.21, y: 11.72), controlPoint1: CGPoint(x: 3.93, y: 12.04), controlPoint2: CGPoint(x: 3.93, y: 12.04))
+        bezier2Path.addCurve(to: CGPoint(x: 23.76, y: 11.72), controlPoint1: CGPoint(x: 4.45, y: 11.44), controlPoint2: CGPoint(x: 23.5, y: 11.41))
+        bezier2Path.addLine(to: CGPoint(x: 23.87, y: 11.85))
+        bezier2Path.addCurve(to: CGPoint(x: 23.75, y: 12.35), controlPoint1: CGPoint(x: 24.02, y: 12.04), controlPoint2: CGPoint(x: 23.98, y: 12.08))
+        bezier2Path.close()
+        bezier2Path.usesEvenOddFillRule = true
+        PaintCode.light.setFill()
+        bezier2Path.fill()
+
+
+        //// Bezier 3 Drawing
+        let bezier3Path = UIBezierPath()
+        bezier3Path.move(to: CGPoint(x: 23.75, y: 20.35))
+        bezier3Path.addCurve(to: CGPoint(x: 4.2, y: 20.35), controlPoint1: CGPoint(x: 23.51, y: 20.63), controlPoint2: CGPoint(x: 4.46, y: 20.66))
+        bezier3Path.addCurve(to: CGPoint(x: 4.21, y: 19.72), controlPoint1: CGPoint(x: 3.93, y: 20.04), controlPoint2: CGPoint(x: 3.93, y: 20.04))
+        bezier3Path.addCurve(to: CGPoint(x: 23.76, y: 19.72), controlPoint1: CGPoint(x: 4.45, y: 19.44), controlPoint2: CGPoint(x: 23.5, y: 19.41))
+        bezier3Path.addLine(to: CGPoint(x: 23.87, y: 19.85))
+        bezier3Path.addCurve(to: CGPoint(x: 23.75, y: 20.35), controlPoint1: CGPoint(x: 24.02, y: 20.04), controlPoint2: CGPoint(x: 23.98, y: 20.08))
+        bezier3Path.close()
+        bezier3Path.usesEvenOddFillRule = true
+        PaintCode.light.setFill()
+        bezier3Path.fill()
+
+
+        //// Group
+        context.saveGState()
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
+
+        //// Clip Clip
+        let clipPath = UIBezierPath()
+        clipPath.move(to: CGPoint(x: 1.83, y: 4.59))
+        clipPath.addCurve(to: CGPoint(x: 0.2, y: 4.59), controlPoint1: CGPoint(x: 1.59, y: 5.11), controlPoint2: CGPoint(x: 0.46, y: 5.17))
+        clipPath.addCurve(to: CGPoint(x: 0.21, y: 3.41), controlPoint1: CGPoint(x: -0.07, y: 4.02), controlPoint2: CGPoint(x: -0.07, y: 4.02))
+        clipPath.addCurve(to: CGPoint(x: 1.85, y: 3.41), controlPoint1: CGPoint(x: 0.45, y: 2.89), controlPoint2: CGPoint(x: 1.58, y: 2.83))
+        clipPath.addLine(to: CGPoint(x: 1.96, y: 3.65))
+        clipPath.addCurve(to: CGPoint(x: 1.83, y: 4.59), controlPoint1: CGPoint(x: 2.1, y: 4), controlPoint2: CGPoint(x: 2.07, y: 4.09))
+        clipPath.close()
+        clipPath.usesEvenOddFillRule = true
+        clipPath.addClip()
+
+
+        //// Rectangle Drawing
+        let rectanglePath = UIBezierPath(rect: CGRect(x: -5.03, y: -2, width: 12.05, height: 12))
+        PaintCode.light.setFill()
+        rectanglePath.fill()
+
+
+        context.endTransparencyLayer()
+        context.restoreGState()
+
+
+        //// Group 2
+        context.saveGState()
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
+
+        //// Clip Clip 2
+        let clip2Path = UIBezierPath()
+        clip2Path.move(to: CGPoint(x: 1.83, y: 12.59))
+        clip2Path.addCurve(to: CGPoint(x: 0.2, y: 12.59), controlPoint1: CGPoint(x: 1.59, y: 13.11), controlPoint2: CGPoint(x: 0.46, y: 13.17))
+        clip2Path.addCurve(to: CGPoint(x: 0.21, y: 11.41), controlPoint1: CGPoint(x: -0.07, y: 12.02), controlPoint2: CGPoint(x: -0.07, y: 12.02))
+        clip2Path.addCurve(to: CGPoint(x: 1.85, y: 11.41), controlPoint1: CGPoint(x: 0.45, y: 10.89), controlPoint2: CGPoint(x: 1.58, y: 10.83))
+        clip2Path.addLine(to: CGPoint(x: 1.96, y: 11.65))
+        clip2Path.addCurve(to: CGPoint(x: 1.83, y: 12.59), controlPoint1: CGPoint(x: 2.1, y: 12), controlPoint2: CGPoint(x: 2.07, y: 12.09))
+        clip2Path.close()
+        clip2Path.usesEvenOddFillRule = true
+        clip2Path.addClip()
+
+
+        //// Rectangle 2 Drawing
+        let rectangle2Path = UIBezierPath(rect: CGRect(x: -5.03, y: 6, width: 12.05, height: 12))
+        PaintCode.light.setFill()
+        rectangle2Path.fill()
+
+
+        context.endTransparencyLayer()
+        context.restoreGState()
+
+
+        //// Group 3
+        context.saveGState()
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
+
+        //// Clip Clip 3
+        let clip3Path = UIBezierPath()
+        clip3Path.move(to: CGPoint(x: 1.83, y: 20.59))
+        clip3Path.addCurve(to: CGPoint(x: 0.2, y: 20.59), controlPoint1: CGPoint(x: 1.59, y: 21.11), controlPoint2: CGPoint(x: 0.46, y: 21.17))
+        clip3Path.addCurve(to: CGPoint(x: 0.21, y: 19.41), controlPoint1: CGPoint(x: -0.07, y: 20.02), controlPoint2: CGPoint(x: -0.07, y: 20.02))
+        clip3Path.addCurve(to: CGPoint(x: 1.85, y: 19.41), controlPoint1: CGPoint(x: 0.45, y: 18.89), controlPoint2: CGPoint(x: 1.58, y: 18.83))
+        clip3Path.addLine(to: CGPoint(x: 1.96, y: 19.65))
+        clip3Path.addCurve(to: CGPoint(x: 1.83, y: 20.59), controlPoint1: CGPoint(x: 2.1, y: 20), controlPoint2: CGPoint(x: 2.07, y: 20.09))
+        clip3Path.close()
+        clip3Path.usesEvenOddFillRule = true
+        clip3Path.addClip()
+
+
+        //// Rectangle 3 Drawing
+        let rectangle3Path = UIBezierPath(rect: CGRect(x: -5.03, y: 14, width: 12.05, height: 12))
+        PaintCode.light.setFill()
+        rectangle3Path.fill()
+
+
+        context.endTransparencyLayer()
+        context.restoreGState()
+        
+        context.restoreGState()
+
+    }
+
+    @objc dynamic public class func drawEditIconActive(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()!
+        
+        //// Resize to Target Frame
+        context.saveGState()
+        let resizedFrame: CGRect = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)
+        context.translateBy(x: resizedFrame.minX, y: resizedFrame.minY)
+        context.scaleBy(x: resizedFrame.width / 24, y: resizedFrame.height / 24)
+
+
+        //// Bezier Drawing
+        let bezierPath = UIBezierPath()
+        bezierPath.move(to: CGPoint(x: 23.75, y: 4.33))
+        bezierPath.addCurve(to: CGPoint(x: 4.2, y: 4.33), controlPoint1: CGPoint(x: 23.51, y: 4.6), controlPoint2: CGPoint(x: 4.46, y: 4.63))
+        bezierPath.addCurve(to: CGPoint(x: 4.21, y: 3.69), controlPoint1: CGPoint(x: 3.93, y: 4.02), controlPoint2: CGPoint(x: 3.93, y: 4.02))
+        bezierPath.addCurve(to: CGPoint(x: 23.76, y: 3.69), controlPoint1: CGPoint(x: 4.45, y: 3.42), controlPoint2: CGPoint(x: 23.5, y: 3.39))
+        bezierPath.addLine(to: CGPoint(x: 23.87, y: 3.82))
+        bezierPath.addCurve(to: CGPoint(x: 23.75, y: 4.33), controlPoint1: CGPoint(x: 24.02, y: 4.01), controlPoint2: CGPoint(x: 23.98, y: 4.05))
+        bezierPath.close()
+        bezierPath.usesEvenOddFillRule = true
+        PaintCode.highlight.setFill()
+        bezierPath.fill()
+
+
+        //// Bezier 2 Drawing
+        let bezier2Path = UIBezierPath()
+        bezier2Path.move(to: CGPoint(x: 23.75, y: 12.35))
+        bezier2Path.addCurve(to: CGPoint(x: 4.2, y: 12.35), controlPoint1: CGPoint(x: 23.51, y: 12.63), controlPoint2: CGPoint(x: 4.46, y: 12.66))
+        bezier2Path.addCurve(to: CGPoint(x: 4.21, y: 11.72), controlPoint1: CGPoint(x: 3.93, y: 12.04), controlPoint2: CGPoint(x: 3.93, y: 12.04))
+        bezier2Path.addCurve(to: CGPoint(x: 23.76, y: 11.72), controlPoint1: CGPoint(x: 4.45, y: 11.44), controlPoint2: CGPoint(x: 23.5, y: 11.41))
+        bezier2Path.addLine(to: CGPoint(x: 23.87, y: 11.85))
+        bezier2Path.addCurve(to: CGPoint(x: 23.75, y: 12.35), controlPoint1: CGPoint(x: 24.02, y: 12.04), controlPoint2: CGPoint(x: 23.98, y: 12.08))
+        bezier2Path.close()
+        bezier2Path.usesEvenOddFillRule = true
+        PaintCode.highlight.setFill()
+        bezier2Path.fill()
+
+
+        //// Bezier 3 Drawing
+        let bezier3Path = UIBezierPath()
+        bezier3Path.move(to: CGPoint(x: 23.75, y: 20.35))
+        bezier3Path.addCurve(to: CGPoint(x: 4.2, y: 20.35), controlPoint1: CGPoint(x: 23.51, y: 20.63), controlPoint2: CGPoint(x: 4.46, y: 20.66))
+        bezier3Path.addCurve(to: CGPoint(x: 4.21, y: 19.72), controlPoint1: CGPoint(x: 3.93, y: 20.04), controlPoint2: CGPoint(x: 3.93, y: 20.04))
+        bezier3Path.addCurve(to: CGPoint(x: 23.76, y: 19.72), controlPoint1: CGPoint(x: 4.45, y: 19.44), controlPoint2: CGPoint(x: 23.5, y: 19.41))
+        bezier3Path.addLine(to: CGPoint(x: 23.87, y: 19.85))
+        bezier3Path.addCurve(to: CGPoint(x: 23.75, y: 20.35), controlPoint1: CGPoint(x: 24.02, y: 20.04), controlPoint2: CGPoint(x: 23.98, y: 20.08))
+        bezier3Path.close()
+        bezier3Path.usesEvenOddFillRule = true
+        PaintCode.highlight.setFill()
+        bezier3Path.fill()
+
+
+        //// Group
+        context.saveGState()
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
+
+        //// Clip Clip
+        let clipPath = UIBezierPath()
+        clipPath.move(to: CGPoint(x: 1.83, y: 4.59))
+        clipPath.addCurve(to: CGPoint(x: 0.2, y: 4.59), controlPoint1: CGPoint(x: 1.59, y: 5.11), controlPoint2: CGPoint(x: 0.46, y: 5.17))
+        clipPath.addCurve(to: CGPoint(x: 0.21, y: 3.41), controlPoint1: CGPoint(x: -0.07, y: 4.02), controlPoint2: CGPoint(x: -0.07, y: 4.02))
+        clipPath.addCurve(to: CGPoint(x: 1.85, y: 3.41), controlPoint1: CGPoint(x: 0.45, y: 2.89), controlPoint2: CGPoint(x: 1.58, y: 2.83))
+        clipPath.addLine(to: CGPoint(x: 1.96, y: 3.65))
+        clipPath.addCurve(to: CGPoint(x: 1.83, y: 4.59), controlPoint1: CGPoint(x: 2.1, y: 4), controlPoint2: CGPoint(x: 2.07, y: 4.09))
+        clipPath.close()
+        clipPath.usesEvenOddFillRule = true
+        clipPath.addClip()
+
+
+        //// Rectangle Drawing
+        let rectanglePath = UIBezierPath(rect: CGRect(x: -5.03, y: -2, width: 12.05, height: 12))
+        PaintCode.highlight.setFill()
+        rectanglePath.fill()
+
+
+        context.endTransparencyLayer()
+        context.restoreGState()
+
+
+        //// Group 2
+        context.saveGState()
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
+
+        //// Clip Clip 2
+        let clip2Path = UIBezierPath()
+        clip2Path.move(to: CGPoint(x: 1.83, y: 12.59))
+        clip2Path.addCurve(to: CGPoint(x: 0.2, y: 12.59), controlPoint1: CGPoint(x: 1.59, y: 13.11), controlPoint2: CGPoint(x: 0.46, y: 13.17))
+        clip2Path.addCurve(to: CGPoint(x: 0.21, y: 11.41), controlPoint1: CGPoint(x: -0.07, y: 12.02), controlPoint2: CGPoint(x: -0.07, y: 12.02))
+        clip2Path.addCurve(to: CGPoint(x: 1.85, y: 11.41), controlPoint1: CGPoint(x: 0.45, y: 10.89), controlPoint2: CGPoint(x: 1.58, y: 10.83))
+        clip2Path.addLine(to: CGPoint(x: 1.96, y: 11.65))
+        clip2Path.addCurve(to: CGPoint(x: 1.83, y: 12.59), controlPoint1: CGPoint(x: 2.1, y: 12), controlPoint2: CGPoint(x: 2.07, y: 12.09))
+        clip2Path.close()
+        clip2Path.usesEvenOddFillRule = true
+        clip2Path.addClip()
+
+
+        //// Rectangle 2 Drawing
+        let rectangle2Path = UIBezierPath(rect: CGRect(x: -5.03, y: 6, width: 12.05, height: 12))
+        PaintCode.highlight.setFill()
+        rectangle2Path.fill()
+
+
+        context.endTransparencyLayer()
+        context.restoreGState()
+
+
+        //// Group 3
+        context.saveGState()
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
+
+        //// Clip Clip 3
+        let clip3Path = UIBezierPath()
+        clip3Path.move(to: CGPoint(x: 1.83, y: 20.59))
+        clip3Path.addCurve(to: CGPoint(x: 0.2, y: 20.59), controlPoint1: CGPoint(x: 1.59, y: 21.11), controlPoint2: CGPoint(x: 0.46, y: 21.17))
+        clip3Path.addCurve(to: CGPoint(x: 0.21, y: 19.41), controlPoint1: CGPoint(x: -0.07, y: 20.02), controlPoint2: CGPoint(x: -0.07, y: 20.02))
+        clip3Path.addCurve(to: CGPoint(x: 1.85, y: 19.41), controlPoint1: CGPoint(x: 0.45, y: 18.89), controlPoint2: CGPoint(x: 1.58, y: 18.83))
+        clip3Path.addLine(to: CGPoint(x: 1.96, y: 19.65))
+        clip3Path.addCurve(to: CGPoint(x: 1.83, y: 20.59), controlPoint1: CGPoint(x: 2.1, y: 20), controlPoint2: CGPoint(x: 2.07, y: 20.09))
+        clip3Path.close()
+        clip3Path.usesEvenOddFillRule = true
+        clip3Path.addClip()
+
+
+        //// Rectangle 3 Drawing
+        let rectangle3Path = UIBezierPath(rect: CGRect(x: -5.03, y: 14, width: 12.05, height: 12))
+        PaintCode.highlight.setFill()
         rectangle3Path.fill()
 
 
@@ -533,6 +872,34 @@ public class PaintCode : NSObject {
         return Cache.imageOfAddButton!
     }
 
+    @objc dynamic public class var imageOfPlusIconComic: UIImage {
+        if Cache.imageOfPlusIconComic != nil {
+            return Cache.imageOfPlusIconComic!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 24, height: 24), false, 0)
+            PaintCode.drawPlusIconComic()
+
+        Cache.imageOfPlusIconComic = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfPlusIconComic!
+    }
+
+    @objc dynamic public class var imageOfEditIconComic: UIImage {
+        if Cache.imageOfEditIconComic != nil {
+            return Cache.imageOfEditIconComic!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 24, height: 24), false, 0)
+            PaintCode.drawEditIconComic()
+
+        Cache.imageOfEditIconComic = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfEditIconComic!
+    }
+
     @objc dynamic public class var imageOfPlusIcon: UIImage {
         if Cache.imageOfPlusIcon != nil {
             return Cache.imageOfPlusIcon!
@@ -559,6 +926,20 @@ public class PaintCode : NSObject {
         UIGraphicsEndImageContext()
 
         return Cache.imageOfEditIcon!
+    }
+
+    @objc dynamic public class var imageOfEditIconActive: UIImage {
+        if Cache.imageOfEditIconActive != nil {
+            return Cache.imageOfEditIconActive!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 24, height: 24), false, 0)
+            PaintCode.drawEditIconActive()
+
+        Cache.imageOfEditIconActive = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfEditIconActive!
     }
 
     //// Customization Infrastructure
@@ -613,6 +994,26 @@ public class PaintCode : NSObject {
         }
     }
 
+    @objc @IBOutlet dynamic var plusIconComicTargets: [AnyObject]! {
+        get { return Cache.plusIconComicTargets }
+        set {
+            Cache.plusIconComicTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: PaintCode.imageOfPlusIconComic)
+            }
+        }
+    }
+
+    @objc @IBOutlet dynamic var editIconComicTargets: [AnyObject]! {
+        get { return Cache.editIconComicTargets }
+        set {
+            Cache.editIconComicTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: PaintCode.imageOfEditIconComic)
+            }
+        }
+    }
+
     @objc @IBOutlet dynamic var plusIconTargets: [AnyObject]! {
         get { return Cache.plusIconTargets }
         set {
@@ -629,6 +1030,16 @@ public class PaintCode : NSObject {
             Cache.editIconTargets = newValue
             for target: AnyObject in newValue {
                 let _ = target.perform(NSSelectorFromString("setImage:"), with: PaintCode.imageOfEditIcon)
+            }
+        }
+    }
+
+    @objc @IBOutlet dynamic var editIconActiveTargets: [AnyObject]! {
+        get { return Cache.editIconActiveTargets }
+        set {
+            Cache.editIconActiveTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: PaintCode.imageOfEditIconActive)
             }
         }
     }

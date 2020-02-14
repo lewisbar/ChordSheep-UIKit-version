@@ -32,7 +32,7 @@ class SongVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .csDark
+        view.backgroundColor = PaintCode.dark
         let scrollView = UIScrollView()
         
         songLabel.lineBreakMode = .byWordWrapping

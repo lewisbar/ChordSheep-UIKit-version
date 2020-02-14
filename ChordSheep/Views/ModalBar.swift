@@ -17,7 +17,7 @@ class ModalBar: UIView {
 
     weak var delegate: ModalBarDelegate?
     
-    convenience init(delegate: ModalBarDelegate, backgroundColor: UIColor = .csDark, tintColor: UIColor = .white) {
+    convenience init(delegate: ModalBarDelegate, backgroundColor: UIColor = PaintCode.dark, tintColor: UIColor = .white) {
         self.init()
         self.delegate = delegate
         
