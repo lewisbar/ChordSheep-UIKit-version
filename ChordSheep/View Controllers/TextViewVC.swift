@@ -31,8 +31,8 @@ class TextViewVC: UIViewController, ModalBarDelegate {
         
         let topBar = ModalBar(delegate: self)
         
-        songTextView.backgroundColor = .black
-        songTextView.textColor = .white
+        songTextView.backgroundColor = .csDark
+        songTextView.textColor = .csLight
         
         let stackView = UIStackView(arrangedSubviews: [topBar, songTextView])
         stackView.axis = .vertical

@@ -43,6 +43,7 @@ class AllSongsVC: SongtableVC {
     @objc override func addButtonPressed() {
         let addVC = AddVC()
         addVC.delegate = self
+        addVC.modalPresentationStyle = .fullScreen
         self.present(addVC, animated: true)
     }
 

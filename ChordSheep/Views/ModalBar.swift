@@ -17,20 +17,21 @@ class ModalBar: UIView {
 
     weak var delegate: ModalBarDelegate?
     
-    convenience init(delegate: ModalBarDelegate, backgroundColor: UIColor = .blue, tintColor: UIColor = .white) {
+    convenience init(delegate: ModalBarDelegate, backgroundColor: UIColor = .csDark, tintColor: UIColor = .white) {
         self.init()
         self.delegate = delegate
         
         self.backgroundColor = backgroundColor
         self.tintColor = tintColor
         
-        let cancelButton = UIButton(type: .system)
-        cancelButton.setTitle("X", for: .normal)
-        cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
+        let cancelButton = UIButton.discreteButton(backgroundImage: PaintCode.imageOfCancelButton, target: self, action: #selector(cancelButtonPressed))
+        // cancelButton.setTitle("X", for: .normal)
+        // cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
         
-        let doneButton = UIButton(type: .system)
-        doneButton.setTitle("√", for: .normal)
-        doneButton.addTarget(self, action: #selector(doneButtonPressed), for: .touchUpInside)
+        let doneButton = UIButton.discreteButton(backgroundImage: PaintCode.imageOfSaveButton, target: self, action: #selector(doneButtonPressed))
+//        let doneButton = UIButton(type: .system)
+//        doneButton.setTitle("√", for: .normal)
+//        doneButton.addTarget(self, action: #selector(doneButtonPressed), for: .touchUpInside)
         
         self.addSubview(cancelButton)
         self.addSubview(doneButton)
