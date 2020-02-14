@@ -38,16 +38,20 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
         self.clearsSelectionOnViewWillAppear = false
         
-        let addButton = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addButtonPressed))
-        navigationItem.rightBarButtonItem = addButton
-        navigationItem.rightBarButtonItems = [editButtonItem, addButton]
+        let addButton = UIBarButtonItem(image: PaintCode.imageOfPlusIcon, style: .plain, target: self, action: #selector(addButtonPressed))
+        let editButton = UIBarButtonItem(image: PaintCode.imageOfEditIcon, style: .plain, target: self, action: #selector(editButtonPressed))
+        navigationItem.rightBarButtonItems = [editButton, addButton]
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
+
         tableView.tableHeaderView = header  // Subclasses can set header.text to set the title
     }
     
     @objc func addButtonPressed() {
         // Must be implemented by subclasses
+    }
+    
+    @objc func editButtonPressed() {
+        tableView.setEditing(!tableView.isEditing, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
