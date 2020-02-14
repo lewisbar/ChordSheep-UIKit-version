@@ -14,6 +14,7 @@ class MainVC: UIViewController {
     let pageVC = PageVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
     let listWidthMultiplier: CGFloat = 0.25  // This could be set in the user settings later
     let pickVC = SongPickVC(style: .insetGrouped)
+    let navVC = UINavigationController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +22,7 @@ class MainVC: UIViewController {
         pageVC.mainVC = self
         let overviewVC = OverviewVC(style: .insetGrouped)
         overviewVC.mainVC = self
-        let navVC = UINavigationController(rootViewController: overviewVC)
+        navVC.setViewControllers([overviewVC], animated: false)
         navVC.navigationBar.tintColor = .white
         navVC.navigationBar.barTintColor = PaintCode.mediumDark
         navVC.navigationBar.isTranslucent = false
@@ -60,7 +61,7 @@ class MainVC: UIViewController {
     }
     
     func toggleList() -> Bool {
-        guard let list = self.stackView.arrangedSubviews.last else { fatalError("List view controller not found in stack view.") }
+        guard let list = navVC.view else { fatalError("ListVC not found!") }
         UIView.animate(withDuration: 0.3) {
             list.isHidden = !list.isHidden
             self.stackView.layoutIfNeeded()
