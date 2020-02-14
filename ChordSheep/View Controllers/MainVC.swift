@@ -28,7 +28,6 @@ class MainVC: UIViewController {
         navVC.navigationBar.isTranslucent = false
         
         self.addChild(pageVC)
-        // TODO: Add a pickVC, hidden at first, only showing when adding songs to a setlist
         self.addChild(pickVC)
         pickVC.view.isHidden = true
         self.addChild(navVC)
