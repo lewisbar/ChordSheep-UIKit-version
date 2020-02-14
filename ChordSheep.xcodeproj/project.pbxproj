@@ -37,6 +37,7 @@
 		7C60C9CD23D8BBEB007BDF62 /* AllSongsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C60C9CC23D8BBEB007BDF62 /* AllSongsVC.swift */; };
 		7C60C9CF23D8EEDF007BDF62 /* SongtableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C60C9CE23D8EEDF007BDF62 /* SongtableVC.swift */; };
 		7C66D73223E588D9006D0EFE /* PaintCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C66D73123E588D9006D0EFE /* PaintCode.swift */; };
+		7C8D7ABF23F7577F0048A201 /* SongPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8D7ABE23F7577F0048A201 /* SongPickVC.swift */; };
 		7C990FB723D64251008544C7 /* DocumentSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C990FB623D64251008544C7 /* DocumentSerializable.swift */; };
 		7CCBF6C723DF64AC001C171D /* Importer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCBF6C623DF64AC001C171D /* Importer.swift */; };
 		7CCBF6C923DF64B8001C171D /* Exporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCBF6C823DF64B8001C171D /* Exporter.swift */; };
@@ -100,6 +101,7 @@
 		7C60C9CC23D8BBEB007BDF62 /* AllSongsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSongsVC.swift; sourceTree = "<group>"; };
 		7C60C9CE23D8EEDF007BDF62 /* SongtableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongtableVC.swift; sourceTree = "<group>"; };
 		7C66D73123E588D9006D0EFE /* PaintCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaintCode.swift; sourceTree = "<group>"; };
+		7C8D7ABE23F7577F0048A201 /* SongPickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPickVC.swift; sourceTree = "<group>"; };
 		7C990FB623D64251008544C7 /* DocumentSerializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSerializable.swift; sourceTree = "<group>"; };
 		7CCBF6C623DF64AC001C171D /* Importer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Importer.swift; sourceTree = "<group>"; };
 		7CCBF6C823DF64B8001C171D /* Exporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exporter.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				7C158CB423C7D0940059795F /* MainVC.swift */,
 				7C158CE223CCD7810059795F /* PageVC.swift */,
 				7C158CEC23CCDB970059795F /* SongVC.swift */,
+				7C8D7ABE23F7577F0048A201 /* SongPickVC.swift */,
 				7C158CE423CCD7EB0059795F /* OverviewVC.swift */,
 				7C60C9CE23D8EEDF007BDF62 /* SongtableVC.swift */,
 				7C60C9D023D8EF02007BDF62 /* SongtableVCs */,
@@ -569,6 +572,7 @@
 				7C60C9CF23D8EEDF007BDF62 /* SongtableVC.swift in Sources */,
 				7C158CFC23CCE03F0059795F /* ModalBar.swift in Sources */,
 				7C158CFA23CCDCDE0059795F /* AddVC.swift in Sources */,
+				7C8D7ABF23F7577F0048A201 /* SongPickVC.swift in Sources */,
 				7C158CED23CCDB970059795F /* SongVC.swift in Sources */,
 				7C158CB123C7D0940059795F /* AppDelegate.swift in Sources */,
 				7C66D73223E588D9006D0EFE /* PaintCode.swift in Sources */,

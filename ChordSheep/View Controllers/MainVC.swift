@@ -13,7 +13,8 @@ class MainVC: UIViewController {
     let stackView = UIStackView()
     let pageVC = PageVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
     let listWidthMultiplier: CGFloat = 0.25  // This could be set in the user settings later
-    
+    let pickVC = SongPickVC(style: .insetGrouped)
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,11 +27,16 @@ class MainVC: UIViewController {
         navVC.navigationBar.isTranslucent = false
         
         self.addChild(pageVC)
+        // TODO: Add a pickVC, hidden at first, only showing when adding songs to a setlist
+        self.addChild(pickVC)
+        pickVC.view.isHidden = true
         self.addChild(navVC)
         pageVC.didMove(toParent: self)
+        pickVC.didMove(toParent: self)
         navVC.didMove(toParent: self)
         
         stackView.addArrangedSubview(pageVC.view)
+        stackView.addArrangedSubview(pickVC.view)
         stackView.addArrangedSubview(navVC.view)
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -39,10 +45,12 @@ class MainVC: UIViewController {
         self.view.addSubview(stackView)
         
         navVC.view.translatesAutoresizingMaskIntoConstraints = false
+        pickVC.view.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         let listWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) * self.listWidthMultiplier
         NSLayoutConstraint.activate([
+            pickVC.view.widthAnchor.constraint(equalToConstant: listWidth),
             navVC.view.widthAnchor.constraint(equalToConstant: listWidth),
             stackView.topAnchor.constraint(equalTo: view.topAnchor),
             stackView.rightAnchor.constraint(equalTo: view.rightAnchor),
@@ -59,6 +67,13 @@ class MainVC: UIViewController {
         }
         // Returns true if the list is visible after toggling
         return !list.isHidden
+    }
+    
+    func showPickVC() {
+        UIView.animate(withDuration: 0.3) {
+            self.pickVC.view.isHidden = false
+            self.stackView.layoutIfNeeded()
+        }
     }
 }
 

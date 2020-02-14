@@ -68,6 +68,10 @@ class ListVC: SongtableVC {
         }
     }
     
+    @objc override func addButtonPressed() {
+        mainVC.showPickVC()
+    }
+    
     
     // MARK: - Table view data source
 //    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
