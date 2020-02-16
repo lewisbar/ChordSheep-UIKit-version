@@ -16,6 +16,7 @@ import Firebase
 class ListVC: SongtableVC {
 
     var songlist: Songlist!
+    
 
     convenience init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist) {
         self.init(style: .insetGrouped)
@@ -69,7 +70,13 @@ class ListVC: SongtableVC {
     }
     
     @objc override func addButtonPressed() {
-        mainVC.showPickVC()
+        if !addButton.isSelected {
+            mainVC.showPickVC()
+            addButton.isSelected = true
+        } else {
+            mainVC.hidePickVC()
+            addButton.isSelected = false
+        }
     }
     
     

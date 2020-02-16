@@ -28,6 +28,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         return header
     }()
     let editButton = UIButton(type: .custom)
+    let addButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,13 +40,16 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
         self.clearsSelectionOnViewWillAppear = false
         
-        let addButton = UIBarButtonItem(image: PaintCode.imageOfPlusIcon, style: .plain, target: self, action: #selector(addButtonPressed))
-        // let editButton = UIBarButtonItem(image: PaintCode.imageOfEditIcon, style: .plain, target: self, action: #selector(editButtonPressed))
+        addButton.setBackgroundImage(PaintCode.imageOfPlusIcon, for: .normal)
+        addButton.setBackgroundImage(PaintCode.imageOfPlusIconActive, for: .selected)
+        addButton.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        let addButtonItem = UIBarButtonItem(customView: addButton)
+        
         editButton.setBackgroundImage(PaintCode.imageOfEditIcon, for: .normal)
         editButton.setBackgroundImage(PaintCode.imageOfEditIconActive, for: .selected)
         editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
         let editButtonItem = UIBarButtonItem(customView: editButton)
-        navigationItem.rightBarButtonItems = [editButtonItem, addButton]
+        navigationItem.rightBarButtonItems = [editButtonItem, addButtonItem]
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         tableView.tableHeaderView = header  // Subclasses can set header.text to set the title

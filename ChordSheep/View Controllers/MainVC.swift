@@ -75,6 +75,13 @@ class MainVC: UIViewController {
             self.stackView.layoutIfNeeded()
         }
     }
+    
+    func hidePickVC() {
+        UIView.animate(withDuration: 0.3) {
+            self.pickVC.view.isHidden = true
+            self.stackView.layoutIfNeeded()
+        }
+    }
 }
 
 
