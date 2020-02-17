@@ -49,8 +49,11 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         editButton.setBackgroundImage(PaintCode.imageOfEditIconActive, for: .selected)
         editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
         let editButtonItem = UIBarButtonItem(customView: editButton)
-        navigationItem.rightBarButtonItems = [editButtonItem, addButtonItem]
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+
+        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        spacer.width = 20
+        
+        navigationItem.rightBarButtonItems = [editButtonItem, spacer, addButtonItem]
 
         tableView.tableHeaderView = header  // Subclasses can set header.text to set the title
     }
