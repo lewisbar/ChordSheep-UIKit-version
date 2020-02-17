@@ -8,8 +8,14 @@
 
 import UIKit
 
+protocol SongPickVCDelegate {
+    func pickVCWasHidden()
+}
+
 class SongPickVC: UITableViewController {
 
+    var delegate: SongPickVCDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

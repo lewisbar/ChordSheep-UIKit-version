@@ -61,20 +61,19 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
     }
     
     @objc func listButtonPressed(_ sender: UIButton) {
-        guard let mainVC = mainVC else { return }
-        let isListVisible = mainVC.toggleList()
-
-        // Flip button
-        if isListVisible {
-            UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromRight, animations: {
-                self.listButton.setBackgroundImage(PaintCode.imageOfHideListButton, for: .normal)
-            })
-            
-        } else {
-            UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromLeft, animations: {
-                self.listButton.setBackgroundImage(PaintCode.imageOfShowListButton, for: .normal)
-            })
-        }
+        mainVC?.listButtonPressed()
+    }
+    
+    func flipArrowToPointLeft() {
+        UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromLeft, animations: {
+            self.listButton.setBackgroundImage(PaintCode.imageOfShowListButton, for: .normal)
+        })
+    }
+    
+    func flipArrowToPointRight() {
+        UIView.transition(with: self.listButton, duration: 0.2, options: .transitionFlipFromRight, animations: {
+            self.listButton.setBackgroundImage(PaintCode.imageOfHideListButton, for: .normal)
+        })
     }
     
     @objc func editButtonPressed(_ sender: UIButton) {

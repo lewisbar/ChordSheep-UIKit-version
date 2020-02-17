@@ -59,17 +59,36 @@ class MainVC: UIViewController {
             ])
     }
     
-    func toggleList() -> Bool {
-        guard let list = navVC.view else { fatalError("ListVC not found!") }
-        UIView.animate(withDuration: 0.3) {
-            list.isHidden = !list.isHidden
-            self.stackView.layoutIfNeeded()
+    func listButtonPressed() {
+        if !pickVC.view.isHidden {
+            hidePickVC()
+            return
         }
-        // Returns true if the list is visible after toggling
-        return !list.isHidden
+        if !navVC.view.isHidden {
+            hideList()
+            pageVC.flipArrowToPointLeft()
+            return
+        }
+        showList()
+        pageVC.flipArrowToPointRight()
     }
     
-    func showPickVC() {
+    func showList() {
+        UIView.animate(withDuration: 0.3) {
+            self.navVC.view?.isHidden = false
+            self.stackView.layoutIfNeeded()
+        }
+    }
+    
+    func hideList() {
+        UIView.animate(withDuration: 0.3) {
+            self.navVC.view?.isHidden = true
+            self.stackView.layoutIfNeeded()
+        }
+    }
+    
+    func showPickVC(delegate: SongPickVCDelegate) {
+        self.pickVC.delegate = delegate
         UIView.animate(withDuration: 0.3) {
             self.pickVC.view.isHidden = false
             self.stackView.layoutIfNeeded()
@@ -81,6 +100,7 @@ class MainVC: UIViewController {
             self.pickVC.view.isHidden = true
             self.stackView.layoutIfNeeded()
         }
+        pickVC.delegate?.pickVCWasHidden()
     }
 }
 

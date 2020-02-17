@@ -71,7 +71,7 @@ class ListVC: SongtableVC {
     
     @objc override func addButtonPressed() {
         if !addButton.isSelected {
-            mainVC.showPickVC()
+            mainVC.showPickVC(delegate: self)
             addButton.isSelected = true
         } else {
             mainVC.hidePickVC()
@@ -130,4 +130,10 @@ class ListVC: SongtableVC {
      }
      */
     
+}
+
+extension ListVC: SongPickVCDelegate {
+    func pickVCWasHidden() {
+        addButton.isSelected = false
+    }
 }
