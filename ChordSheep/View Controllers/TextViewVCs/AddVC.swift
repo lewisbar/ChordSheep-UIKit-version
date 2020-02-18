@@ -12,6 +12,7 @@ protocol AddVCDelegate: AnyObject {
     func receive(newSong: Song)
 }
 
+// TODO: Add a title label in the ModalBar that gets filled automatically. Maybe even more meta data that just the title, preferably all of it, so you get immediate feedback what your input will produce.
 class AddVC: TextViewVC {
 
     weak var delegate: AddVCDelegate?

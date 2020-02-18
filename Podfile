@@ -6,13 +6,13 @@ target 'ChordSheep' do
   use_frameworks!
 
   # Pods for ChordSheep
-  pod 'Firebase/Analytics'
+  #pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
-  pod 'Firebase/Messaging'
-  pod 'Fabric'
-  pod 'Crashlytics'
-  pod 'Firebase/Performance'
+  #pod 'Firebase/Messaging'
+  #pod 'Fabric'
+  #pod 'Crashlytics'
+  #pod 'Firebase/Performance'
   pod 'FirebaseUI'
 
   target 'ChordSheepTests' do
