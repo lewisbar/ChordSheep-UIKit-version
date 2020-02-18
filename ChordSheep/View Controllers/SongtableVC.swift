@@ -25,6 +25,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         header.font = UIFont.systemFont(ofSize: 24)
         header.textAlignment = .center
         header.adjustsFontSizeToFitWidth = true
+        header.textColor = PaintCode.light
         return header
     }()
     let editButton = UIButton(type: .custom)
