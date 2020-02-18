@@ -88,6 +88,7 @@ class MainVC: UIViewController {
     }
     
     func showPickVC(delegate: SongPickVCDelegate) {
+        guard pickVC.view.isHidden else { return }
         self.pickVC.delegate = delegate
         UIView.animate(withDuration: 0.3) {
             self.pickVC.view.isHidden = false
@@ -96,6 +97,7 @@ class MainVC: UIViewController {
     }
     
     func hidePickVC() {
+        guard !pickVC.view.isHidden else { return }
         UIView.animate(withDuration: 0.3) {
             self.pickVC.view.isHidden = true
             self.stackView.layoutIfNeeded()

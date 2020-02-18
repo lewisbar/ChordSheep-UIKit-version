@@ -69,6 +69,10 @@ class ListVC: SongtableVC {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        mainVC.hidePickVC()
+    }
+    
     @objc override func addButtonPressed() {
         if !addButton.isSelected {
             mainVC.showPickVC(delegate: self)
