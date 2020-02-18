@@ -37,7 +37,9 @@ extension Songlist: DocumentSerializable {
     init(from dict: [String : Any], reference: DocumentReference) {
         self.title = dict["title"] as? String ?? ""
         self.date = dict["date"] as? Date
-        self.songRefs = Songlist.refArray(from: (dict["songs"] as! [String: DocumentReference]))
+        if let songDict = dict["songs"] as? [String:DocumentReference] {
+            self.songRefs = Songlist.refArray(from: songDict)
+        }
         self.ref = reference
     }
     

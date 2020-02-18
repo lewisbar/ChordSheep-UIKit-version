@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1FA0E674B86A28AB87BB26E8 /* Pods_ChordSheep_ChordSheepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C4669A6C70925A17744F9F5 /* Pods_ChordSheep_ChordSheepUITests.framework */; };
+		15FDDCC6FC8E70FDBE5B538E /* Pods_ChordSheep_ChordSheepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D4589B44CF5230A11D5F0B5 /* Pods_ChordSheep_ChordSheepUITests.framework */; };
 		7C158CB123C7D0940059795F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CB023C7D0940059795F /* AppDelegate.swift */; };
 		7C158CB323C7D0940059795F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CB223C7D0940059795F /* SceneDelegate.swift */; };
 		7C158CB523C7D0940059795F /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158CB423C7D0940059795F /* MainVC.swift */; };
@@ -33,7 +33,6 @@
 		7C158D0523CDFE150059795F /* Songlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0423CDFE150059795F /* Songlist.swift */; };
 		7C158D0723CE02830059795F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0623CE02830059795F /* User.swift */; };
 		7C158D0923CE02920059795F /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C158D0823CE02920059795F /* Band.swift */; };
-		7C25F9896C1C57F9BF95B658 /* Pods_ChordSheepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BA924CDD8224EB2233E6FA /* Pods_ChordSheepTests.framework */; };
 		7C60C9CD23D8BBEB007BDF62 /* AllSongsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C60C9CC23D8BBEB007BDF62 /* AllSongsVC.swift */; };
 		7C60C9CF23D8EEDF007BDF62 /* SongtableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C60C9CE23D8EEDF007BDF62 /* SongtableVC.swift */; };
 		7C66D73223E588D9006D0EFE /* PaintCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C66D73123E588D9006D0EFE /* PaintCode.swift */; };
@@ -41,7 +40,8 @@
 		7C990FB723D64251008544C7 /* DocumentSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C990FB623D64251008544C7 /* DocumentSerializable.swift */; };
 		7CCBF6C723DF64AC001C171D /* Importer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCBF6C623DF64AC001C171D /* Importer.swift */; };
 		7CCBF6C923DF64B8001C171D /* Exporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCBF6C823DF64B8001C171D /* Exporter.swift */; };
-		8C07AD4DF53A40C3B3051855 /* Pods_ChordSheep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DF16B36AF3E54F0842606AD /* Pods_ChordSheep.framework */; };
+		9E72A4D057D21B8A2279FCA4 /* Pods_ChordSheepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99DCE3546E5660E7534DD3FE /* Pods_ChordSheepTests.framework */; };
+		B3469A08C21DFFD799184E02 /* Pods_ChordSheep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4A51CC5C2E6327AE6911548 /* Pods_ChordSheep.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,10 +62,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2793A651137C41F3B598907D /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep-ChordSheepUITests.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		3DF16B36AF3E54F0842606AD /* Pods_ChordSheep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		456778D99CFBEB0B60CA8A2A /* Pods-ChordSheepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheepTests.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheepTests/Pods-ChordSheepTests.debug.xcconfig"; sourceTree = "<group>"; };
-		57BA924CDD8224EB2233E6FA /* Pods_ChordSheepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D4589B44CF5230A11D5F0B5 /* Pods_ChordSheep_ChordSheepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheep_ChordSheepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3502582EE4A17FBA45A2ED3D /* Pods-ChordSheep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep.release.xcconfig"; path = "Target Support Files/Pods-ChordSheep/Pods-ChordSheep.release.xcconfig"; sourceTree = "<group>"; };
+		3B9462171618A1F418EDED18 /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep-ChordSheepUITests.release.xcconfig"; path = "Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests.release.xcconfig"; sourceTree = "<group>"; };
+		5A58D20ECDD431FE7CD09B03 /* Pods-ChordSheepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheepTests.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheepTests/Pods-ChordSheepTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6E88619DB02A245C4C1C84E2 /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep-ChordSheepUITests.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7C158CAD23C7D0940059795F /* ChordSheep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChordSheep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C158CB023C7D0940059795F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C158CB223C7D0940059795F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -97,7 +98,6 @@
 		7C158D0423CDFE150059795F /* Songlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Songlist.swift; sourceTree = "<group>"; };
 		7C158D0623CE02830059795F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7C158D0823CE02920059795F /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
-		7C4669A6C70925A17744F9F5 /* Pods_ChordSheep_ChordSheepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheep_ChordSheepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C60C9CC23D8BBEB007BDF62 /* AllSongsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSongsVC.swift; sourceTree = "<group>"; };
 		7C60C9CE23D8EEDF007BDF62 /* SongtableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongtableVC.swift; sourceTree = "<group>"; };
 		7C66D73123E588D9006D0EFE /* PaintCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaintCode.swift; sourceTree = "<group>"; };
@@ -105,10 +105,10 @@
 		7C990FB623D64251008544C7 /* DocumentSerializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSerializable.swift; sourceTree = "<group>"; };
 		7CCBF6C623DF64AC001C171D /* Importer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Importer.swift; sourceTree = "<group>"; };
 		7CCBF6C823DF64B8001C171D /* Exporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exporter.swift; sourceTree = "<group>"; };
-		9173DFBDE9476C76DD347EF2 /* Pods-ChordSheep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheep/Pods-ChordSheep.debug.xcconfig"; sourceTree = "<group>"; };
-		9E8A1E816C9D67800A7B990D /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep-ChordSheepUITests.release.xcconfig"; path = "Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests.release.xcconfig"; sourceTree = "<group>"; };
-		9F3A269C488B7C4E6635ECE3 /* Pods-ChordSheep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep.release.xcconfig"; path = "Target Support Files/Pods-ChordSheep/Pods-ChordSheep.release.xcconfig"; sourceTree = "<group>"; };
-		A5EDA05B1F0188B0FE7E5F9A /* Pods-ChordSheepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheepTests.release.xcconfig"; path = "Target Support Files/Pods-ChordSheepTests/Pods-ChordSheepTests.release.xcconfig"; sourceTree = "<group>"; };
+		82DBA6FB340B9B932B3AFAAB /* Pods-ChordSheep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheep.debug.xcconfig"; path = "Target Support Files/Pods-ChordSheep/Pods-ChordSheep.debug.xcconfig"; sourceTree = "<group>"; };
+		99DCE3546E5660E7534DD3FE /* Pods_ChordSheepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4A51CC5C2E6327AE6911548 /* Pods_ChordSheep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChordSheep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBE1B1230EB40FFE4BE8BC36 /* Pods-ChordSheepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChordSheepTests.release.xcconfig"; path = "Target Support Files/Pods-ChordSheepTests/Pods-ChordSheepTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C07AD4DF53A40C3B3051855 /* Pods_ChordSheep.framework in Frameworks */,
+				B3469A08C21DFFD799184E02 /* Pods_ChordSheep.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C25F9896C1C57F9BF95B658 /* Pods_ChordSheepTests.framework in Frameworks */,
+				9E72A4D057D21B8A2279FCA4 /* Pods_ChordSheepTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FA0E674B86A28AB87BB26E8 /* Pods_ChordSheep_ChordSheepUITests.framework in Frameworks */,
+				15FDDCC6FC8E70FDBE5B538E /* Pods_ChordSheep_ChordSheepUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,12 +142,12 @@
 		0372D635F51A17D61424D3D6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9173DFBDE9476C76DD347EF2 /* Pods-ChordSheep.debug.xcconfig */,
-				9F3A269C488B7C4E6635ECE3 /* Pods-ChordSheep.release.xcconfig */,
-				2793A651137C41F3B598907D /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */,
-				9E8A1E816C9D67800A7B990D /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */,
-				456778D99CFBEB0B60CA8A2A /* Pods-ChordSheepTests.debug.xcconfig */,
-				A5EDA05B1F0188B0FE7E5F9A /* Pods-ChordSheepTests.release.xcconfig */,
+				82DBA6FB340B9B932B3AFAAB /* Pods-ChordSheep.debug.xcconfig */,
+				3502582EE4A17FBA45A2ED3D /* Pods-ChordSheep.release.xcconfig */,
+				6E88619DB02A245C4C1C84E2 /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */,
+				3B9462171618A1F418EDED18 /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */,
+				5A58D20ECDD431FE7CD09B03 /* Pods-ChordSheepTests.debug.xcconfig */,
+				BBE1B1230EB40FFE4BE8BC36 /* Pods-ChordSheepTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -160,7 +160,7 @@
 				7C158CD123C7D0960059795F /* ChordSheepUITests */,
 				7C158CAE23C7D0940059795F /* Products */,
 				0372D635F51A17D61424D3D6 /* Pods */,
-				9747215C72EB81B20B452A22 /* Frameworks */,
+				964FE59EFA76333D61849B3E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -270,12 +270,12 @@
 			path = TextViewVCs;
 			sourceTree = "<group>";
 		};
-		9747215C72EB81B20B452A22 /* Frameworks */ = {
+		964FE59EFA76333D61849B3E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3DF16B36AF3E54F0842606AD /* Pods_ChordSheep.framework */,
-				7C4669A6C70925A17744F9F5 /* Pods_ChordSheep_ChordSheepUITests.framework */,
-				57BA924CDD8224EB2233E6FA /* Pods_ChordSheepTests.framework */,
+				A4A51CC5C2E6327AE6911548 /* Pods_ChordSheep.framework */,
+				1D4589B44CF5230A11D5F0B5 /* Pods_ChordSheep_ChordSheepUITests.framework */,
+				99DCE3546E5660E7534DD3FE /* Pods_ChordSheepTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -287,12 +287,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C158CD723C7D0960059795F /* Build configuration list for PBXNativeTarget "ChordSheep" */;
 			buildPhases = (
-				54175D826B58F6B3BF19B0A1 /* [CP] Check Pods Manifest.lock */,
+				13E9F33535BD54CC3F80013C /* [CP] Check Pods Manifest.lock */,
 				7C158CA923C7D0940059795F /* Sources */,
 				7C158CAA23C7D0940059795F /* Frameworks */,
 				7C158CAB23C7D0940059795F /* Resources */,
-				E5B8F9C7E8CEE4A361C766A7 /* [CP] Embed Pods Frameworks */,
-				0D6A7C892F98D453FF222980 /* [CP] Copy Pods Resources */,
+				D35DDC5C0F17CFD778347493 /* [CP] Embed Pods Frameworks */,
+				85A7890CF670A1B9EE53ADC7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -307,7 +307,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C158CDA23C7D0960059795F /* Build configuration list for PBXNativeTarget "ChordSheepTests" */;
 			buildPhases = (
-				750CA2A7DFFE52DBAB918089 /* [CP] Check Pods Manifest.lock */,
+				471A7F367268DC7271BFC7C3 /* [CP] Check Pods Manifest.lock */,
 				7C158CBF23C7D0960059795F /* Sources */,
 				7C158CC023C7D0960059795F /* Frameworks */,
 				7C158CC123C7D0960059795F /* Resources */,
@@ -326,12 +326,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C158CDD23C7D0960059795F /* Build configuration list for PBXNativeTarget "ChordSheepUITests" */;
 			buildPhases = (
-				C3710670A2118599552D1CA8 /* [CP] Check Pods Manifest.lock */,
+				0B195512F7A97BA990D5BA46 /* [CP] Check Pods Manifest.lock */,
 				7C158CCA23C7D0960059795F /* Sources */,
 				7C158CCB23C7D0960059795F /* Frameworks */,
 				7C158CCC23C7D0960059795F /* Resources */,
-				E78A18432BC29ACE540E4B6F /* [CP] Embed Pods Frameworks */,
-				63D437340044941B106B2602 /* [CP] Copy Pods Resources */,
+				759CC3A4B5A50EBD627406DE /* [CP] Embed Pods Frameworks */,
+				B2DBD95E0BD9CB65A6B9F918 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -414,85 +414,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0D6A7C892F98D453FF222980 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		54175D826B58F6B3BF19B0A1 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ChordSheep-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		63D437340044941B106B2602 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		750CA2A7DFFE52DBAB918089 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ChordSheepTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C3710670A2118599552D1CA8 /* [CP] Check Pods Manifest.lock */ = {
+		0B195512F7A97BA990D5BA46 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -514,24 +436,51 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E5B8F9C7E8CEE4A361C766A7 /* [CP] Embed Pods Frameworks */ = {
+		13E9F33535BD54CC3F80013C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChordSheep-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E78A18432BC29ACE540E4B6F /* [CP] Embed Pods Frameworks */ = {
+		471A7F367268DC7271BFC7C3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChordSheepTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		759CC3A4B5A50EBD627406DE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -546,6 +495,57 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		85A7890CF670A1B9EE53ADC7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B2DBD95E0BD9CB65A6B9F918 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep-ChordSheepUITests/Pods-ChordSheep-ChordSheepUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D35DDC5C0F17CFD778347493 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChordSheep/Pods-ChordSheep-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -744,7 +744,7 @@
 		};
 		7C158CD823C7D0960059795F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9173DFBDE9476C76DD347EF2 /* Pods-ChordSheep.debug.xcconfig */;
+			baseConfigurationReference = 82DBA6FB340B9B932B3AFAAB /* Pods-ChordSheep.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -763,7 +763,7 @@
 		};
 		7C158CD923C7D0960059795F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F3A269C488B7C4E6635ECE3 /* Pods-ChordSheep.release.xcconfig */;
+			baseConfigurationReference = 3502582EE4A17FBA45A2ED3D /* Pods-ChordSheep.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -782,7 +782,7 @@
 		};
 		7C158CDB23C7D0960059795F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 456778D99CFBEB0B60CA8A2A /* Pods-ChordSheepTests.debug.xcconfig */;
+			baseConfigurationReference = 5A58D20ECDD431FE7CD09B03 /* Pods-ChordSheepTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -805,7 +805,7 @@
 		};
 		7C158CDC23C7D0960059795F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A5EDA05B1F0188B0FE7E5F9A /* Pods-ChordSheepTests.release.xcconfig */;
+			baseConfigurationReference = BBE1B1230EB40FFE4BE8BC36 /* Pods-ChordSheepTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -828,7 +828,7 @@
 		};
 		7C158CDE23C7D0960059795F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2793A651137C41F3B598907D /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */;
+			baseConfigurationReference = 6E88619DB02A245C4C1C84E2 /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -849,7 +849,7 @@
 		};
 		7C158CDF23C7D0960059795F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E8A1E816C9D67800A7B990D /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */;
+			baseConfigurationReference = 3B9462171618A1F418EDED18 /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
