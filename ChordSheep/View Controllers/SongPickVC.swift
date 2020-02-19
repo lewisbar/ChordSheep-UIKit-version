@@ -11,6 +11,7 @@ import Firebase
 
 protocol SongPickVCDelegate {
     func pickVCWasHidden()
+    func picked(songRef: DocumentReference)
 }
 
 class SongPickVC: UITableViewController {
@@ -73,5 +74,10 @@ class SongPickVC: UITableViewController {
         cell.textLabel?.text = song.title
         cell.detailTextLabel?.text = song.metadataDescription
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let ref = songs[indexPath.row].ref else { print("Song has no document reference"); return }
+        delegate?.picked(songRef: ref)
     }
 }

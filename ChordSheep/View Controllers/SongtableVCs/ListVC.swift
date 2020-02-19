@@ -140,4 +140,9 @@ extension ListVC: SongPickVCDelegate {
     func pickVCWasHidden() {
         addButton.isSelected = false
     }
+    
+    func picked(songRef: DocumentReference) {
+        songlist.songRefs.append(songRef)
+        songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
+    }
 }
