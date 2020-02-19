@@ -46,7 +46,7 @@ class ListVC: SongtableVC {
             for (i, songRef) in self.songlist.songRefs.enumerated() {
                 songRef.getDocument { document, error in
                     guard let data = document?.data() else {
-                        print(songRef.path)
+                        print("Song \(songRef.path) has no data")
                         if let error = error {
                             print(error.localizedDescription)
                         }
