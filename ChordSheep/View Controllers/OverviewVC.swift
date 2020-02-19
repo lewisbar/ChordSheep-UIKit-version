@@ -219,6 +219,7 @@ class OverviewVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // guard let bandRef = currentBandRef, let band = currentBand else { return }
         let band = bands[indexPath.section]
+        mainVC.currentBand = band
         if indexPath.row == 0 {
             let songsRef = band.ref.collection("songs")
             let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: songsRef)  // db.collection("bands/\(bandID)/songs"))

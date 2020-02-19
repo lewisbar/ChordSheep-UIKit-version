@@ -15,6 +15,11 @@ class MainVC: UIViewController {
     let listWidthMultiplier: CGFloat = 0.25  // This could be set in the user settings later
     let pickVC = SongPickVC(style: .insetGrouped)
     let navVC = UINavigationController()
+    var currentBand: Band? {
+        didSet {
+            self.pickVC.songsRef = currentBand?.ref.collection("songs")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,6 +94,7 @@ class MainVC: UIViewController {
     
     func showPickVC(delegate: SongPickVCDelegate) {
         guard pickVC.view.isHidden else { return }
+        self.pickVC.startListener()
         self.pickVC.delegate = delegate
         UIView.animate(withDuration: 0.3) {
             self.pickVC.view.isHidden = false
@@ -98,6 +104,7 @@ class MainVC: UIViewController {
     
     func hidePickVC() {
         guard !pickVC.view.isHidden else { return }
+        self.pickVC.stopListener()
         UIView.animate(withDuration: 0.3) {
             self.pickVC.view.isHidden = true
             self.stackView.layoutIfNeeded()
