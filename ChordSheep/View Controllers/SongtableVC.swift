@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import MobileCoreServices
 
 class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
 
@@ -57,6 +58,9 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         navigationItem.rightBarButtonItems = [editButtonItem, spacer, addButtonItem]
 
         tableView.tableHeaderView = header  // Subclasses can set header.text to set the title
+        
+        tableView.dragDelegate = self
+        tableView.dragInteractionEnabled = true
     }
     
     @objc func addButtonPressed() {
@@ -201,4 +205,16 @@ extension SongtableVC: UITextFieldDelegate {
     }
     
     @objc func changeListTitle(to newTitle: String) { }
+}
+
+extension SongtableVC: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let song = songs[indexPath.row]
+        guard let songRef = song.ref,
+            let textData = song.text.data(using: .utf8) else { return [] }
+        let itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = songRef
+        return [dragItem]
+    }
 }
