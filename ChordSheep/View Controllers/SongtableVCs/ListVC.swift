@@ -160,9 +160,9 @@ extension ListVC: UITableViewDropDelegate {
             destinationIndexPath = IndexPath(row: row, section: section)
         }
         
-        for item in coordinator.items {
+        for (row, item) in coordinator.items.enumerated() {
             if let songRef = item.dragItem.localObject as? DocumentReference {
-                songlist.songRefs.insert(songRef, at: destinationIndexPath.row)
+                songlist.songRefs.insert(songRef, at: destinationIndexPath.row + row)
                 songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
             }
         }
