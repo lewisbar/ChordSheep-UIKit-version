@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import MobileCoreServices
 
 protocol SongPickVCDelegate {
     func pickVCWasHidden()
@@ -36,6 +37,9 @@ class SongPickVC: UITableViewController {
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
+        
+        tableView.dragDelegate = self
+        tableView.dragInteractionEnabled = true
     }
     
     func startListener() {
@@ -79,5 +83,17 @@ class SongPickVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let ref = songs[indexPath.row].ref else { print("Song has no document reference"); return }
         delegate?.picked(songRef: ref)
+    }
+}
+
+extension SongPickVC: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let song = songs[indexPath.row]
+        guard let songRef = song.ref,
+            let textData = song.text.data(using: .utf8) else { return [] }
+        let itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = songRef
+        return [dragItem]
     }
 }

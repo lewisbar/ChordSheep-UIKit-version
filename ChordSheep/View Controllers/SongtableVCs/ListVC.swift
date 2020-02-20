@@ -28,6 +28,7 @@ class ListVC: SongtableVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         header.text = songlist.title
+        tableView.dropDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -144,5 +145,26 @@ extension ListVC: SongPickVCDelegate {
     func picked(songRef: DocumentReference) {
         songlist.songRefs.append(songRef)
         songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
+    }
+}
+
+extension ListVC: UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        let destinationIndexPath: IndexPath
+
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        } else {  // Append at the end
+            let section = tableView.numberOfSections - 1
+            let row = tableView.numberOfRows(inSection: section)
+            destinationIndexPath = IndexPath(row: row, section: section)
+        }
+        
+        for item in coordinator.items {
+            if let songRef = item.dragItem.localObject as? DocumentReference {
+                songlist.songRefs.insert(songRef, at: destinationIndexPath.row)
+                songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
+            }
+        }
     }
 }
