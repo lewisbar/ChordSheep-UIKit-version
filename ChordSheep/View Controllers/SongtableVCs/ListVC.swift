@@ -168,3 +168,4 @@ extension ListVC: UITableViewDropDelegate {
         }
     }
 }
+// TODO: Allow reordering by just dragging and dropping in the same list, without pressing the edit button?
