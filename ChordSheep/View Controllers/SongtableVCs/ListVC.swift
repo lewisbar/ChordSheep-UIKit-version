@@ -109,6 +109,12 @@ class ListVC: SongtableVC {
         if editingStyle == .delete {
             songlist.songRefs.remove(at: indexPath.row)
             songlist.ref.updateData(["songs": songlist.songRefDict])
+
+            if songlist.songRefs.count < 1 {
+                songs.removeAll()
+                tableView.reloadData()
+                // songlist.ref.updateData(["songs": FieldValue.delete()])
+            }
         }
     }
     
@@ -170,13 +176,21 @@ extension ListVC: UITableViewDropDelegate {
         }
         
         for (row, item) in coordinator.items.enumerated() {
+            let destinationIndexPathForItem = IndexPath(row: destinationIndexPath.row + row, section: destinationIndexPath.section)
             if let songRef = item.dragItem.localObject as? DocumentReference {
                 if let sourceIndexPath = item.sourceIndexPath {  // Meaning: If the drag is coming from the same table
                     songlist.songRefs.remove(at: sourceIndexPath.row)
                 }
-                songlist.songRefs.insert(songRef, at: destinationIndexPath.row + row)
+                if songlist.songRefs.count > 0 {
+                    songlist.songRefs.insert(songRef, at: destinationIndexPathForItem.row)
+                } else {
+                    songlist.songRefs.append(songRef)
+                }
                 songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
             }
+            // TODO: Handle external drags
+            
+            // coordinator.drop(item.dragItem, toRowAt: destinationIndexPathForItem)  // Looks strange, maybe because changing the model automatically reloads the tableview.
         }
     }
 }

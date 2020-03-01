@@ -45,6 +45,7 @@ extension Songlist: DocumentSerializable {
     
     static func refArray(from dict: [String: DocumentReference]) -> [DocumentReference] {
         var refs = [DocumentReference]()
+        guard dict.count > 0 else { return refs }
         for i in 0...dict.count-1 {
             if let songRef = dict[String(i)] {
                 refs.append(songRef)
@@ -55,6 +56,7 @@ extension Songlist: DocumentSerializable {
     
     var songRefDict: [String: DocumentReference] {
         var dict = [String: DocumentReference]()
+        guard self.songRefs.count > 0 else { return dict }
         for i in 0...self.songRefs.count-1 {
             dict[String(i)] = self.songRefs[i]
         }
