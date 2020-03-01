@@ -118,6 +118,8 @@ class ListVC: SongtableVC {
         }
     }
     
+    // TODO: Adding a song to an empty list sometimes adds an empty cell at the top, above the added song.
+    
     /*
      // Override to support conditional editing of the table view.
      override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
