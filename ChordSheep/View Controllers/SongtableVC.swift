@@ -209,6 +209,15 @@ extension SongtableVC: UITextFieldDelegate {
 
 extension SongtableVC: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        session.localContext = tableView
+        return dragItems(at: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
+        return dragItems(at: indexPath)
+    }
+    
+    func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
         let song = songs[indexPath.row]
         guard let songRef = song.ref,
             let textData = song.text.data(using: .utf8) else { return [] }

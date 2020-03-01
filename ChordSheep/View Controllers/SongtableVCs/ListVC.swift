@@ -149,6 +149,15 @@ extension ListVC: SongPickVCDelegate {
 }
 
 extension ListVC: UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: NSString.self)
+    }
+    
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        let isFromSameTable = (session.localDragSession?.localContext as? UITableView) === tableView
+        return UITableViewDropProposal(operation: isFromSameTable ? .move : .copy, intent: .insertAtDestinationIndexPath)
+    }
+    
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
         let destinationIndexPath: IndexPath
 
@@ -162,10 +171,12 @@ extension ListVC: UITableViewDropDelegate {
         
         for (row, item) in coordinator.items.enumerated() {
             if let songRef = item.dragItem.localObject as? DocumentReference {
+                if let sourceIndexPath = item.sourceIndexPath {  // Meaning: If the drag is coming from the same table
+                    songlist.songRefs.remove(at: sourceIndexPath.row)
+                }
                 songlist.songRefs.insert(songRef, at: destinationIndexPath.row + row)
                 songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
             }
         }
     }
 }
-// TODO: Allow reordering by just dragging and dropping in the same list, without pressing the edit button?
