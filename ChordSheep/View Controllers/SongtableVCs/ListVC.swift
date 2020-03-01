@@ -110,10 +110,10 @@ class ListVC: SongtableVC {
             songlist.songRefs.remove(at: indexPath.row)
             songlist.ref.updateData(["songs": songlist.songRefDict])
 
+            // For deleting the last song, the listener doesn't seem to fire, so I need to do this manually
             if songlist.songRefs.count < 1 {
                 songs.removeAll()
                 tableView.reloadData()
-                // songlist.ref.updateData(["songs": FieldValue.delete()])
             }
         }
     }
