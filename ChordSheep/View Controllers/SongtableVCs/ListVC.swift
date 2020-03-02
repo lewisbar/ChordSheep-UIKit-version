@@ -179,20 +179,47 @@ extension ListVC: UITableViewDropDelegate {
         
         for (row, item) in coordinator.items.enumerated() {
             let destinationIndexPathForItem = IndexPath(row: destinationIndexPath.row + row, section: destinationIndexPath.section)
+            
+            // 1. Local drags
             if let songRef = item.dragItem.localObject as? DocumentReference {
-                if let sourceIndexPath = item.sourceIndexPath {  // Meaning: If the drag is coming from the same table
+                if let sourceIndexPath = item.sourceIndexPath {  // Meaning: If the drag is coming from the same table (then remove from old position before inserting into the new one)
                     songlist.songRefs.remove(at: sourceIndexPath.row)
                 }
-                if songlist.songRefs.count > 0 {
-                    songlist.songRefs.insert(songRef, at: destinationIndexPathForItem.row)
-                } else {
-                    songlist.songRefs.append(songRef)
-                }
-                songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
+                
+                // Insert song in setlist
+                self.songlist = inserting(songRef: songRef, into: self.songlist, at: destinationIndexPathForItem.row)
+                self.songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
             }
-            // TODO: Handle external drags
-            
+                
+            // 2. External drags
+            else {
+                coordinator.session.loadObjects(ofClass: NSString.self) { items in
+                    for item in items {
+                        if let text = item as? String,
+                            let allSongsRef = self.mainVC.currentBand?.ref.collection("songs") {
+                            
+                            // Add song to All Songs
+                            let songRef = allSongsRef.addDocument(data: Song(with: text).dict)
+                            
+                            // Insert song in setlist
+                            self.songlist = self.inserting(songRef: songRef, into: self.songlist, at: destinationIndexPathForItem.row)
+                            self.songlist.ref.setData(["songs": self.songlist.songRefDict], merge: true)
+                        }
+                    }
+                }
+            }
             // coordinator.drop(item.dragItem, toRowAt: destinationIndexPathForItem)  // Looks strange, maybe because changing the model automatically reloads the tableview.
         }
+    }
+    
+    func inserting(songRef: DocumentReference, into songlist: Songlist, at index: Int) -> Songlist {
+        var songlist = songlist
+        
+        if songlist.songRefs.count > 0 {
+            songlist.songRefs.insert(songRef, at: index)
+        } else {
+            songlist.songRefs.append(songRef)
+        }
+        return songlist
     }
 }
