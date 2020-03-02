@@ -23,6 +23,7 @@ class AllSongsVC: SongtableVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         header.text = "All Songs"
+        tableView.dropDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,5 +102,27 @@ class AllSongsVC: SongtableVC {
         //        tableView.insertRows(at: [path], with: .automatic)
         //        tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
         //        pageVC?.didSelectSongAtRow(row)
+    }
+}
+
+extension AllSongsVC: UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
+        // Don't accept in-app drags into the All Songs list (except maybe later from other bands), because this would lead to duplicate songs
+        return session.localDragSession == nil &&
+            session.canLoadObjects(ofClass: NSString.self)
+    }
+    
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        return UITableViewDropProposal(operation: .copy, intent: .unspecified)
+    }
+    
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        for item in coordinator.items {
+            item.dragItem.itemProvider.loadObject(ofClass: NSString.self) { (provider, error) in
+                if let text = provider as? String {
+                    self.receive(newSong: Song(with: text))
+                }
+            }
+        }
     }
 }
