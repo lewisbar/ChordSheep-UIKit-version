@@ -32,10 +32,12 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     let editButton = UIButton(type: .custom)
     let addButton = UIButton(type: .custom)
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.backgroundColor = PaintCode.mediumDark
+        tableView.allowsMultipleSelectionDuringEditing = true
         
         db = Firestore.firestore()
 

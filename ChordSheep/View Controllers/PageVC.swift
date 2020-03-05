@@ -7,7 +7,7 @@
 //
 
 
-// TODO: Handle drops into the left side (pageVC). When in All Songs, add to All Songs and display text. When in ListVC, add to list before (or after?) the currently displayed song and display text.
+// TODO: Handle drops into the left side (pageVC)?. When in All Songs, add to All Songs and display text. When in ListVC, add to list before (or after?) the currently displayed song and display text.
 
 import UIKit
 
