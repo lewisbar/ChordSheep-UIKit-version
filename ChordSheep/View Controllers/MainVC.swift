@@ -7,6 +7,7 @@
 //
 
 // TODO: When you delete a song from a setlist that is currently chosen, it is still shown in the SongVC. When you then swipe to the next song, and then back, the deleted song is shown again in the SongVC. I'm not sure where to fix this right now, because I haven't looked into the project for more than half a year. So I'm just noting this here to be looked after at some time.
+// TODO: Similarly to the TODO above, when you drag a song into a set, the selection goes away. When you swipe, the old list of songs is used. You have to select a song in the list again to fix it.
 
 import UIKit
 
