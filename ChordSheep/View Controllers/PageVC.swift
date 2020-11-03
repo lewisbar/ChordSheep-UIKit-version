@@ -43,7 +43,7 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
         listButton.translatesAutoresizingMaskIntoConstraints = false
         // editButton.translatesAutoresizingMaskIntoConstraints = false
         
-        var buttonConstraints = [
+        let buttonConstraints = [
             listButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             listButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -8),
             listButton.heightAnchor.constraint(equalToConstant: 44),
