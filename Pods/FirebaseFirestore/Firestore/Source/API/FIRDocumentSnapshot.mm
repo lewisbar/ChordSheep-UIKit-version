@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Google
+ * Copyright 2017 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 #include <utility>
 #include <vector>
 
-#include "Firestore/core/src/firebase/firestore/util/warnings.h"
+#include "Firestore/core/src/util/warnings.h"
 
 #import "Firestore/Source/API/FIRDocumentReference+Internal.h"
 #import "Firestore/Source/API/FIRFieldPath+Internal.h"
@@ -29,18 +29,20 @@
 #import "Firestore/Source/API/FIRTimestamp+Internal.h"
 #import "Firestore/Source/API/converters.h"
 
-#include "Firestore/core/src/firebase/firestore/api/document_snapshot.h"
-#include "Firestore/core/src/firebase/firestore/api/firestore.h"
-#include "Firestore/core/src/firebase/firestore/api/settings.h"
-#include "Firestore/core/src/firebase/firestore/model/database_id.h"
-#include "Firestore/core/src/firebase/firestore/model/document_key.h"
-#include "Firestore/core/src/firebase/firestore/model/field_value.h"
-#include "Firestore/core/src/firebase/firestore/model/field_value_options.h"
-#include "Firestore/core/src/firebase/firestore/nanopb/nanopb_util.h"
-#include "Firestore/core/src/firebase/firestore/util/exception.h"
-#include "Firestore/core/src/firebase/firestore/util/hard_assert.h"
-#include "Firestore/core/src/firebase/firestore/util/log.h"
-#include "Firestore/core/src/firebase/firestore/util/string_apple.h"
+#include "Firestore/core/src/api/document_reference.h"
+#include "Firestore/core/src/api/document_snapshot.h"
+#include "Firestore/core/src/api/firestore.h"
+#include "Firestore/core/src/api/settings.h"
+#include "Firestore/core/src/model/database_id.h"
+#include "Firestore/core/src/model/document_key.h"
+#include "Firestore/core/src/model/field_path.h"
+#include "Firestore/core/src/model/field_value.h"
+#include "Firestore/core/src/model/field_value_options.h"
+#include "Firestore/core/src/nanopb/nanopb_util.h"
+#include "Firestore/core/src/util/exception.h"
+#include "Firestore/core/src/util/hard_assert.h"
+#include "Firestore/core/src/util/log.h"
+#include "Firestore/core/src/util/string_apple.h"
 
 namespace util = firebase::firestore::util;
 using firebase::Timestamp;
@@ -202,10 +204,7 @@ ServerTimestampBehavior InternalServerTimestampBehavior(FIRServerTimestampBehavi
 
 - (FieldValueOptions)optionsForServerTimestampBehavior:
     (FIRServerTimestampBehavior)serverTimestampBehavior {
-  SUPPRESS_DEPRECATED_DECLARATIONS_BEGIN()
-  return FieldValueOptions(InternalServerTimestampBehavior(serverTimestampBehavior),
-                           _snapshot.firestore()->settings().timestamps_in_snapshots_enabled());
-  SUPPRESS_END()
+  return FieldValueOptions(InternalServerTimestampBehavior(serverTimestampBehavior));
 }
 
 - (id)convertedValue:(FieldValue)value options:(const FieldValueOptions &)options {
@@ -240,12 +239,7 @@ ServerTimestampBehavior InternalServerTimestampBehavior(FIRServerTimestampBehavi
 }
 
 - (id)convertedTimestamp:(const FieldValue &)value options:(const FieldValueOptions &)options {
-  FIRTimestamp *wrapped = MakeFIRTimestamp(value.timestamp_value());
-  if (options.timestamps_in_snapshots_enabled()) {
-    return wrapped;
-  } else {
-    return [wrapped dateValue];
-  }
+  return MakeFIRTimestamp(value.timestamp_value());
 }
 
 - (id)convertedServerTimestamp:(const FieldValue &)value

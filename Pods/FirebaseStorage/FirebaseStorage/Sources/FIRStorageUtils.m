@@ -16,7 +16,7 @@
 
 #if TARGET_OS_IOS || TARGET_OS_TV
 #import <MobileCoreServices/MobileCoreServices.h>
-#elif TARGET_OS_OSX
+#elif TARGET_OS_OSX || TARGET_OS_WATCH
 #import <CoreServices/CoreServices.h>
 #endif
 
@@ -26,7 +26,11 @@
 #import "FirebaseStorage/Sources/FIRStorageErrors.h"
 #import "FirebaseStorage/Sources/FIRStoragePath.h"
 
+#if SWIFT_PACKAGE
+@import GTMSessionFetcherCore;
+#else
 #import <GTMSessionFetcher/GTMSessionFetcher.h>
+#endif
 
 // This is the list at https://cloud.google.com/storage/docs/json_api/ without &, ; and +.
 NSString *const kGCSObjectAllowedCharacterSet =
@@ -97,6 +101,12 @@ NSString *const kGCSObjectAllowedCharacterSet =
     [queryItems addObject:[NSURLQueryItem queryItemWithName:key value:queryParams[key]]];
   }
   [components setQueryItems:queryItems];
+  // NSURLComponents does not encode "+" as "%2B". This is however required by our backend, as
+  // it treats "+" as a shorthand encoding for spaces. See also
+  // https://stackoverflow.com/questions/31577188/how-to-encode-into-2b-with-nsurlcomponents
+  [components setPercentEncodedQuery:[[components percentEncodedQuery]
+                                         stringByReplacingOccurrencesOfString:@"+"
+                                                                   withString:@"%2B"]];
 
   NSString *encodedPath = [self encodedURLForPath:path];
   [components setPercentEncodedPath:encodedPath];
