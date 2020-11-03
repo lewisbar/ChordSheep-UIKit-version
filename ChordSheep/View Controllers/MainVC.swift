@@ -6,6 +6,8 @@
 //  Copyright © 2020 Lennart Wisbar. All rights reserved.
 //
 
+// TODO: When you delete a song from a setlist that is currently chosen, it is still shown in the SongVC. When you then swipe to the next song, and then back, the deleted song is shown again in the SongVC. I'm not sure where to fix this right now, because I haven't looked into the project for more than half a year. So I'm just noting this here to be looked after at some time.
+
 import UIKit
 
 class MainVC: UIViewController {

@@ -80,7 +80,7 @@ struct Style {
             guard let partType = determinePartType(for: matches[i], in: text) else { continue }
             
             let partStart = matches[i].range.upperBound
-            let partEnd = (i+1 < matches.count) ? matches[i+1].range.lowerBound : (text.endIndex.encodedOffset) // for last item, take end of text as partEnd
+            let partEnd = (i+1 < matches.count) ? matches[i+1].range.lowerBound : (text.endIndex.utf16Offset(in: text)) // for last item, take end of text as partEnd
             let partLength = partEnd - partStart
             let partRange = NSRange(location: partStart, length: partLength)
             result.append((partRange, partType))
