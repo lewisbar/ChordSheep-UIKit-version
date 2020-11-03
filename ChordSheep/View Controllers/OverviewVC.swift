@@ -115,7 +115,8 @@ class OverviewVC: UITableViewController {
         mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
         
         // Listen for the currently logged in user
-        let authHandle = Auth.auth().addStateDidChangeListener { (auth, user) in
+        // let authHandle =  // This was in front of the next line, but I don't need it right now. I'm leaving it here to remind me that it is possible to store the return value of addStateDidChangeListener, and I might need it in the future.
+        Auth.auth().addStateDidChangeListener { (auth, user) in
             guard let user = user else { print("No user logged in"); return }
             self.user.name = user.displayName ?? user.email ?? user.phoneNumber ?? "Unknown User"
             self.user.uid = user.uid
