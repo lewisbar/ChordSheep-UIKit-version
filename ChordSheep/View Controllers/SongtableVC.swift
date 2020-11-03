@@ -162,7 +162,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         guard let oldRow = selection else { print("No song selected"); return }
         let song = songs[oldRow]
         // song.text = text
-        guard let newRow = songs.index(of: song) else { print("Song not in list"); return }
+        guard let newRow = songs.firstIndex(of: song) else { print("Song not in list"); return }
 
         let oldPath = IndexPath(row: oldRow, section: 0)
         let newPath = IndexPath(row: newRow, section: 0)
