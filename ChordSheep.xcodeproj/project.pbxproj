@@ -832,7 +832,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 16539445234CE6AAF2920434 /* Pods-ChordSheep-ChordSheepUITests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9SPL76B3GR;
 				INFOPLIST_FILE = ChordSheepUITests/Info.plist;
@@ -853,7 +853,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B8E2318C4911335B82150E3A /* Pods-ChordSheep-ChordSheepUITests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9SPL76B3GR;
 				INFOPLIST_FILE = ChordSheepUITests/Info.plist;
