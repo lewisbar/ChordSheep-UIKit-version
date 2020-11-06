@@ -171,7 +171,7 @@ class OverviewVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !closedSections.contains(section) {
-            return bands[section].songlists.count + 1
+            return bands[section].songlists.count + 2
         }
         return 0
     }
@@ -179,12 +179,16 @@ class OverviewVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexPath)
-        
+
         switch indexPath.row {
         case 0:
             cell.textLabel?.text = "All Songs"
+        case 1:
+            cell.accessoryView = UIImageView(image: PaintCode.imageOfAddButtonSmall)
+            cell.textLabel?.text = "New list"
+            cell.textLabel?.textColor = PaintCode.medium
         default:
-            cell.textLabel?.text = bands[indexPath.section].songlists[indexPath.row - 1].title
+            cell.textLabel?.text = bands[indexPath.section].songlists[indexPath.row - 2].title
         }
         
         return cell
@@ -221,17 +225,35 @@ class OverviewVC: UITableViewController {
         // guard let bandRef = currentBandRef, let band = currentBand else { return }
         let band = bands[indexPath.section]
         mainVC.currentBand = band
-        if indexPath.row == 0 {
+        
+        switch indexPath.row {
+        
+        case 0:  // All Songs
             let songsRef = band.ref.collection("songs")
             let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: songsRef)  // db.collection("bands/\(bandID)/songs"))
             mainVC.pageVC.songtableVC = allSongsVC
             navigationController?.pushViewController(allSongsVC, animated: true)
-            return
+            
+        case 1:  // New list
+            let timestamp = Timestamp(date: Date())
+            let date = timestamp.dateValue()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            let formattedDate = formatter.string(from: date)
+            let listRef = band.ref.collection("lists").addDocument(data: ["date": timestamp, "title": formattedDate])
+            let songlist = Songlist(title: formattedDate, ref: listRef)
+            
+            let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
+            mainVC.pageVC.songtableVC = listVC
+            navigationController?.pushViewController(listVC, animated: true)
+            
+        default:
+            let songlist = band.songlists[indexPath.row - 2]
+            
+            let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
+            mainVC.pageVC.songtableVC = listVC
+            navigationController?.pushViewController(listVC, animated: true)
         }
-        let songlist = band.songlists[indexPath.row - 1]
-        let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
-        mainVC.pageVC.songtableVC = listVC
-        navigationController?.pushViewController(listVC, animated: true)
     }
     
     // Override to support conditional editing of the table view.
