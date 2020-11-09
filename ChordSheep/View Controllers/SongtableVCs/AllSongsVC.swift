@@ -23,6 +23,7 @@ class AllSongsVC: SongtableVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         header.text = "All Songs"
+        header.isUserInteractionEnabled = false
         tableView.dropDelegate = self
     }
     

@@ -28,6 +28,7 @@ class ListVC: SongtableVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         header.text = songlist.title
+        header.delegate = self
         tableView.dropDelegate = self
     }
     
@@ -221,5 +222,33 @@ extension ListVC: UITableViewDropDelegate {
             songlist.songRefs.append(songRef)
         }
         return songlist
+    }
+}
+
+
+extension ListVC: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        tapToDismissKeyboard.addTarget(self, action: #selector(dismissKeyboard))
+        mainVC?.view.addGestureRecognizer(tapToDismissKeyboard)
+    }
+    
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        mainVC?.view.removeGestureRecognizer(tapToDismissKeyboard)
+        if let text = textField.text {
+            changeListTitle(to: text)
+        }
+    }
+    
+    @objc func changeListTitle(to newTitle: String) {
+        songlist.ref.setData(["title": newTitle], merge: true)
     }
 }
