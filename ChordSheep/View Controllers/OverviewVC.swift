@@ -24,6 +24,8 @@ class OverviewVC: UITableViewController {
         
         db = Firestore.firestore()
         
+        tableView.register(AllSongsCell.self, forCellReuseIdentifier: "allSongsCell")
+        tableView.register(AddListCell.self, forCellReuseIdentifier: "addListCell")
         tableView.register(ListCell.self, forCellReuseIdentifier: "listCell")
         
         // Add a padding above the first section
@@ -178,20 +180,19 @@ class OverviewVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexPath)
+        var cell: UITableViewCell?
 
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "All Songs"
+            cell = tableView.dequeueReusableCell(withIdentifier: "allSongsCell", for: indexPath)
         case 1:
-            cell.accessoryView = UIImageView(image: PaintCode.imageOfAddButtonSmall)
-            cell.textLabel?.text = "New list"
-            cell.textLabel?.textColor = PaintCode.medium
+            cell = tableView.dequeueReusableCell(withIdentifier: "addListCell", for: indexPath)
         default:
-            cell.textLabel?.text = bands[indexPath.section].songlists[indexPath.row - 2].title
+            cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexPath)
+            cell?.textLabel?.text = bands[indexPath.section].songlists[indexPath.row - 2].title
         }
         
-        return cell
+        return cell!
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
