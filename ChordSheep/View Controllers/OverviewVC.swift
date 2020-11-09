@@ -259,25 +259,32 @@ class OverviewVC: UITableViewController {
     
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // "All Songs" filter must not be deleted
-        if indexPath.row == 0 {
+        // "All Songs" filter and "New Song" cell must not be deleted
+        if indexPath.row <= 1 {
             return false
         }
         return true
     }
     
 
-    /*
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let band = bands[indexPath.section]
+
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            band.songlists[indexPath.row - 2].ref.delete() { err in
+                if let err = err {
+                    print("Error removing songlist: \(err)")
+                } else {
+                    print("Songlist successfully removed!")
+                    // tableView.deleteRows(at: [indexPath], with: .fade)
+                }
+            }
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
 
     /*
     // Override to support rearranging the table view.
