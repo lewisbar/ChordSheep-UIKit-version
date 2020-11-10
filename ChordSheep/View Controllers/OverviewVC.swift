@@ -281,6 +281,9 @@ class OverviewVC: UITableViewController {
         let band = bands[indexPath.section]
 
         if editingStyle == .delete {
+            let deletedSonglist = band.songlists[indexPath.row - 2]
+            let deletedIndex = deletedSonglist.index
+            
             // Delete the row from the data source
             band.songlists[indexPath.row - 2].ref.delete() { err in
                 if let err = err {
@@ -288,6 +291,13 @@ class OverviewVC: UITableViewController {
                 } else {
                     print("Songlist successfully removed!")
                     // tableView.deleteRows(at: [indexPath], with: .fade)
+                    
+                    // Update the indices of all remaining songlists in that band
+                    for list in band.songlists {
+                        if list.index > deletedIndex {
+                            list.ref.setData(["index": list.index - 1], merge: true)
+                        }
+                    }
                 }
             }
         } else if editingStyle == .insert {
