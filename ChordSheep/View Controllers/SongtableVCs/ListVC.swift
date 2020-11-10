@@ -16,20 +16,22 @@ import Firebase
 class ListVC: SongtableVC {
 
     var songlist: Songlist!
+    var isNewList = false
     
 
-    convenience init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist) {
+    convenience init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist, isNewList: Bool = false) {
         self.init(style: .insetGrouped)
         self.mainVC = mainVC
         self.pageVC = pageVC
         self.songlist = songlist
+        self.isNewList = isNewList
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.dropDelegate = self
         header.text = songlist.title
         header.delegate = self
-        tableView.dropDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,7 +73,16 @@ class ListVC: SongtableVC {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isNewList {
+            header.becomeFirstResponder()
+            header.selectAll(nil)
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         mainVC.hidePickVC()
     }
     

@@ -244,7 +244,7 @@ class OverviewVC: UITableViewController {
             let listRef = band.ref.collection("lists").addDocument(data: ["date": timestamp, "title": formattedDate])
             let songlist = Songlist(title: formattedDate, ref: listRef)
             
-            let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
+            let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist, isNewList: true)
             mainVC.pageVC.songtableVC = listVC
             navigationController?.pushViewController(listVC, animated: true)
             
