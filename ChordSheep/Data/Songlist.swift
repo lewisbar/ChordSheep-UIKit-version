@@ -15,6 +15,7 @@ struct Songlist {
     var title = ""
     var songRefs = [DocumentReference]()
     var date: Date?
+    var index = 0
     var ref: DocumentReference
     
 //    var dictionary: [String: Any] {
@@ -40,6 +41,7 @@ extension Songlist: DocumentSerializable {
         if let songDict = dict["songs"] as? [String:DocumentReference] {
             self.songRefs = Songlist.refArray(from: songDict)
         }
+        self.index = dict["index"] as! Int
         self.ref = reference
     }
     

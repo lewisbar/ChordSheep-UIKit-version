@@ -141,7 +141,7 @@ class OverviewVC: UITableViewController {
                     // var currentBand = Band(name: bandName, ref: band.reference)
                     // self.bands.append(currentBand)
                     
-                    let listListener = band.ref.collection("lists").addSnapshotListener() { snapshot, error in
+                    let listListener = band.ref.collection("lists").order(by: "index").addSnapshotListener() { snapshot, error in
                         guard let snapshot = snapshot?.documents else {
                             print(error!.localizedDescription)
                             return
