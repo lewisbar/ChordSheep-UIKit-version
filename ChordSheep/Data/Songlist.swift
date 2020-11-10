@@ -14,8 +14,8 @@ struct Songlist {
     
     var title = ""
     var songRefs = [DocumentReference]()
-    var date: Date?
-    var index = 0
+    var date: Timestamp
+    var index: Int
     var ref: DocumentReference
     
 //    var dictionary: [String: Any] {
@@ -37,11 +37,16 @@ extension Songlist: DocumentSerializable {
     
     init(from dict: [String : Any], reference: DocumentReference) {
         self.title = dict["title"] as? String ?? ""
-        self.date = dict["date"] as? Date
+        self.date = dict["date"] as! Timestamp
         if let songDict = dict["songs"] as? [String:DocumentReference] {
             self.songRefs = Songlist.refArray(from: songDict)
         }
-        self.index = dict["index"] as! Int
+        if let i = dict["index"] as? Int {
+            self.index = i  // dict["index"] as! Int
+        } else {
+            self.index = 99
+            print(self.title, "has no index.")
+        }
         self.ref = reference
     }
     

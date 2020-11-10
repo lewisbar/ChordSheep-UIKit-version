@@ -241,12 +241,21 @@ class OverviewVC: UITableViewController {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
             let formattedDate = formatter.string(from: date)
-            let listRef = band.ref.collection("lists").addDocument(data: ["date": timestamp, "title": formattedDate])
-            let songlist = Songlist(title: formattedDate, ref: listRef)
+            let index = 0
             
-            let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist, isNewList: true)
-            mainVC.pageVC.songtableVC = listVC
-            navigationController?.pushViewController(listVC, animated: true)
+            // Add to firebase and initialize songlist with the same data
+            let listRef = band.ref.collection("lists").addDocument(data: ["title": formattedDate, "date": timestamp, "index": index])
+            let newList = Songlist(title: formattedDate, date: timestamp, index: index, ref: listRef)
+            
+            // Update the other lists' indices so the new list can take its place at the top
+            for list in band.songlists {
+                let newIndex = list.index + 1
+                list.ref.setData(["index": newIndex], merge: true)
+            }
+            
+            let listVC = ListVC(mainVC: self.mainVC, pageVC: self.mainVC.pageVC, songlist: newList, isNewList: true)
+            self.mainVC.pageVC.songtableVC = listVC
+            self.navigationController?.pushViewController(listVC, animated: true)
             
         default:
             let songlist = band.songlists[indexPath.row - 2]
