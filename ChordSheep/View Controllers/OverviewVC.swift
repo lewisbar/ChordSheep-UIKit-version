@@ -345,6 +345,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         return proposedDestinationIndexPath
     }
     
+    // TODO: Sometimes a list doesn't want to get dropped, I think when you do two drags too quickly after one another, then the list is not fully updated yet. Maybe I can find some kind of solution for that.
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         guard sourceIndexPath.section == destinationIndexPath.section,
               destinationIndexPath.row >= 2 else { return }
@@ -352,25 +353,12 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         let band = bands[sourceIndexPath.section]
         let oldIndex = sourceIndexPath.row - 2  // -2 because there are All Songs and New List cells at the top of the table
         let newIndex = destinationIndexPath.row - 2
-        let listRef = band.songlists[oldIndex].ref
-                
-        // Update the lists indices
-        let draggingDown = newIndex > oldIndex
         
-        if draggingDown {
-            for list in band.songlists {
-                if listRef != list.ref && (list.index <= newIndex) && (list.index > oldIndex) {  // Between source and destination index
-                    list.ref.setData(["index": list.index - 1], merge: true)
-                }
-            }
-            listRef.setData(["index": newIndex], merge: true)
-        } else {
-            listRef.setData(["index": newIndex], merge: true)
-            for list in band.songlists {
-                if listRef != list.ref && list.index >= newIndex {
-                    list.ref.setData(["index": list.index + 1], merge: true)
-                }
-            }
+        // Update the lists indices
+        let movingList = band.songlists.remove(at: oldIndex)
+        band.songlists.insert(movingList, at: newIndex)
+        for (index, list) in band.songlists.enumerated() {
+            list.ref.setData(["index": index], merge: true)
         }
     }
 }
