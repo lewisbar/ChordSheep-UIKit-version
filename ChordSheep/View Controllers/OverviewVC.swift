@@ -8,9 +8,9 @@
 
 import UIKit
 import Firebase
+import MobileCoreServices  // for kUTTypePlainText for dragging
 
-class OverviewVC: UITableViewController {
-
+class OverviewVC: UITableViewController, UITableViewDragDelegate {
     var mainVC: MainVC!
     var db: Firestore!
     var snapshotListeners = [ListenerRegistration]()
@@ -32,6 +32,10 @@ class OverviewVC: UITableViewController {
         tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 20))
         
         tableView.backgroundColor = PaintCode.mediumDark
+        
+        tableView.dragDelegate = self
+        tableView.dragInteractionEnabled = true
+        // tableView.dropDelegate = self
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -217,10 +221,10 @@ class OverviewVC: UITableViewController {
     }
 
     
-    @objc func addSetlistButtonPressed() {
-        // TODO: Implement adding setlists
-        print("Adding setlists is not implemented yet.")
-    }
+//    @objc func addSetlistButtonPressed() {
+//        // TODO: Implement adding setlists
+//        print("Adding setlists is not implemented yet.")
+//    }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // guard let bandRef = currentBandRef, let band = currentBand else { return }
@@ -319,5 +323,149 @@ class OverviewVC: UITableViewController {
         return true
     }
     */
-
+    
+    
+    // MARK: Reordering of single items
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard indexPath.row >= 2 else { return [] }
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        let list = bands[indexPath.section].songlists[indexPath.row - 2]
+        dragItem.localObject = list.ref
+        return [dragItem]
+    }
+    
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.row >= 2  // Don't allow All Songs and New List to be moved
+    }
+    
+    override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        if sourceIndexPath.section != proposedDestinationIndexPath.section || proposedDestinationIndexPath.row < 2 {  // Trying to drag to a different section or into the protected area? Back to source.
+            return sourceIndexPath
+        }
+        return proposedDestinationIndexPath
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard sourceIndexPath.section == destinationIndexPath.section,
+              destinationIndexPath.row >= 2 else { return }
+        
+        let band = bands[sourceIndexPath.section]
+        let oldIndex = sourceIndexPath.row - 2  // -2 because there are All Songs and New List cells at the top of the table
+        let newIndex = destinationIndexPath.row - 2
+        let listRef = band.songlists[oldIndex].ref
+                
+        // Update the lists indices
+        let draggingDown = newIndex > oldIndex
+        
+        if draggingDown {
+            for list in band.songlists {
+                if listRef != list.ref && (list.index <= newIndex) && (list.index > oldIndex) {  // Between source and destination index
+                    list.ref.setData(["index": list.index - 1], merge: true)
+                }
+            }
+            listRef.setData(["index": newIndex], merge: true)
+        } else {
+            listRef.setData(["index": newIndex], merge: true)
+            for list in band.songlists {
+                if listRef != list.ref && list.index >= newIndex {
+                    list.ref.setData(["index": list.index + 1], merge: true)
+                }
+            }
+        }
+    }
 }
+
+/*
+extension OverviewVC: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        session.localContext = tableView
+        return dragItems(at: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
+        return dragItems(at: indexPath)
+    }
+    
+    func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
+        let list = bands[indexPath.section].songlists[indexPath.row]
+        var listString = list.title
+        
+        for songRef in list.songRefs {
+            songRef.getDocument { (document, error) in
+                if let song = document, song.exists {
+                    listString.append("\n")
+                    listString.append(song.get("title") as? String ?? "")
+                } else {
+                    print("Document does not exist")
+                }
+            }
+        }
+        guard let textData = listString.data(using: .utf8) else { return [] }
+        
+        let itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = list.ref
+        return [dragItem]
+    }
+}
+
+
+extension OverviewVC: UITableViewDropDelegate {
+    // "Local drags with one item go through the existing `tableView(_:moveRowAt:to:)` method on the data source." (https://developer.apple.com/documentation/uikit/drag_and_drop/adopting_drag_and_drop_in_a_table_view)
+    
+    func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
+        return false  // session.canLoadObjects(ofClass: NSString.self)
+    }
+    
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        let isFromSameTable = (session.localDragSession?.localContext as? UITableView) === tableView
+        return UITableViewDropProposal(operation: isFromSameTable ? .move : .cancel, intent: .insertAtDestinationIndexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        guard let sourceIndexPath = coordinator.items[0].sourceIndexPath else { return }
+        
+        let destinationIndexPath: IndexPath
+
+        if let indexPath = coordinator.destinationIndexPath {  // meaning the drop location is at a specific index path, not just on an empty area on the table view
+            guard indexPath.section == sourceIndexPath.section else { return }  // Only allow drops from the same section
+            destinationIndexPath = indexPath
+        } else {  // Append at the end
+            // let section = tableView.numberOfSections - 1
+            let row = tableView.numberOfRows(inSection: sourceIndexPath.section)
+            destinationIndexPath = IndexPath(row: row, section: sourceIndexPath.section)
+        }
+        
+        for (row, item) in coordinator.items.enumerated() {
+            let destinationIndexPathForItem = IndexPath(row: destinationIndexPath.row + row, section: destinationIndexPath.section)
+            
+            // Accepts only local drops
+            if let listRef = item.dragItem.localObject as? DocumentReference {
+                let band = bands[destinationIndexPathForItem.section]
+                
+                listRef.setData(["index": destinationIndexPathForItem.row - 2], merge: true)
+                
+                // Update the other lists' indices so the new list can take its place at the top
+                for list in band.songlists {
+                    if list.index > destinationIndexPathForItem.row {
+                        let newIndex = list.index + 1
+                        list.ref.setData(["index": newIndex], merge: true)
+                    }
+                }
+            }
+            // coordinator.drop(item.dragItem, toRowAt: destinationIndexPathForItem)  // Looks strange, maybe because changing the model automatically reloads the tableview.
+        }
+    }
+    
+//    func inserting(songRef: DocumentReference, into songlist: Songlist, at index: Int) -> Songlist {
+//        var songlist = songlist
+//
+//        if songlist.songRefs.count > 0 {
+//            songlist.songRefs.insert(songRef, at: index)
+//        } else {
+//            songlist.songRefs.append(songRef)
+//        }
+//        return songlist
+//    }
+}
+*/

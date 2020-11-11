@@ -168,7 +168,7 @@ extension ListVC: SongPickVCDelegate {
     }
 }
 
-extension ListVC: UITableViewDropDelegate {
+extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in superclass (SongtableVC)
     func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: NSString.self)
     }
