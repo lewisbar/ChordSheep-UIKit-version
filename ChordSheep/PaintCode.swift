@@ -51,6 +51,8 @@ public class PaintCode : NSObject {
         static var addButtonSmallTargets: [AnyObject]?
         static var imageOfEditSongButton: UIImage?
         static var editSongButtonTargets: [AnyObject]?
+        static var imageOfEditSongIcon: UIImage?
+        static var editSongIconTargets: [AnyObject]?
     }
 
     //// Colors
@@ -1132,6 +1134,66 @@ public class PaintCode : NSObject {
 
     }
 
+    @objc dynamic public class func drawEditSongIcon(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()!
+        
+        //// Resize to Target Frame
+        context.saveGState()
+        let resizedFrame: CGRect = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)
+        context.translateBy(x: resizedFrame.minX, y: resizedFrame.minY)
+        context.scaleBy(x: resizedFrame.width / 24, y: resizedFrame.height / 24)
+
+
+        //// Color Declarations
+        let fillColor2 = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+
+        //// Bezier Drawing
+        let bezierPath = UIBezierPath()
+        bezierPath.move(to: CGPoint(x: 14.51, y: 4.3))
+        bezierPath.addCurve(to: CGPoint(x: 14.51, y: 4.96), controlPoint1: CGPoint(x: 14.91, y: 4.32), controlPoint2: CGPoint(x: 14.91, y: 4.76))
+        bezierPath.addCurve(to: CGPoint(x: 7.25, y: 5.15), controlPoint1: CGPoint(x: 14.25, y: 5.09), controlPoint2: CGPoint(x: 11.82, y: 5.15))
+        bezierPath.addCurve(to: CGPoint(x: 4.11, y: 5.1), controlPoint1: CGPoint(x: 5.85, y: 5.15), controlPoint2: CGPoint(x: 4.7, y: 5.14))
+        bezierPath.addLine(to: CGPoint(x: 4.12, y: 5.39))
+        bezierPath.addCurve(to: CGPoint(x: 4.11, y: 19.46), controlPoint1: CGPoint(x: 4.22, y: 8.33), controlPoint2: CGPoint(x: 3.84, y: 19.19))
+        bezierPath.addCurve(to: CGPoint(x: 19.23, y: 19.66), controlPoint1: CGPoint(x: 4.39, y: 19.74), controlPoint2: CGPoint(x: 16.85, y: 19.47))
+        bezierPath.addLine(to: CGPoint(x: 19.21, y: 19.23))
+        bezierPath.addLine(to: CGPoint(x: 19.19, y: 18.56))
+        bezierPath.addCurve(to: CGPoint(x: 19.6, y: 9.41), controlPoint1: CGPoint(x: 19.17, y: 16.67), controlPoint2: CGPoint(x: 19.28, y: 10.12))
+        bezierPath.addCurve(to: CGPoint(x: 20.31, y: 9.41), controlPoint1: CGPoint(x: 19.91, y: 8.7), controlPoint2: CGPoint(x: 20.31, y: 8.92))
+        bezierPath.addCurve(to: CGPoint(x: 20.28, y: 12.71), controlPoint1: CGPoint(x: 20.31, y: 9.73), controlPoint2: CGPoint(x: 20.3, y: 10.83))
+        bezierPath.addCurve(to: CGPoint(x: 19.92, y: 20.03), controlPoint1: CGPoint(x: 20.21, y: 16.38), controlPoint2: CGPoint(x: 20.07, y: 19.88))
+        bezierPath.addLine(to: CGPoint(x: 19.8, y: 20.15))
+        bezierPath.addCurve(to: CGPoint(x: 19.75, y: 20.19), controlPoint1: CGPoint(x: 19.79, y: 20.17), controlPoint2: CGPoint(x: 19.77, y: 20.18))
+        bezierPath.addLine(to: CGPoint(x: 19.66, y: 20.29))
+        bezierPath.addCurve(to: CGPoint(x: 19.6, y: 20.36), controlPoint1: CGPoint(x: 19.64, y: 20.31), controlPoint2: CGPoint(x: 19.62, y: 20.33))
+        bezierPath.addLine(to: CGPoint(x: 3.14, y: 20.43))
+        bezierPath.addCurve(to: CGPoint(x: 3.41, y: 4.68), controlPoint1: CGPoint(x: 2.83, y: 20.13), controlPoint2: CGPoint(x: 3.09, y: 5))
+        bezierPath.addLine(to: CGPoint(x: 3.54, y: 4.55))
+        bezierPath.addLine(to: CGPoint(x: 3.68, y: 4.4))
+        bezierPath.addCurve(to: CGPoint(x: 14.51, y: 4.3), controlPoint1: CGPoint(x: 10.63, y: 4.32), controlPoint2: CGPoint(x: 14.24, y: 4.28))
+        bezierPath.close()
+        bezierPath.usesEvenOddFillRule = true
+        fillColor2.setFill()
+        bezierPath.fill()
+
+
+        //// Bezier 2 Drawing
+        let bezier2Path = UIBezierPath()
+        bezier2Path.move(to: CGPoint(x: 8.46, y: 16.09))
+        bezier2Path.addCurve(to: CGPoint(x: 8.01, y: 15.53), controlPoint1: CGPoint(x: 7.84, y: 16.27), controlPoint2: CGPoint(x: 7.84, y: 16.27))
+        bezier2Path.addCurve(to: CGPoint(x: 21.58, y: 1.91), controlPoint1: CGPoint(x: 8.04, y: 15.39), controlPoint2: CGPoint(x: 21.14, y: 1.91))
+        bezier2Path.addCurve(to: CGPoint(x: 22.01, y: 2.37), controlPoint1: CGPoint(x: 22.01, y: 1.91), controlPoint2: CGPoint(x: 22.01, y: 1.91))
+        bezier2Path.addCurve(to: CGPoint(x: 8.46, y: 16.09), controlPoint1: CGPoint(x: 22.01, y: 2.82), controlPoint2: CGPoint(x: 8.59, y: 16.05))
+        bezier2Path.close()
+        bezier2Path.usesEvenOddFillRule = true
+        fillColor2.setFill()
+        bezier2Path.fill()
+        
+        context.restoreGState()
+
+    }
+
     //// Generated Images
 
     @objc dynamic public class var imageOfHideListButton: UIImage {
@@ -1330,6 +1392,20 @@ public class PaintCode : NSObject {
         return Cache.imageOfEditSongButton!
     }
 
+    @objc dynamic public class var imageOfEditSongIcon: UIImage {
+        if Cache.imageOfEditSongIcon != nil {
+            return Cache.imageOfEditSongIcon!
+        }
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 24, height: 24), false, 0)
+            PaintCode.drawEditSongIcon()
+
+        Cache.imageOfEditSongIcon = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return Cache.imageOfEditSongIcon!
+    }
+
     //// Customization Infrastructure
 
     @objc @IBOutlet dynamic var hideListButtonTargets: [AnyObject]! {
@@ -1468,6 +1544,16 @@ public class PaintCode : NSObject {
             Cache.editSongButtonTargets = newValue
             for target: AnyObject in newValue {
                 let _ = target.perform(NSSelectorFromString("setImage:"), with: PaintCode.imageOfEditSongButton)
+            }
+        }
+    }
+
+    @objc @IBOutlet dynamic var editSongIconTargets: [AnyObject]! {
+        get { return Cache.editSongIconTargets }
+        set {
+            Cache.editSongIconTargets = newValue
+            for target: AnyObject in newValue {
+                let _ = target.perform(NSSelectorFromString("setImage:"), with: PaintCode.imageOfEditSongIcon)
             }
         }
     }
