@@ -65,6 +65,7 @@ class AllSongsVC: SongtableVC {
         if editingStyle == .delete {
             let song = self.songs[indexPath.row]
             song.ref?.delete()
+            
             // TODO: Deletion must be handled in setlists that use the deleted song.
         }
     }

@@ -149,4 +149,8 @@ extension PageVC {
             setViewControllers([SongVC(with: song, index: index)], direction: .forward, animated: false)
         }
     }
+    
+    func didDeselectAllSongs() {
+        setViewControllers([SongVC()], direction: .forward, animated: false)
+    }
 }

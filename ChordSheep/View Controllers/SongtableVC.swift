@@ -16,7 +16,12 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     weak var pageVC: PageVC!
     var db: Firestore!
     var snapshotListener: ListenerRegistration?
-    var songs = [Song]()
+    var songs = [Song]() {
+        didSet {
+            editSongButton.isHidden = songs.isEmpty
+            pageVC.didDeselectAllSongs()
+        }
+    }
     var selection: Int? {
         return tableView.indexPathForSelectedRow?.row
     }
@@ -32,6 +37,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     }()
     let editButton = UIButton(type: .custom)
     let addButton = UIButton(type: .custom)
+    let editSongButton = UIButton(type: .custom)
     
     
     override func viewDidLoad() {
@@ -54,16 +60,26 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         editButton.setBackgroundImage(PaintCode.imageOfEditIconActive, for: .selected)
         editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
         let editButtonItem = UIBarButtonItem(customView: editButton)
+        
+        editSongButton.setBackgroundImage(PaintCode.imageOfEditSongIcon, for: .normal)
+        editSongButton.addTarget(self, action: #selector(editSongButtonPressed), for: .touchUpInside)
+        let editSongButtonItem = UIBarButtonItem(customView: editSongButton)
 
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spacer.width = 20
         
-        navigationItem.rightBarButtonItems = [editButtonItem, spacer, addButtonItem]
+        navigationItem.rightBarButtonItems = [editButtonItem, spacer, addButtonItem, spacer, editSongButtonItem]
 
         tableView.tableHeaderView = header  // Subclasses can set header.text to set the title
         
         tableView.dragDelegate = self
         tableView.dragInteractionEnabled = true
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(selectionDidChange), name: UITableView.selectionDidChangeNotification, object: tableView)
+    }
+    
+    @objc func editSongButtonPressed() {
+        pageVC.editButtonPressed(editButton)
     }
     
     @objc func addButtonPressed() {
@@ -106,7 +122,20 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pageVC?.didSelectSongAtRow(indexPath.row)
+        editSongButton.isHidden = false
     }
+    
+//    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+//        if selection == nil {
+//            editSongButton.isHidden = true
+//            pageVC?.didDeselectAllSongs()
+//        }
+//    }
+//
+//    // MARK: - Handle deselection of rows
+//    @objc func selectionDidChange() {
+//        print("selection did change")
+//    }
 
     
     // MARK: - Handle new songs and song updates
