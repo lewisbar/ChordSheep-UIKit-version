@@ -17,6 +17,10 @@ struct Style {
             styledText.addAttributes(part.styles, range: range)
         }
         
+        for range in Style.findChords(in: text) {
+            styledText.addAttributes(chord.styles, range: range)
+        }
+        
         for range in Style.findAnnotations(in: text) {
             styledText.addAttributes(annotation.styles, range: range)
         }
@@ -58,7 +62,8 @@ struct Style {
     )
     private static let chord = Part(
         keys: [],
-        styles: [NSAttributedString.Key.font: UIFont(name: "Menlo", size: 17) ?? UIFont.monospacedDigitSystemFont(ofSize: 17, weight: UIFont.Weight.regular)]
+        styles: [NSAttributedString.Key.font: UIFont(name: "Menlo", size: 17) ?? UIFont.monospacedDigitSystemFont(ofSize: 17, weight: UIFont.Weight.regular),
+                 NSAttributedString.Key.foregroundColor: UIColor.red]
     )
     
     private static let normalParts = [chorus, verse, bridge, preChorus]
@@ -86,6 +91,13 @@ struct Style {
             result.append((partRange, partType))
         }
         return result
+    }
+    private static func findChords(in text: String) -> [NSRange] {
+        let pattern = "\\[[^\\[\\]]*\\]"
+        let regex = try! NSRegularExpression(pattern: pattern)
+        let searchRange = NSRange(text.startIndex..., in: text)
+        let matches = regex.matches(in: text, range: searchRange)
+        return matches.map { $0.range }
     }
     
     private static func songPartTriggers(in text: String) -> [NSTextCheckingResult] {
