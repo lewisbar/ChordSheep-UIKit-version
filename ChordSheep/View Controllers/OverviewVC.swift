@@ -34,8 +34,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         tableView.backgroundColor = PaintCode.mediumDark
         
         tableView.dragDelegate = self
-        tableView.dragInteractionEnabled = true
-        // tableView.dropDelegate = self
+        tableView.dragInteractionEnabled = true  // TODO: Do I need this? Enables intra-app drags for iPhone. I think I need it to be even able to start a drag.
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -328,9 +327,32 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     // MARK: Reordering of single items
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         guard indexPath.row >= 2 else { return [] }
-        let dragItem = UIDragItem(itemProvider: NSItemProvider())
-        let list = bands[indexPath.section].songlists[indexPath.row - 2]
-        dragItem.localObject = list.ref
+        let songlist = bands[indexPath.section].songlists[indexPath.row - 2]
+        var text = songlist.title
+        
+        // Make sure the songs are put in the right order. Async fetching tends to mix them up.
+        var songtitles = [String](repeating: "", count: songlist.songRefs.count)
+        for (i, songRef) in songlist.songRefs.enumerated() {
+            songRef.getDocument { document, error in
+                if let document = document,
+                   document.exists,
+                   let title = document.get("title") as? String {
+                    
+                    songtitles[i] = title
+                } else {
+                    print("Document does not exist")
+                }
+            }
+        }
+        for title in songtitles {
+            text += "\n" + title
+        }
+        var itemProvider = NSItemProvider()  // Fallback in case the next line cannot convert to data. Just use an empty item provider.
+        if let textData = text.data(using: .utf8) {
+            itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
+        }
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = songlist.ref
         return [dragItem]
     }
     
@@ -364,40 +386,6 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
 }
 
 /*
-extension OverviewVC: UITableViewDragDelegate {
-    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        session.localContext = tableView
-        return dragItems(at: indexPath)
-    }
-    
-    func tableView(_ tableView: UITableView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
-        return dragItems(at: indexPath)
-    }
-    
-    func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
-        let list = bands[indexPath.section].songlists[indexPath.row]
-        var listString = list.title
-        
-        for songRef in list.songRefs {
-            songRef.getDocument { (document, error) in
-                if let song = document, song.exists {
-                    listString.append("\n")
-                    listString.append(song.get("title") as? String ?? "")
-                } else {
-                    print("Document does not exist")
-                }
-            }
-        }
-        guard let textData = listString.data(using: .utf8) else { return [] }
-        
-        let itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = list.ref
-        return [dragItem]
-    }
-}
-
-
 extension OverviewVC: UITableViewDropDelegate {
     // "Local drags with one item go through the existing `tableView(_:moveRowAt:to:)` method on the data source." (https://developer.apple.com/documentation/uikit/drag_and_drop/adopting_drag_and_drop_in_a_table_view)
     
@@ -456,4 +444,5 @@ extension OverviewVC: UITableViewDropDelegate {
 //        return songlist
 //    }
 }
+
 */

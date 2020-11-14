@@ -16,18 +16,18 @@ class SongVC: UIViewController {
     
     // weak var delegate: SongVCDelegate?
     var songLabel = UILabel()
-    var song: Song? {
+    var song: Song? /* {
         didSet {
+            print("didSet song")
             songLabel.attributedText = Style.styledText(for: song?.body ?? "")
         }
-    }
+    } */
     var index = 0
     
     convenience init(with song: Song, index: Int) {
         self.init()
         self.song = song
         self.index = index
-        songLabel.attributedText = Style.styledText(for: song.body ?? "")
     }
     
     override func viewDidLoad() {
@@ -38,6 +38,7 @@ class SongVC: UIViewController {
         songLabel.lineBreakMode = .byWordWrapping
         songLabel.numberOfLines = 0
         songLabel.textColor = .white
+        songLabel.attributedText = Style.styledText(for: song?.body ?? "")
         
         scrollView.addSubview(songLabel)
         view.addSubview(scrollView)

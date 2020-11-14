@@ -25,7 +25,7 @@ struct Style {
     }
     
     
-    // TODO: If there is text in the same line, but outside of the brackets, put the chords above that. You can have your chords inline, top, bottom, or even above each part. If a part contains no text, but only chords, the chords get the part color. Else, chords have a special chord color.
+    // TODO: If there is text in the same line, but outside of the brackets, put the chords above that. You can have your chords inline, top, bottom, or even above each part. If a part contains no text, but only chords, the chords get the part color. Else, chords have a special chord color. EDIT: Is that a good idea? By now I think it's better to give all chords the same color, so you don't miss them when you're playing chords. Later, the user should be given the ability to choose some styling preferences.
     
     private struct Part {
         let keys: [String]
