@@ -81,6 +81,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        guard songs.count > initialSelection.row else { return }
         tableView.selectRow(at: initialSelection, animated: true, scrollPosition: .none)
         pageVC.didSelectSongAtRow(initialSelection.row)
     }
