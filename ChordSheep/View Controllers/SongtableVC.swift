@@ -26,6 +26,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         return tableView.indexPathForSelectedRow?.row
     }
     var initialSelection = IndexPath(row: 0, section: 0)
+    var mostRecentlySelectedSong: Song?
     let tapToDismissKeyboard = UITapGestureRecognizer()
     let header: UITextField = {
         let header = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
@@ -139,17 +140,24 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         editSongButton.isHidden = false
     }
     
-//    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-//        if selection == nil {
-//            editSongButton.isHidden = true
-//            pageVC?.didDeselectAllSongs()
-//        }
-//    }
-//
-//    // MARK: - Handle deselection of rows
-//    @objc func selectionDidChange() {
-//        print("selection did change")
-//    }
+    override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+        // Store the current selection because editing cancels the selection
+        if let selection = selection {
+            mostRecentlySelectedSong = songs[selection]
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        // Restore the selection because editing cancels the selection
+        if let song = mostRecentlySelectedSong {
+            let rowToBeSelected = songs.firstIndex(where: { $0.ref == song.ref }) ?? 0
+            let indexPathToBeSelected = IndexPath(row: rowToBeSelected, section: 0)
+            DispatchQueue.main.async {
+                tableView.selectRow(at: indexPathToBeSelected, animated: true, scrollPosition: .none)
+                self.pageVC.didSelectSongAtRow(indexPathToBeSelected.row)
+            }
+        }
+    }
 
     
     // MARK: - Handle new songs and song updates

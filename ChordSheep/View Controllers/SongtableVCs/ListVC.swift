@@ -130,7 +130,7 @@ class ListVC: SongtableVC {
         }
     }
     
-    // TODO: Adding a song to an empty list sometimes adds an empty cell at the top, above the added song.
+    // TODO: Adding a song to an empty list sometimes adds an empty cell at the top, above the added song. Edit: Is that still the case?
     
     /*
      // Override to support conditional editing of the table view.
