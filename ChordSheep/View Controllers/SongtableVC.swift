@@ -25,6 +25,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     var selection: Int? {
         return tableView.indexPathForSelectedRow?.row
     }
+    var initialSelection = IndexPath(row: 0, section: 0)
     let tapToDismissKeyboard = UITapGestureRecognizer()
     let header: UITextField = {
         let header = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
@@ -78,9 +79,26 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
 //        NotificationCenter.default.addObserver(self, selector: #selector(selectionDidChange), name: UITableView.selectionDidChangeNotification, object: tableView)
     }
     
-    @objc func editSongButtonPressed() {
-        pageVC.editButtonPressed(editButton)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.selectRow(at: initialSelection, animated: true, scrollPosition: .none)
+        pageVC.didSelectSongAtRow(initialSelection.row)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Subclasses should add a snapshotListener in viewWillAppear
+        snapshotListener?.remove()
+    }
+    
+    
+    @objc func editSongButtonPressed() {
+        guard let selection = selection else { return }
+        let editVC = EditVC(song: songs[selection], delegate: self)
+        editVC.modalPresentationStyle = .fullScreen
+        self.present(editVC, animated: true)
+    }
+ 
     
     @objc func addButtonPressed() {
         // Must be implemented by subclasses
@@ -95,12 +113,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
             editButton.isSelected = false
         }
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Subclasses should add a snapshotListener in viewWillAppear
-        snapshotListener?.remove()
-    }
+
 
     // MARK: - Table view data source
 
@@ -143,19 +156,11 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         // Implement in subclass
     }
     
-    func updateSong(with text: String) {
-        guard let oldRow = selection else { print("No song selected"); return }
-        let song = songs[oldRow]
-        // song.text = text
-        guard let newRow = songs.firstIndex(of: song) else { print("Song not in list"); return }
-
-        let oldPath = IndexPath(row: oldRow, section: 0)
-        let newPath = IndexPath(row: newRow, section: 0)
-        tableView.reloadRows(at: [oldPath, newPath], with: .automatic)
-        tableView.selectRow(at: newPath, animated: true, scrollPosition: .none)
-        tableView.scrollToRow(at: newPath, at: .none, animated: true)
-
-        pageVC?.didSelectSongAtRow(newRow)
+    func update(song: Song, with text: String) {
+        /* This method is called while the EditVC is still onscreen, so all selections made here would be removed when the view appears. That's why, instead of selecting the row here, I set the variable initialSelection. In viewDidAppear, this variable will be used to select a row.*/
+        let rowToBeSelected = songs.firstIndex(where: { $0.ref == song.ref }) ?? 0
+        let indexPathToBeSelected = IndexPath(row: rowToBeSelected, section: 0)
+        initialSelection = indexPathToBeSelected
     }
 }
 

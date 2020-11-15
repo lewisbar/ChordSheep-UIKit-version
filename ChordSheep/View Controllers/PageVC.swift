@@ -79,13 +79,13 @@ class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewCo
         })
     }
     
-    @objc func editButtonPressed(_ sender: UIButton) {
-        let editVC = EditVC()
-        guard let song = (viewControllers?.first as? SongVC)?.song else { return }
-        editVC.songTextView.text = song.text
-        editVC.delegate = songtableVC
-        self.present(editVC, animated: true)
-    }
+//    @objc func editButtonPressed(_ sender: UIButton) {
+//        let editVC = EditVC()
+//        guard let song = (viewControllers?.first as? SongVC)?.song else { return }
+//        editVC.songTextView.text = song.text
+//        editVC.delegate = songtableVC
+//        self.present(editVC, animated: true)
+//    }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         

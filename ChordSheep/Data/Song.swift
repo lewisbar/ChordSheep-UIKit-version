@@ -15,6 +15,7 @@ struct Song {
     var text = "" {
         didSet {
             evaluateText()
+            ref?.setData(dict)
         }
     }
     var title = ""
