@@ -8,18 +8,12 @@
 
 import UIKit
 
-protocol EditVCDelegate: AnyObject {
-    func update(song: Song)
-}
-
 class EditVC: TextViewVC {
     
-    weak var delegate: EditVCDelegate?
     var song: Song
     
-    init(song: Song, delegate: EditVCDelegate) {
+    init(song: Song) {
         self.song = song
-        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,7 +29,6 @@ class EditVC: TextViewVC {
     override func doneButtonPressed() {
         songTextView.resignFirstResponder()  // Otherwise the keyboard disappears a bit after the AddVC
         song.text = songTextView.text
-        self.delegate?.update(song: song)
         dismiss(animated: true)
     }
 }

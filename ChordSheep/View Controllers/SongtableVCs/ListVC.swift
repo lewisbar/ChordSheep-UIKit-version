@@ -158,15 +158,6 @@ class ListVC: SongtableVC {
      return true
      }
      */
-
-
-    // MARK: EditVCDelegate
-    override func update(song: Song) {
-        // Select the edited song in the table
-        
-//        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
-//        self.pageVC.didSelectSongAtRow(storedSelection.row)
-    }
 }
 
 

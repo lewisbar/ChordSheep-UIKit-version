@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import MobileCoreServices
 
-class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
+class SongtableVC: UITableViewController, AddVCDelegate {
 
     weak var mainVC: MainVC!
     weak var pageVC: PageVC!
@@ -98,7 +98,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         storedSelection = tableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
         storedSelectedSong = songs[storedSelection.row]
         
-        let editVC = EditVC(song: songs[selection], delegate: self)
+        let editVC = EditVC(song: songs[selection])
         editVC.modalPresentationStyle = .fullScreen
         self.present(editVC, animated: true)
     }
