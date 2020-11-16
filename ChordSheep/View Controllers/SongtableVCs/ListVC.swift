@@ -78,6 +78,11 @@ class ListVC: SongtableVC {
             header.becomeFirstResponder()
             header.selectAll(nil)
         }
+        
+        // Make sure the IndexPath exists. Then restore the selection (because editing a song removes it).
+        guard songs.count > storedSelection.row else { return }
+        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
+        pageVC.didSelectSongAtRow(storedSelection.row)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -153,8 +158,17 @@ class ListVC: SongtableVC {
      return true
      }
      */
-    
+
+
+    // MARK: EditVCDelegate
+    override func update(song: Song) {
+        // Select the edited song in the table
+        
+//        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
+//        self.pageVC.didSelectSongAtRow(storedSelection.row)
+    }
 }
+
 
 extension ListVC: SongPickVCDelegate {
     func pickVCWasHidden() {

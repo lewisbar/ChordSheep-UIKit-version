@@ -42,6 +42,16 @@ class AllSongsVC: SongtableVC {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // The IndexPath could change if the title has been edited, therefore we must find the song itself. The first occurrence is also the only one in "All Songs".
+        guard let song = storedSelectedSong else { return }
+        let rowToBeSelected = self.songs.firstIndex(where: { $0.ref == song.ref }) ?? 0
+        let indexPathToBeSelected = IndexPath(row: rowToBeSelected, section: 0)
+        tableView.selectRow(at: indexPathToBeSelected, animated: true, scrollPosition: .none)
+        pageVC.didSelectSongAtRow(indexPathToBeSelected.row)
+    }
+    
     @objc override func addButtonPressed() {
         let addVC = AddVC()
         addVC.delegate = self
@@ -104,6 +114,15 @@ class AllSongsVC: SongtableVC {
         //        tableView.insertRows(at: [path], with: .automatic)
         //        tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
         //        pageVC?.didSelectSongAtRow(row)
+    }
+    
+    override func update(song: Song) {
+//        // The IndexPath could change if the title has been edited, therefore we must find the song itself. The first occurrence is also the only one in "All Songs".
+//        let rowToBeSelected = self.songs.firstIndex(where: { $0.ref == song.ref }) ?? 0
+//        let indexPathToBeSelected = IndexPath(row: rowToBeSelected, section: 0)
+//
+//        // storedSelection will be used in viewDidAppear
+//        self.storedSelectedSong = song
     }
 }
 

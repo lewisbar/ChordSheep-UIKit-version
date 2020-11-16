@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditVCDelegate: AnyObject {
-    func update(song: Song, with text: String)
+    func update(song: Song)
 }
 
 class EditVC: TextViewVC {
@@ -35,7 +35,7 @@ class EditVC: TextViewVC {
     override func doneButtonPressed() {
         songTextView.resignFirstResponder()  // Otherwise the keyboard disappears a bit after the AddVC
         song.text = songTextView.text
-        self.delegate?.update(song: song, with: songTextView.text)
+        self.delegate?.update(song: song)
         dismiss(animated: true)
     }
 }

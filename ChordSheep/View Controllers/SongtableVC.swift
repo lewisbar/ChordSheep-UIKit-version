@@ -82,13 +82,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(selectionDidChange), name: UITableView.selectionDidChangeNotification, object: tableView)
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        guard songs.count > storedSelection.row else { return }
-        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
-        pageVC.didSelectSongAtRow(storedSelection.row)
-    }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -99,6 +93,11 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     
     @objc func editSongButtonPressed() {
         guard let selection = selection else { return }
+        
+        // So the selection can be restored after the edit
+        storedSelection = tableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
+        storedSelectedSong = songs[storedSelection.row]
+        
         let editVC = EditVC(song: songs[selection], delegate: self)
         editVC.modalPresentationStyle = .fullScreen
         self.present(editVC, animated: true)
@@ -170,11 +169,9 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         // Implement in subclass
     }
     
-    func update(song: Song, with text: String) {
-        /* This method is called while the EditVC is still onscreen, so all selections made here would be removed when the view appears. That's why, instead of selecting the row here, I set the variable initialSelection. In viewDidAppear, this variable will be used to select a row.*/
-        let rowToBeSelected = songs.firstIndex(where: { $0.ref == song.ref }) ?? 0
-        let indexPathToBeSelected = IndexPath(row: rowToBeSelected, section: 0)
-        storedSelection = indexPathToBeSelected
+    func update(song: Song) {
+        /* This method is called while the EditVC is still onscreen, so all selections made here would be removed when the view appears. That's why, instead of selecting the row here, I set the variable storedSelection. In viewDidAppear, this variable will be used to select a row.*/
+        // Implement in subclasses
     }
 }
 
