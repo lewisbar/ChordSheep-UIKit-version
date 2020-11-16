@@ -25,8 +25,11 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     var selection: Int? {
         return tableView.indexPathForSelectedRow?.row
     }
-    var initialSelection = IndexPath(row: 0, section: 0)
-    var mostRecentlySelectedSong: Song?
+    
+    // For remembering the selection in case it is removed, for example after editing mode
+    var storedSelection = IndexPath(row: 0, section: 0)
+    var storedSelectedSong: Song?
+
     let tapToDismissKeyboard = UITapGestureRecognizer()
     let header: UITextField = {
         let header = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
@@ -82,9 +85,9 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard songs.count > initialSelection.row else { return }
-        tableView.selectRow(at: initialSelection, animated: true, scrollPosition: .none)
-        pageVC.didSelectSongAtRow(initialSelection.row)
+        guard songs.count > storedSelection.row else { return }
+        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
+        pageVC.didSelectSongAtRow(storedSelection.row)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -142,20 +145,22 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
     
     override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
         // Store the current selection because editing cancels the selection
-        if let selection = selection {
-            mostRecentlySelectedSong = songs[selection]
-        }
+        storedSelection = tableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
     }
     
     override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         // Restore the selection because editing cancels the selection
-        if let song = mostRecentlySelectedSong {
-            let rowToBeSelected = songs.firstIndex(where: { $0.ref == song.ref }) ?? 0
-            let indexPathToBeSelected = IndexPath(row: rowToBeSelected, section: 0)
-            DispatchQueue.main.async {
-                tableView.selectRow(at: indexPathToBeSelected, animated: true, scrollPosition: .none)
-                self.pageVC.didSelectSongAtRow(indexPathToBeSelected.row)
-            }
+        guard let deletedIndexPath = indexPath,
+              !songs.isEmpty else { return }
+        let newSelection: IndexPath
+        if deletedIndexPath <= storedSelection {
+            newSelection = IndexPath(row: storedSelection.row - 1, section: 0)
+        } else {
+            newSelection = storedSelection
+        }
+        DispatchQueue.main.async {
+            tableView.selectRow(at: newSelection, animated: true, scrollPosition: .none)
+            self.pageVC.didSelectSongAtRow(newSelection.row)
         }
     }
 
@@ -169,7 +174,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, EditVCDelegate {
         /* This method is called while the EditVC is still onscreen, so all selections made here would be removed when the view appears. That's why, instead of selecting the row here, I set the variable initialSelection. In viewDidAppear, this variable will be used to select a row.*/
         let rowToBeSelected = songs.firstIndex(where: { $0.ref == song.ref }) ?? 0
         let indexPathToBeSelected = IndexPath(row: rowToBeSelected, section: 0)
-        initialSelection = indexPathToBeSelected
+        storedSelection = indexPathToBeSelected
     }
 }
 

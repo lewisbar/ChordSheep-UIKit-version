@@ -16,8 +16,7 @@ import Firebase
 class ListVC: SongtableVC {
 
     var songlist: Songlist!
-    var isNewList = false
-    
+    var isNewList = false    
 
     convenience init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist, isNewList: Bool = false) {
         self.init(style: .insetGrouped)
