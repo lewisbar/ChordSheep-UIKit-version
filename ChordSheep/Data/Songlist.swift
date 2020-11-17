@@ -46,18 +46,26 @@ struct Songlist: DocumentSerializable {
     
     init(from dict: [String : Any], reference: DocumentReference) {
         /* This is the initializer for existing songs in the database (as opposed to creating a new song). */
+        self.ref = reference
         self.title = dict["title"] as? String ?? ""
-        self.timestamp = dict["timestamp"] as! Timestamp  // ?? Timestamp(date: Date())
+        if let timestamp = dict["timestamp"] as? Timestamp {
+            self.timestamp = timestamp
+        } else {
+            // If the list, for some reason, has no timestamp, create one and add it to the document
+            self.timestamp = Timestamp(date: Date())
+            self.ref?.setData(["timestamp": timestamp], merge: true)
+            print("Songlist \(self.title) has no timestamp. Using new timestamp.")
+        }
+        // self.timestamp = dict["timestamp"] as! Timestamp  // ?? Timestamp(date: Date())
         if let songDict = dict["songs"] as? [String:DocumentReference] {
             self.songRefs = Songlist.refArray(from: songDict)
         }
         if let i = dict["index"] as? Int {
             self.index = i  // dict["index"] as! Int
         } else {
-            self.index = 99
+            self.index = 99  // TODO: No good solution. This should never happen, but you never know.
             print(self.title, "has no index.")
         }
-        self.ref = reference
     }
     
     init(title: String, timestamp: Timestamp, index: Int) {

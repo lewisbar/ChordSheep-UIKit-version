@@ -245,6 +245,8 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             let formattedDate = formatter.string(from: timestamp.dateValue())
             
             let newList = band.createSonglist(title: formattedDate, timestamp: timestamp)
+            // band.ref.collection("lists").addDocument(data: newList.dataDict)
+
             
             let listVC = ListVC(mainVC: self.mainVC, pageVC: self.mainVC.pageVC, songlist: newList, isNewList: true)
             self.mainVC.pageVC.songtableVC = listVC

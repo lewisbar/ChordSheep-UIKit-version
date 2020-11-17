@@ -6,7 +6,6 @@
 //  Copyright © 2020 Lennart Wisbar. All rights reserved.
 //
 
-// TODO: It could be that I don't need this class.
 
 import Foundation
 import Firebase
@@ -18,6 +17,10 @@ class Band {
     var ref: DocumentReference
     var songlists: [Songlist] {
         didSet {
+            for list in songlists {
+                print(list.title, list.index)
+            }
+            // Update all indices to match the new situation
             for (index, _) in songlists.enumerated() {
                 songlists[index].index = index
             }
@@ -33,15 +36,8 @@ class Band {
     }
     
     func createSonglist(title: String, timestamp: Timestamp) -> Songlist {
-        let songlist = Songlist(title: title, timestamp: timestamp, index: 0)
-        ref.collection("lists").addDocument(data: songlist.dataDict)
-        
-        // Update the other lists' indices so the new list can take its place at the top
-        for list in songlists {
-            let newIndex = list.index + 1
-            list.ref?.setData(["index": newIndex], merge: true)
-        }
-        
+        var songlist = Songlist(title: title, timestamp: timestamp, index: 0)
+        songlist.ref = self.ref.collection("lists").addDocument(data: songlist.dataDict)
         return songlist
     }
     
