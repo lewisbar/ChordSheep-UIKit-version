@@ -31,12 +31,13 @@ class Band {
     
     init(name: String, ref: DocumentReference, songlists: [Songlist] = [Songlist]()) {
         self.name = name
-        self.ref = ref
         self.songlists = songlists
+        self.ref = ref
     }
     
     func createSonglist(title: String, timestamp: Timestamp) -> Songlist {
         var songlist = Songlist(title: title, timestamp: timestamp, index: 0)
+        songlists.insert(songlist, at: 0)
         songlist.ref = self.ref.collection("lists").addDocument(data: songlist.dataDict)
         return songlist
     }

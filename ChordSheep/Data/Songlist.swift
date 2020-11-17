@@ -23,10 +23,16 @@ struct Songlist: DocumentSerializable {
             self.ref?.setData(["songs": songRefDict], merge: true) }
     }
     var timestamp: Timestamp {
-        didSet { self.ref?.setData(["timestamp": timestamp], merge: true) }
+        didSet {
+            print("new timestamp:", timestamp)
+            self.ref?.setData(["timestamp": timestamp], merge: true)
+        }
     }
     var index: Int {
-        didSet { self.ref?.setData(["index": index], merge: true) }
+        didSet {
+            print("index of \(title) set")
+            self.ref?.setData(["index": index], merge: true)
+        }
     }
     var ref: DocumentReference?
     

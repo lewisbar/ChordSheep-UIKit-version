@@ -356,9 +356,6 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         // Update the lists indices
         let movingList = band.songlists.remove(at: oldIndex)
         band.songlists.insert(movingList, at: newIndex)
-        for (index, list) in band.songlists.enumerated() {
-            list.ref?.setData(["index": index], merge: true)
-        }
     }
 }
 
