@@ -240,10 +240,9 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             
         case 1:  // New list
             let timestamp = Timestamp(date: Date())
-            let date = timestamp.dateValue()
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
-            let formattedDate = formatter.string(from: date)
+            let formattedDate = formatter.string(from: timestamp.dateValue())
             
             let newList = band.createSonglist(title: formattedDate, timestamp: timestamp)
             
