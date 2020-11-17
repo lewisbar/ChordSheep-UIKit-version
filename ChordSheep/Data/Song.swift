@@ -190,7 +190,8 @@ struct Song {
     }
     
     func delete() {
-        // TODO: Delete from database. But does this really need this wrapper function?
+        // Delete from database.
+        ref?.delete()
     }
 }
 

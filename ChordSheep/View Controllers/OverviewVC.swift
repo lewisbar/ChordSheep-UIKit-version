@@ -244,17 +244,8 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
             let formattedDate = formatter.string(from: date)
-            let index = 0
             
-            // Add to firebase and initialize songlist with the same data
-            let listRef = band.ref.collection("lists").addDocument(data: ["title": formattedDate, "date": timestamp, "index": index])
-            let newList = Songlist(title: formattedDate, date: timestamp, index: index, ref: listRef)
-            
-            // Update the other lists' indices so the new list can take its place at the top
-            for list in band.songlists {
-                let newIndex = list.index + 1
-                list.ref.setData(["index": newIndex], merge: true)
-            }
+            let newList = band.createSonglist(title: formattedDate, timestamp: timestamp)
             
             let listVC = ListVC(mainVC: self.mainVC, pageVC: self.mainVC.pageVC, songlist: newList, isNewList: true)
             self.mainVC.pageVC.songtableVC = listVC
@@ -284,24 +275,9 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         let band = bands[indexPath.section]
 
         if editingStyle == .delete {
-            let deletedSonglist = band.songlists[indexPath.row - 2]
-            let deletedIndex = deletedSonglist.index
-            
-            // Delete the row from the data source
-            band.songlists[indexPath.row - 2].ref.delete() { err in
-                if let err = err {
-                    print("Error removing songlist: \(err)")
-                } else {
-                    print("Songlist successfully removed!")
-                    // tableView.deleteRows(at: [indexPath], with: .fade)
-                    
-                    // Update the indices of all remaining songlists in that band
-                    for list in band.songlists {
-                        if list.index > deletedIndex {
-                            list.ref.setData(["index": list.index - 1], merge: true)
-                        }
-                    }
-                }
+            if let ref = band.songlists[indexPath.row - 2].ref {            
+                // Delete the row from the data source
+                band.deleteSonglist(ref: ref)
             }
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -380,7 +356,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         let movingList = band.songlists.remove(at: oldIndex)
         band.songlists.insert(movingList, at: newIndex)
         for (index, list) in band.songlists.enumerated() {
-            list.ref.setData(["index": index], merge: true)
+            list.ref?.setData(["index": index], merge: true)
         }
     }
 }

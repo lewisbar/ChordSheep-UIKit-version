@@ -36,13 +36,13 @@ class ListVC: SongtableVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        snapshotListener = songlist.ref.addSnapshotListener() {snapshot, error in
+        snapshotListener = songlist.ref?.addSnapshotListener() {snapshot, error in
             guard let songlistDict = snapshot?.data() else {
                 print("Songs couldn't be read.")
                 return
             }
             
-            self.songlist = Songlist(from: songlistDict, reference: self.songlist.ref)
+            self.songlist = Songlist(from: songlistDict, reference: self.songlist.ref!)
             
             // Make sure the songs are put in the right order. Async fetching tends to mix them up.
             self.songs = [Song](repeating: Song(with: ""), count: self.songlist.songRefs.count)
@@ -124,7 +124,6 @@ class ListVC: SongtableVC {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             songlist.songRefs.remove(at: indexPath.row)
-            songlist.ref.updateData(["songs": songlist.songRefDict])
 
             // For deleting the last song, the listener doesn't seem to fire, so I need to do this manually
             if songlist.songRefs.count < 1 {
@@ -168,7 +167,6 @@ extension ListVC: SongPickVCDelegate {
     
     func picked(songRef: DocumentReference) {
         songlist.songRefs.append(songRef)
-        songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
     }
 }
 
@@ -204,7 +202,6 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
                 
                 // Insert song in setlist
                 self.songlist = inserting(songRef: songRef, into: self.songlist, at: destinationIndexPathForItem.row)
-                self.songlist.ref.setData(["songs": songlist.songRefDict], merge: true)
             }
                 
             // 2. External drags
@@ -219,7 +216,6 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
                             
                             // Insert song in setlist
                             self.songlist = self.inserting(songRef: songRef, into: self.songlist, at: destinationIndexPathForItem.row)
-                            self.songlist.ref.setData(["songs": self.songlist.songRefDict], merge: true)
                         }
                     }
                 }
@@ -259,11 +255,7 @@ extension ListVC: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         mainVC?.view.removeGestureRecognizer(tapToDismissKeyboard)
         if let text = textField.text {
-            changeListTitle(to: text)
+            songlist.title = text
         }
-    }
-    
-    @objc func changeListTitle(to newTitle: String) {
-        songlist.ref.setData(["title": newTitle], merge: true)
     }
 }
