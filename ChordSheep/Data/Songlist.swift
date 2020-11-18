@@ -17,11 +17,7 @@ struct Songlist: DocumentSerializable {
             print("new title:", title)
             self.ref?.setData(["title": title], merge: true) }
     }
-    var songRefs = [DocumentReference]() {
-        didSet {
-            print("songrefs updated")
-            self.ref?.setData(["songs": songRefDict], merge: true) }
-    }
+    var songRefs = [DocumentReference]()
     var timestamp: Timestamp {
         didSet {
             print("new timestamp:", timestamp)
@@ -79,6 +75,34 @@ struct Songlist: DocumentSerializable {
         self.title = title
         self.timestamp = timestamp
         self.index = index
+    }
+    
+    mutating func addSong(ref: DocumentReference, at index: Int) {
+        if index < songRefs.count {
+            songRefs.insert(ref, at: index)
+        } else {
+            songRefs.append(ref)
+        }
+        submitSongRefs()
+    }
+    
+    mutating func removeSong(at index: Int) {
+        songRefs.remove(at: index)
+        submitSongRefs()
+    }
+    
+    mutating func moveSong(fromIndex: Int, toIndex: Int) {
+        guard fromIndex < songRefs.count, toIndex < songRefs.count else {
+            print("Invalid indices", fromIndex, toIndex)
+            return
+        }
+        let songRef = songRefs.remove(at: fromIndex)
+        songRefs.insert(songRef, at: toIndex)
+        submitSongRefs()
+    }
+    
+    func submitSongRefs() {
+        self.ref?.setData(["songs": songRefDict], merge: true)
     }
     
     var dataDict: [String: Any] {

@@ -15,15 +15,19 @@ import Firebase
 
 class ListVC: SongtableVC {
 
-    var songlist: Songlist!
+    var songlist: Songlist
     var isNewList = false    
 
-    convenience init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist, isNewList: Bool = false) {
-        self.init(style: .insetGrouped)
+    init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist, isNewList: Bool = false) {
+        self.songlist = songlist
+        super.init(style: .insetGrouped)
         self.mainVC = mainVC
         self.pageVC = pageVC
-        self.songlist = songlist
         self.isNewList = isNewList
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -123,7 +127,7 @@ class ListVC: SongtableVC {
     // TODO: If last song is deleted, hide edit button?
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            songlist.songRefs.remove(at: indexPath.row)
+            songlist.removeSong(at: indexPath.row)
 
             // For deleting the last song, the listener doesn't seem to fire, so I need to do this manually
             if songlist.songRefs.count < 1 {
@@ -197,11 +201,11 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
             // 1. Local drags
             if let songRef = item.dragItem.localObject as? DocumentReference {
                 if let sourceIndexPath = item.sourceIndexPath {  // Meaning: If the drag is coming from the same table (then remove from old position before inserting into the new one)
-                    songlist.songRefs.remove(at: sourceIndexPath.row)
+                    self.songlist.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
+                } else {
+                    // Insert song in setlist
+                    songlist.addSong(ref: songRef, at: destinationIndexPath.row)
                 }
-                
-                // Insert song in setlist
-                self.songlist = inserting(songRef: songRef, into: self.songlist, at: destinationIndexPathForItem.row)
             }
                 
             // 2. External drags
@@ -209,13 +213,15 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
                 coordinator.session.loadObjects(ofClass: NSString.self) { items in
                     for item in items {
                         if let text = item as? String,
-                            let allSongsRef = self.mainVC.currentBand?.ref.collection("songs") {
+                            let band = self.mainVC.currentBand {
                             
                             // Add song to All Songs
-                            let songRef = allSongsRef.addDocument(data: Song(with: text).dict)
+                            let songRef = band.createSong(with: text)
+                            // let songRef = allSongsRef.addDocument(data: Song(with: text).dict)
                             
                             // Insert song in setlist
-                            self.songlist = self.inserting(songRef: songRef, into: self.songlist, at: destinationIndexPathForItem.row)
+                            self.songlist.addSong(ref: songRef, at: destinationIndexPathForItem.row)
+                            // self.songlist.songRefs = self.inserting(songRef: songRef, into: self.songlist.songRefs, at: destinationIndexPathForItem.row)
                         }
                     }
                 }
@@ -224,15 +230,15 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
         }
     }
     
-    func inserting(songRef: DocumentReference, into songlist: Songlist, at index: Int) -> Songlist {
-        var songlist = songlist
+    func inserting(songRef: DocumentReference, into songRefs: [DocumentReference], at index: Int) -> [DocumentReference] {
+        var songRefs = songRefs
         
-        if songlist.songRefs.count > 0 {
-            songlist.songRefs.insert(songRef, at: index)
+        if songRefs.count > 0 {
+            songRefs.insert(songRef, at: index)
         } else {
-            songlist.songRefs.append(songRef)
+            songRefs.append(songRef)
         }
-        return songlist
+        return songRefs
     }
 }
 

@@ -38,12 +38,17 @@ class Band {
     func createSonglist(title: String, timestamp: Timestamp) -> Songlist {
         var songlist = Songlist(title: title, timestamp: timestamp, index: 0)
         songlists.insert(songlist, at: 0)
-        songlist.ref = self.ref.collection("lists").addDocument(data: songlist.dataDict)
+        songlist.ref = ref.collection("lists").addDocument(data: songlist.dataDict)
         return songlist
     }
     
     func deleteSonglist(ref: DocumentReference) {
         ref.delete()
+    }
+    
+    func createSong(with text: String) -> DocumentReference {
+        let song = Song(with: text)
+        return ref.collection("songs").addDocument(data: song.dict)
     }
 }
 
