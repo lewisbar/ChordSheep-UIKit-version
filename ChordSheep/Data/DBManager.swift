@@ -23,7 +23,7 @@ struct Fields {
 }
 
 struct DBManager {
-    // - MARK: Top Level: Contains Users and Bands
+    // MARK: - Top Level: Contains Users and Bands
     static func createUser(name: String, in database: Firestore, completion: @escaping (_ user: User) -> ()) {
         var ref: DocumentReference? = nil
         ref = database.collection(Collections.users).addDocument(data: [Fields.name: name]) { error in
@@ -54,7 +54,7 @@ struct DBManager {
     }
     
     
-    // - MARK: Band Level: Contains Songs and Lists
+    // MARK: - Band Level: Contains Songs and Lists
     static func createSong(text: String, in bandRef: DocumentReference, completion: @escaping (_ song: Song) -> ()) {
         var song = Song(with: text)
         var ref: DocumentReference? = nil
@@ -94,7 +94,7 @@ struct DBManager {
     }
     
     
-    // - MARK: List Level: Contains Song References
+    // MARK: - List Level: Contains Song References
     static func addSong(ref: DocumentReference, to list: inout Songlist, at index: Int) {
         if index < list.songRefs.count {
             list.songRefs.insert(ref, at: index)
