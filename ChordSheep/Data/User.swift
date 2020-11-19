@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 class User: Equatable, Comparable {
     static func == (lhs: User, rhs: User) -> Bool {
@@ -23,4 +24,10 @@ class User: Equatable, Comparable {
     var transpositions = [String: Int]()    // [SongID: TranspositionLevel], example: [4jsflkj22434ksjf: -2]
     var notes = [String: String]()          // [SongID: Note], example: [240siljjfd290j: "Play this song slowly."]
     var zoomLevels = [String: Float]()      // [SongID: ZoomLevel], example: [984hf8ejefq84: 1.2432]
+    var ref: DocumentReference
+    
+    init(name: String, ref: DocumentReference) {
+        self.name = name
+        self.ref = ref
+    }
 }

@@ -70,7 +70,7 @@ struct Songlist: DocumentSerializable {
         }
     }
     
-    init(title: String, timestamp: Timestamp, index: Int) {
+    init(title: String, timestamp: Timestamp, index: Int = 0) {
         /* This is the initializer for creating a new songlist (as opposed to initializing an existing one from the database). To be called via band.create(songlist:title)*/
         self.title = title
         self.timestamp = timestamp
