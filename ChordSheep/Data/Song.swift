@@ -12,10 +12,14 @@ import Firebase
 struct Song {
     
     // TODO: Create my own data types for key and signature?
+    let bandID: String
+    let id: String
+    let timestamp: Timestamp
+    
     var text = "" {
         didSet {
             evaluateText()
-            // ref?.setData(dict)
+            DBManager.updateText(in: self, to: self.title)
         }
     }
     var title = ""
@@ -24,7 +28,6 @@ struct Song {
     var tempo: Int?
     var signature: String?
     var body: String?
-    var ref: DocumentReference?
     
     
     // Compose a summary of all meta data for the detail label in the songlist
@@ -49,6 +52,8 @@ struct Song {
     init(with text: String) {
         self.text = text
         evaluateText()
+        self.id = DBManager.generateDocumentID(type: .song, name: self.title)
+        DBManager.create(song: self, id: self.id)
     }
     
     enum Key: String {

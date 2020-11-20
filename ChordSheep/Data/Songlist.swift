@@ -35,7 +35,7 @@ struct Songlist {
         self.timestamp = timestamp
         self.index = index
         self.id = DBManager.generateDocumentID(type: .list, name: self.title)
-        DBManager.create(list: self, in: bandID, id: self.id)
+        DBManager.create(list: self, id: self.id)
     }
 
     func delete() {
