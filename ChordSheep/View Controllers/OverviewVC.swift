@@ -149,7 +149,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
                             print(error!.localizedDescription)
                             return
                         }
-                        band.songlists = snapshot.map { Songlist(from: $0.data(), reference: $0.reference) }
+                        band.lists = snapshot.map { Songlist(from: $0.data(), reference: $0.reference) }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                         }

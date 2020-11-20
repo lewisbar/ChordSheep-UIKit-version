@@ -10,45 +10,44 @@ import Foundation
 import Firebase
 
 
-struct Songlist: DocumentSerializable {
+struct Songlist {
     
-    var title = "" {
-        didSet {
-            print("new title:", title)
-            self.ref?.setData(["title": title], merge: true) }
-    }
-    var songRefs = [DocumentReference]()
-    var timestamp: Timestamp {
-        didSet {
-            print("new timestamp:", timestamp)
-            self.ref?.setData(["timestamp": timestamp], merge: true)
-        }
-    }
+    let bandID: String
+    let id: String
+    let timestamp: Timestamp
+
+    var title = "" { didSet { DBManager.rename(list: self, in: bandID, to: title) } }
+    
     var index: Int {
         didSet {
             print("index of \(title) set")
             self.ref?.setData(["index": index], merge: true)
         }
     }
-    var ref: DocumentReference?
+    // var songRefs = [DocumentReference]()
     
-//    var dictionary: [String: Any] {
-//        if let date = date {
-//            return [
-//                "title": title,
-//                "songs": songs,
-//                "date": date
-//            ]
-//        }
-//        return [
-//            "title": title,
-//            "songs": songs
-//        ]
-//    }
     
-    init(from dict: [String : Any], reference: DocumentReference) {
+    
+    init(title: String, timestamp: Timestamp, index: Int = 0, bandID: String) {
+        /* This is the initializer for creating a new songlist (as opposed to initializing an existing one from the database). To be called via band.create(songlist:title)*/
+        self.bandID = bandID
+        self.title = title
+        self.timestamp = timestamp
+        self.index = index
+        self.id = DBManager.generateDocumentID(type: .list, name: self.title)
+        DBManager.create(list: self, in: bandID, id: self.id)
+    }
+
+    func delete() {
+        DBManager.delete(list: self, from: bandID)
+    }
+    
+    
+    
+    
+    init(from dict: [String : Any], ref: DocumentReference) {
         /* This is the initializer for existing songs in the database (as opposed to creating a new song). */
-        self.ref = reference
+        self.ref = ref
         self.title = dict["title"] as? String ?? ""
         if let timestamp = dict["timestamp"] as? Timestamp {
             self.timestamp = timestamp
@@ -70,12 +69,7 @@ struct Songlist: DocumentSerializable {
         }
     }
     
-    init(title: String, timestamp: Timestamp, index: Int = 0) {
-        /* This is the initializer for creating a new songlist (as opposed to initializing an existing one from the database). To be called via band.create(songlist:title)*/
-        self.title = title
-        self.timestamp = timestamp
-        self.index = index
-    }
+
     
     mutating func addSong(ref: DocumentReference, at index: Int) {
         if index < songRefs.count {

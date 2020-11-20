@@ -9,7 +9,7 @@
 import Foundation
 import Firebase
 
-class User: Equatable, Comparable {
+struct User: Equatable, Comparable {
     static func == (lhs: User, rhs: User) -> Bool {
         return lhs.uid == rhs.uid
     }
@@ -21,13 +21,14 @@ class User: Equatable, Comparable {
     
     var name = ""
     var uid = ""
-    var transpositions = [String: Int]()    // [SongID: TranspositionLevel], example: [4jsflkj22434ksjf: -2]
-    var notes = [String: String]()          // [SongID: Note], example: [240siljjfd290j: "Play this song slowly."]
-    var zoomLevels = [String: Float]()      // [SongID: ZoomLevel], example: [984hf8ejefq84: 1.2432]
-    var ref: DocumentReference
+    var ref: DocumentReference?
+
+//    var transpositions = [DocumentReference: Int]()    // [SongID: TranspositionLevel], example: [4jsflkj22434ksjf: -2]
+//    var notes = [DocumentReference: String]()          // [SongID: Note], example: [240siljjfd290j: "Play this song slowly."]
+//    var zoomLevels = [DocumentReference: Float]()      // [SongID: ZoomLevel], example: [984hf8ejefq84: 1.2432]
     
-    init(name: String, ref: DocumentReference) {
+    init(name: String) {
         self.name = name
-        self.ref = ref
+        DBManager.create(user: &self)
     }
 }

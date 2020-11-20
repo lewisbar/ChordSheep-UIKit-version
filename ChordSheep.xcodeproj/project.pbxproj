@@ -38,7 +38,6 @@
 		7C60C9CF23D8EEDF007BDF62 /* SongtableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C60C9CE23D8EEDF007BDF62 /* SongtableVC.swift */; };
 		7C66D73223E588D9006D0EFE /* PaintCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C66D73123E588D9006D0EFE /* PaintCode.swift */; };
 		7C8D7ABF23F7577F0048A201 /* SongPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8D7ABE23F7577F0048A201 /* SongPickVC.swift */; };
-		7C990FB723D64251008544C7 /* DocumentSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C990FB623D64251008544C7 /* DocumentSerializable.swift */; };
 		7CA124632559D17900EDAF5B /* AddListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA124622559D17900EDAF5B /* AddListCell.swift */; };
 		7CA124682559D34800EDAF5B /* AllSongsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA124672559D34800EDAF5B /* AllSongsCell.swift */; };
 		7CCBF6C723DF64AC001C171D /* Importer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCBF6C623DF64AC001C171D /* Importer.swift */; };
@@ -105,7 +104,6 @@
 		7C60C9CE23D8EEDF007BDF62 /* SongtableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongtableVC.swift; sourceTree = "<group>"; };
 		7C66D73123E588D9006D0EFE /* PaintCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaintCode.swift; sourceTree = "<group>"; };
 		7C8D7ABE23F7577F0048A201 /* SongPickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPickVC.swift; sourceTree = "<group>"; };
-		7C990FB623D64251008544C7 /* DocumentSerializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSerializable.swift; sourceTree = "<group>"; };
 		7CA124622559D17900EDAF5B /* AddListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListCell.swift; sourceTree = "<group>"; };
 		7CA124672559D34800EDAF5B /* AllSongsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSongsCell.swift; sourceTree = "<group>"; };
 		7CCBF6C623DF64AC001C171D /* Importer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Importer.swift; sourceTree = "<group>"; };
@@ -264,7 +262,6 @@
 				7C158D0823CE02920059795F /* Band.swift */,
 				7C158CF023CCDC420059795F /* Song.swift */,
 				7C158D0423CDFE150059795F /* Songlist.swift */,
-				7C990FB623D64251008544C7 /* DocumentSerializable.swift */,
 				7CCBF6C623DF64AC001C171D /* Importer.swift */,
 				7CCBF6C823DF64B8001C171D /* Exporter.swift */,
 			);
@@ -567,7 +564,6 @@
 				7CCBF6C923DF64B8001C171D /* Exporter.swift in Sources */,
 				7C158D0023CCE0850059795F /* SongCell.swift in Sources */,
 				7C60C9CD23D8BBEB007BDF62 /* AllSongsVC.swift in Sources */,
-				7C990FB723D64251008544C7 /* DocumentSerializable.swift in Sources */,
 				7C158CE723CCD8170059795F /* ListVC.swift in Sources */,
 				7C158D0923CE02920059795F /* Band.swift in Sources */,
 				7C158CE523CCD7EB0059795F /* OverviewVC.swift in Sources */,

@@ -196,7 +196,7 @@ struct Song {
 }
 
 
-extension Song: DocumentSerializable {
+extension Song: FirestoreType {
     init(from dict: [String: Any], reference: DocumentReference) {
         self.text = dict["text"] as? String ?? ""
         self.title = dict["title"] as? String ?? ""
