@@ -31,6 +31,7 @@ struct Fields {
     static let tempo = "tempo"
     static let signature = "signature"
     static let body = "body"
+    static let index = "index"
 }
 
 
@@ -121,18 +122,18 @@ struct DBManager {
         bands.document(song.bandID).collection(Collections.songs).document(song.id).setData(dict(for: song), merge: true)
     }
     
-    static func rename(list: Songlist, to name: String) {
-        bands.document(list.bandID).collection(Collections.lists).document(list.id).setData([Fields.title: name], merge: true)
+    static func rename(list: Songlist, to title: String) {
+        bands.document(list.bandID).collection(Collections.lists).document(list.id).setData([Fields.title: title], merge: true)
     }
-    
+        
     
     // MARK: - Reordering
     static func move(band: Band, fromIndex: Int, toIndex: Int) {
-        // TODO
+        // TODO. But drag and drop reordering of bands has not been implemented anyway as of now.
     }
     
-    static func move(list: Songlist, fromIndex: Int, toIndex: Int) {
-        // TODO
+    static func set(index: Int, for list: Songlist) {
+        bands.document(list.bandID).collection(Collections.lists).document(list.id).setData([Fields.index: index], merge: true)
     }
     
     static func move(songRef: DocumentReference, in list: Songlist, fromIndex: Int, toIndex: Int) {

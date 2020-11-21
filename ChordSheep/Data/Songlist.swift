@@ -16,16 +16,10 @@ struct Songlist {
     let id: String
     let timestamp: Timestamp
 
-    var title = "" { didSet { DBManager.rename(list: self, in: bandID, to: title) } }
+    var title = "" { didSet { DBManager.rename(list: self, to: title) } }
     
-    var index: Int {
-        didSet {
-            print("index of \(title) set")
-            self.ref?.setData(["index": index], merge: true)
-        }
-    }
-    // var songRefs = [DocumentReference]()
-    
+    var index: Int
+    var songRefs = [DocumentReference]()
     
     
     init(title: String, timestamp: Timestamp, index: Int = 0, bandID: String) {
@@ -35,12 +29,31 @@ struct Songlist {
         self.timestamp = timestamp
         self.index = index
         self.id = DBManager.generateDocumentID(type: .list, name: self.title)
-        DBManager.create(list: self, id: self.id)
+        DBManager.create(list: self, in: self.bandID, id: self.id)
     }
 
     func delete() {
         DBManager.delete(list: self, from: bandID)
     }
+    
+    mutating func moveSongRef(fromIndex: Int, toIndex: Int) {
+        let songRef = songRefs.remove(at: fromIndex)
+        songRefs.insert(songRef, at: toIndex)
+        
+        // Update indices
+        var dict = [String: DocumentReference]()
+        for i in 0...self.songRefs.count-1 {
+            dict[String(i)] = self.songRefs[i]
+        }
+        
+        for index in 0..<lists.count {
+            if lists[index].index != index {
+                lists[index].index = index
+                DBManager.set(index: index, for: lists[index])
+            }
+        }
+    }
+    
     
     
     

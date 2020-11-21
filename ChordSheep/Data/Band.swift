@@ -11,8 +11,10 @@ import Foundation
 import Firebase
 
 struct Band {
-    var name: String { didSet { DBManager.rename(band: self, to: name) } }
     let id: String
+
+    var name: String { didSet { DBManager.rename(band: self, to: name) } }
+    var lists = [Songlist]()
     
     init(name: String) {
         self.name = name
@@ -23,21 +25,22 @@ struct Band {
     func delete() {
         DBManager.delete(band: self)
     }
+    
+    mutating func moveList(fromIndex: Int, toIndex: Int) {
+        let list = lists.remove(at: fromIndex)
+        lists.insert(list, at: toIndex)
+        
+        // Update indices
+        for index in min(fromIndex, toIndex)...max(fromIndex, toIndex) {
+            lists[index].index = index
+            DBManager.set(index: index, for: lists[index])
+        }
+    }
 }
 
 
     // var songs: [Song]  // TODO: Is it necessary to initialize all bands' songs everytime I open the app? I think not, so I commented this line.
-//    var songlists: [Songlist] {
-//        didSet {
-//            for list in songlists {
-//                print(list.title, list.index)
-//            }
-//            // Update all indices to match the new situation
-//            for (index, _) in songlists.enumerated() {
-//                songlists[index].index = index
-//            }
-//        }
-//    }
+
     // var members = [String: Int]()
 
     
