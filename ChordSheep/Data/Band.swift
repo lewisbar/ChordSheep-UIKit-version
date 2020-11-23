@@ -27,14 +27,32 @@ struct Band {
     }
     
     mutating func moveList(fromIndex: Int, toIndex: Int) {
-        let list = lists.remove(at: fromIndex)
-        lists.insert(list, at: toIndex)
+        lists.moveElement(fromIndex: fromIndex, toIndex: toIndex)
         
         // Update indices
         for index in min(fromIndex, toIndex)...max(fromIndex, toIndex) {
             lists[index].index = index
             DBManager.set(index: index, for: lists[index])
         }
+    }
+    
+    mutating func createList(title: String, timestamp: Timestamp) {
+        // Prepare the other lists' indices to make room at position 0
+        for (i, _) in lists.enumerated() {
+            let index = i + 1
+            lists[index].index = index
+            DBManager.set(index: index, for: lists[index])
+        }
+        
+        // Create the new list
+        let listID = DBManager.generateDocumentID(type: .list, name: title)
+        let newList = Songlist(title: title, id: listID, bandID: self.id, timestamp: timestamp)
+        lists.insert(newList, at: lists.startIndex)
+        DBManager.create(list: newList)
+    }
+    
+    func delete(list: Songlist) {
+        DBManager.delete(list: list, from: id)
     }
 }
 

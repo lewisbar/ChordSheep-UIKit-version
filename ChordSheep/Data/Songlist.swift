@@ -18,43 +18,32 @@ struct Songlist {
 
     var title = "" { didSet { DBManager.rename(list: self, to: title) } }
     
-    var index: Int
+    var index = 0
     var songRefs = [DocumentReference]()
     
     
-    init(title: String, timestamp: Timestamp, index: Int = 0, bandID: String) {
+    init(title: String, id: ListID, bandID: String, timestamp: Timestamp) {
         /* This is the initializer for creating a new songlist (as opposed to initializing an existing one from the database). To be called via band.create(songlist:title)*/
         self.bandID = bandID
         self.title = title
         self.timestamp = timestamp
-        self.index = index
-        self.id = DBManager.generateDocumentID(type: .list, name: self.title)
-        DBManager.create(list: self, in: self.bandID, id: self.id)
-    }
-
-    func delete() {
-        DBManager.delete(list: self, from: bandID)
+        self.id = id
     }
     
-    mutating func moveSongRef(fromIndex: Int, toIndex: Int) {
-        let songRef = songRefs.remove(at: fromIndex)
-        songRefs.insert(songRef, at: toIndex)
-        
-        // Update indices
-        var dict = [String: DocumentReference]()
-        for i in 0...self.songRefs.count-1 {
-            dict[String(i)] = self.songRefs[i]
-        }
-        
-        for index in 0..<lists.count {
-            if lists[index].index != index {
-                lists[index].index = index
-                DBManager.set(index: index, for: lists[index])
-            }
-        }
+    mutating func move(fromIndex: Int, toIndex: Int) {
+        songRefs.moveElement(fromIndex: fromIndex, toIndex: toIndex)
+        DBManager.updateSongRefs(for: self)
     }
     
+    mutating func add(songRef: DocumentReference, at index: Int) {
+        songRefs.insert(songRef, at: index)
+        DBManager.updateSongRefs(for: self)
+    }
     
+    mutating func remove(at index: Int) {
+        songRefs.remove(at: index)
+        DBManager.updateSongRefs(for: self)
+    }
     
     
     
@@ -98,19 +87,19 @@ struct Songlist {
         submitSongRefs()
     }
     
-    mutating func moveSong(fromIndex: Int, toIndex: Int) {
-        guard fromIndex < songRefs.count, toIndex < songRefs.count else {
-            print("Invalid indices", fromIndex, toIndex)
-            return
-        }
-        let songRef = songRefs.remove(at: fromIndex)
-        songRefs.insert(songRef, at: toIndex)
-        submitSongRefs()
-    }
-    
-    func submitSongRefs() {
-        self.ref?.setData(["songs": songRefDict], merge: true)
-    }
+//    mutating func moveSong(fromIndex: Int, toIndex: Int) {
+//        guard fromIndex < songRefs.count, toIndex < songRefs.count else {
+//            print("Invalid indices", fromIndex, toIndex)
+//            return
+//        }
+//        let songRef = songRefs.remove(at: fromIndex)
+//        songRefs.insert(songRef, at: toIndex)
+//        submitSongRefs()
+//    }
+//    
+//    func submitSongRefs() {
+//        self.ref?.setData(["songs": songRefDict], merge: true)
+//    }
     
     var dataDict: [String: Any] {
         var dict = [String: Any]()

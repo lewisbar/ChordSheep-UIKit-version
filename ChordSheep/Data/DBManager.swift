@@ -9,6 +9,10 @@
 import Foundation
 import Firebase
 
+typealias BandID = String
+typealias SongID = String
+typealias ListID = String
+
 enum DocumentType: String {
     case user, band, song, list
 }
@@ -71,7 +75,7 @@ struct DBManager {
         }
     }
     
-    static func create(song: Song, id: String) {
+    static func create(song: Song, id: SongID) {
         bands.document(song.bandID).collection(Collections.songs).document(song.id).setData(dict(for: song)) { error in
             if let error = error {
                 print("Error writing document: \(error)")
@@ -81,13 +85,13 @@ struct DBManager {
         }
     }
     
-    static func create(list: Songlist, in bandID: String, id: String) {
+    static func create(list: Songlist) {
         var dict = [String: Any]()
         dict["title"] = list.title
         dict["timestamp"] = list.timestamp
         dict["index"] = list.index
         
-        bands.document(bandID).collection(Collections.lists).document(list.id).setData(dict) { error in
+        bands.document(list.bandID).collection(Collections.lists).document(list.id).setData(dict) { error in
             if let error = error {
                 print("Error writing document: \(error)")
             } else {
@@ -103,12 +107,12 @@ struct DBManager {
         // TODO: Subcollections should be deleted, too, but this is only possible via a cloud function (if at all). Maybe I can just leave the stuff there?
     }
     
-    static func delete(song: Song, from bandID: String) {
+    static func delete(song: Song, from bandID: BandID) {
         bands.document(bandID).collection(Collections.songs).document(song.id).delete()
         // TODO: Handle playlists that use that song
     }
     
-    static func delete(list: Songlist, from bandID: String) {
+    static func delete(list: Songlist, from bandID: BandID) {
         bands.document(bandID).collection(Collections.lists).document(list.id).delete()
     }
     
@@ -118,7 +122,7 @@ struct DBManager {
         bands.document(band.id).setData(["name": name], merge: true)
     }
     
-    static func updateText(in song: Song, to name: String) {
+    static func update(song: Song) {
         bands.document(song.bandID).collection(Collections.songs).document(song.id).setData(dict(for: song), merge: true)
     }
     
@@ -136,19 +140,16 @@ struct DBManager {
         bands.document(list.bandID).collection(Collections.lists).document(list.id).setData([Fields.index: index], merge: true)
     }
     
-    static func move(songRef: DocumentReference, in list: Songlist, fromIndex: Int, toIndex: Int) {
-        // TODO
+    static func updateSongRefs(for list: Songlist) {
+        var dict = [Int: DocumentReference]()
+        
+        // Use the songRefs array to create a dictionary
+        for (index, songRef) in list.songRefs.enumerated() {
+            dict[index] = songRef
+        }
+        bands.document(list.bandID).collection(Collections.lists).document(list.id).setData([Fields.songs: dict], merge: true)
     }
-    
-    
-    // MARK: - Adding to and removing from lists
-    static func add(songRef: DocumentReference, to list: Songlist, in bandID: String) {
-        // TODO
-    }
-    
-    static func remove(songRef: DocumentReference, from list: Songlist, in bandID: String) {
-        // TODO
-    }
+
     
     
     // Band Level: Contains Songs and Lists

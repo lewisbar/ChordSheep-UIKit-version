@@ -19,7 +19,7 @@ struct Song {
     var text = "" {
         didSet {
             evaluateText()
-            DBManager.updateText(in: self, to: self.title)
+            DBManager.update(song: self)
         }
     }
     var title = ""
