@@ -75,8 +75,8 @@ struct DBManager {
         }
     }
     
-    static func create(song: Song, id: SongID) {
-        bands.document(song.bandID).collection(Collections.songs).document(song.id).setData(dict(for: song)) { error in
+    static func create(song: Song) {
+        bands.document(song.bandID).collection(Collections.songs).document(song.id).setData([Fields.text: song.text]) { error in
             if let error = error {
                 print("Error writing document: \(error)")
             } else {
@@ -107,13 +107,13 @@ struct DBManager {
         // TODO: Subcollections should be deleted, too, but this is only possible via a cloud function (if at all). Maybe I can just leave the stuff there?
     }
     
-    static func delete(song: Song, from bandID: BandID) {
-        bands.document(bandID).collection(Collections.songs).document(song.id).delete()
+    static func delete(song: Song) {
+        bands.document(song.bandID).collection(Collections.songs).document(song.id).delete()
         // TODO: Handle playlists that use that song
     }
     
-    static func delete(list: Songlist, from bandID: BandID) {
-        bands.document(bandID).collection(Collections.lists).document(list.id).delete()
+    static func delete(list: Songlist) {
+        bands.document(list.bandID).collection(Collections.lists).document(list.id).delete()
     }
     
     
@@ -123,7 +123,7 @@ struct DBManager {
     }
     
     static func update(song: Song) {
-        bands.document(song.bandID).collection(Collections.songs).document(song.id).setData(dict(for: song), merge: true)
+        create(song: song)
     }
     
     static func rename(list: Songlist, to title: String) {
@@ -149,8 +149,18 @@ struct DBManager {
         }
         bands.document(list.bandID).collection(Collections.lists).document(list.id).setData([Fields.songs: dict], merge: true)
     }
-
     
+    
+    // MARK: - Loading Data from Database
+    static func listenForAllSongs(in bandID: BandID, onChange: (_ songs: [Song]) -> ()) -> ListenerRegistration? {
+        return bands.document(bandID).collection(Collections.songs).order(by: "title").addSnapshotListener() { snapshot, error in
+            guard let documents = snapshot?.documents else {
+                print(error!.localizedDescription)
+                return
+            }
+            onChange(documents.map { Song(with: $0.data()[Fields.text] as? String ?? "Song has no text") })
+        }
+    }
     
     // Band Level: Contains Songs and Lists
 //    static func createSong(text: String, in bandRef: DocumentReference, completion: @escaping (_ song: Song) -> ()) {
@@ -212,22 +222,29 @@ struct DBManager {
 extension DBManager {
     
     static func generateDocumentID(type: DocumentType, name: String) -> String {
+        // Create date stamp
         let formatter = DateFormatter()
-        formatter.dateFormat = "y-M-d H:m:s.SSSS"
+        formatter.dateFormat = "y-M-d H:m:s-SSSS"
         let stamp = formatter.string(from: Date())
-        return type.rawValue + name + stamp
+        
+        // Remove unallowed characters
+        let characterSet = CharacterSet(charactersIn: "./")
+        let components = name.components(separatedBy: characterSet)
+        let filteredName = components.joined(separator: "")
+        
+        return type.rawValue + filteredName + stamp
     }
-    
-    static func dict(for song: Song) -> [String: Any] {
-        var dict = [String: Any]()
-        dict[Fields.text] = song.text
-        dict[Fields.title] = song.title
-        dict[Fields.timestamp] = song.timestamp
-        if let artist = song.artist { dict[Fields.artist] = artist }
-        if let key = song.key { dict[Fields.key] = key }
-        if let tempo = song.tempo { dict[Fields.tempo] = tempo }
-        if let signature = song.signature { dict[Fields.signature] = signature }
-        if let body = song.body { dict[Fields.body] = body }
-        return dict
-    }
+//
+//    static func dict(for song: Song) -> [String: Any] {
+//        var dict = [String: Any]()
+//        dict[Fields.text] = song.text
+//        dict[Fields.title] = song.title
+//        dict[Fields.timestamp] = song.timestamp
+//        if let artist = song.artist { dict[Fields.artist] = artist }
+//        if let key = song.key { dict[Fields.key] = key }
+//        if let tempo = song.tempo { dict[Fields.tempo] = tempo }
+//        if let signature = song.signature { dict[Fields.signature] = signature }
+//        if let body = song.body { dict[Fields.body] = body }
+//        return dict
+//    }
 }

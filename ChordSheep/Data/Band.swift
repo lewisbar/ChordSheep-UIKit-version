@@ -51,8 +51,22 @@ struct Band {
         DBManager.create(list: newList)
     }
     
+    func createSong(text: String, timestamp: Timestamp) {
+        let songID = DBManager.generateDocumentID(type: .song, name: String(text.prefix(20)))
+        let song = Song(text: text, id: songID, bandID: self.id, timestamp: timestamp)
+        DBManager.create(song: song)
+    }
+    
     func delete(list: Songlist) {
-        DBManager.delete(list: list, from: id)
+        DBManager.delete(list: list)
+    }
+    
+    func delete(song: Song) {
+        DBManager.delete(song: song)
+    }
+    
+    func load(song: Song) {
+        
     }
 }
 

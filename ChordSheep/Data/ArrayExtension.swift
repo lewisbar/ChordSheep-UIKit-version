@@ -14,12 +14,4 @@ extension Array {
         if abs(fromIndex - toIndex) == 1 { self.swapAt(fromIndex, toIndex) }
         self.insert(self.remove(at: fromIndex), at: toIndex)
     }
-    
-//    mutating func prepend(_ element: Element) {
-//        if self.isEmpty {
-//            self.append(element)
-//        } else {
-//            self.insert(element, at: startIndex)
-//        }
-//    }
 }

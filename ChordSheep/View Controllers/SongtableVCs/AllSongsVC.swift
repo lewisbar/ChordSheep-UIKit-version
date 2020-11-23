@@ -11,14 +11,7 @@ import Firebase
 
 class AllSongsVC: SongtableVC {
     
-    var songsRef: CollectionReference!
-    
-    convenience init(mainVC: MainVC, pageVC: PageVC, songsRef: CollectionReference) {
-        self.init(style: .insetGrouped)
-        self.mainVC = mainVC
-        self.pageVC = pageVC
-        self.songsRef = songsRef
-    }
+    // var songsRef: CollectionReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +23,8 @@ class AllSongsVC: SongtableVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        snapshotListener = songsRef.order(by: "title").addSnapshotListener() {snapshot, error in
-            guard let documents = snapshot?.documents else {
-                print(error!.localizedDescription)
-                return
-            }
-            self.songs = documents.map { Song(from: $0.data(), reference: $0.reference) }
+        snapshotListener = DBManager.listenForAllSongs(in: bandID) { songs in
+            self.songs = songs
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -46,10 +35,10 @@ class AllSongsVC: SongtableVC {
         super.viewDidAppear(animated)
         // The IndexPath could change if the title has been edited, therefore we must find the song itself. The first occurrence is also the only one in "All Songs".
         guard let song = storedSelectedSong else { return }
-        let rowToBeSelected = self.songs.firstIndex(where: { $0.ref == song.ref }) ?? 0
+        let rowToBeSelected = self.songs.firstIndex(where: { $0.id == song.id }) ?? 0
         let indexPathToBeSelected = IndexPath(row: rowToBeSelected, section: 0)
         tableView.selectRow(at: indexPathToBeSelected, animated: true, scrollPosition: .none)
-        pageVC.didSelectSongAtRow(indexPathToBeSelected.row)
+        pageVC?.didSelectSongAtRow(indexPathToBeSelected.row)
     }
     
     @objc override func addButtonPressed() {

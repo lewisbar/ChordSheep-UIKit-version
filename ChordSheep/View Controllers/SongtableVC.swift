@@ -12,19 +12,21 @@ import MobileCoreServices
 
 class SongtableVC: UITableViewController, AddVCDelegate {
 
-    weak var mainVC: MainVC!
-    weak var pageVC: PageVC!
-    var db: Firestore!
+    weak var mainVC: MainVC?
+    weak var pageVC: PageVC?
+    let db: Firestore = Firestore.firestore()
     var snapshotListener: ListenerRegistration?
+    var bandID: BandID
     var songs = [Song]() {
         didSet {
             editSongButton.isHidden = songs.isEmpty
-            pageVC.didDeselectAllSongs()
+            pageVC?.didDeselectAllSongs()
         }
     }
     var selection: Int? {
         return tableView.indexPathForSelectedRow?.row
     }
+    
     
     // For remembering the selection in case it is removed, for example after editing mode
     var storedSelection = IndexPath(row: 0, section: 0)
@@ -44,6 +46,15 @@ class SongtableVC: UITableViewController, AddVCDelegate {
     let addButton = UIButton(type: .custom)
     let editSongButton = UIButton(type: .custom)
     
+    init(mainVC: MainVC, pageVC: PageVC, bandID: BandID) {
+        self.mainVC = mainVC
+        self.pageVC = pageVC
+        self.bandID = bandID
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +62,7 @@ class SongtableVC: UITableViewController, AddVCDelegate {
         tableView.backgroundColor = PaintCode.mediumDark
         tableView.allowsMultipleSelectionDuringEditing = true
         
-        db = Firestore.firestore()
+        // db = Firestore.firestore()
 
         tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
         self.clearsSelectionOnViewWillAppear = false

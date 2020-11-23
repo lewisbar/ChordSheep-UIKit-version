@@ -49,11 +49,12 @@ struct Song {
     }
     
     
-    init(with text: String) {
+    init(text: String, id: SongID, bandID: BandID, timestamp: Timestamp) {
         self.text = text
+        self.id = id
+        self.bandID = bandID
+        self.timestamp = timestamp
         evaluateText()
-        self.id = DBManager.generateDocumentID(type: .song, name: self.title)
-        DBManager.create(song: self, id: self.id)
     }
     
     enum Key: String {
@@ -196,46 +197,46 @@ struct Song {
     
     func delete() {
         // Delete from database.
-        ref?.delete()
+        DBManager.delete(song: self, from: bandID)
     }
 }
 
 
-extension Song: FirestoreType {
-    init(from dict: [String: Any], reference: DocumentReference) {
-        self.text = dict["text"] as? String ?? ""
-        self.title = dict["title"] as? String ?? ""
-        self.artist = dict["artist"] as? String
-        self.key = dict["key"] as? String
-        self.tempo = dict["tempo"] as? Int
-        self.signature = dict["signature"] as? String
-        self.body = dict["body"] as? String
-        self.ref = reference
-    }
-    
-    var dict: [String: Any] {
-        var dict: [String: Any] = [
-            "text": self.text,
-            "title": self.title,
-        ]
-        if let artist = self.artist {
-            dict["artist"] = artist
-        }
-        if let key = self.key {
-            dict["key"] = key
-        }
-        if let tempo = self.tempo {
-            dict["tempo"] = tempo
-        }
-        if let signature = self.signature {
-            dict["signature"] = signature
-        }
-        if let body = self.body {
-            dict["body"] = body
-        }
-        return dict
-    }
-}
+//extension Song {
+//    init(from dict: [String: Any], reference: DocumentReference) {
+//        self.text = dict["text"] as? String ?? ""
+//        self.title = dict["title"] as? String ?? ""
+//        self.artist = dict["artist"] as? String
+//        self.key = dict["key"] as? String
+//        self.tempo = dict["tempo"] as? Int
+//        self.signature = dict["signature"] as? String
+//        self.body = dict["body"] as? String
+//        self.ref = reference
+//    }
+//    
+//    var dict: [String: Any] {
+//        var dict: [String: Any] = [
+//            "text": self.text,
+//            "title": self.title,
+//        ]
+//        if let artist = self.artist {
+//            dict["artist"] = artist
+//        }
+//        if let key = self.key {
+//            dict["key"] = key
+//        }
+//        if let tempo = self.tempo {
+//            dict["tempo"] = tempo
+//        }
+//        if let signature = self.signature {
+//            dict["signature"] = signature
+//        }
+//        if let body = self.body {
+//            dict["body"] = body
+//        }
+//        return dict
+//    }
+//}
 
 
 extension Song: Equatable, Comparable {
