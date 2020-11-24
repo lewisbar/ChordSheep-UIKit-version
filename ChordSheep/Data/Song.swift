@@ -12,16 +12,11 @@ import Firebase
 struct Song {
     
     // TODO: Create my own data types for key and signature?
-    let bandID: String
     let id: String
+    let band: Band
     let timestamp: Timestamp
     
-    var text = "" {
-        didSet {
-            evaluateText()
-            DBManager.update(song: self)
-        }
-    }
+    var text: String { didSet { evaluateText(); DBManager.update(song: self) } }
     var title = ""
     var artist: String?
     var key: String?
@@ -49,12 +44,20 @@ struct Song {
     }
     
     
-    init(text: String, id: SongID, bandID: BandID, timestamp: Timestamp) {
+    init(text: String, id: SongID, band: Band, timestamp: Timestamp) {
         self.text = text
         self.id = id
-        self.bandID = bandID
+        self.band = band
         self.timestamp = timestamp
         evaluateText()
+    }
+    
+    init() {
+        /* Only for dummy Songs. Doesn't even evaluateText(). */
+        self.text = ""
+        self.id = ""
+        self.band = Band(name: "", isNew: false)
+        self.timestamp = Timestamp()
     }
     
     enum Key: String {
@@ -194,11 +197,11 @@ struct Song {
             }
         }
     }
-    
-    func delete() {
-        // Delete from database.
-        DBManager.delete(song: self, from: bandID)
-    }
+//    
+//    func delete() {
+//        // Delete from database.
+//        DBManager.delete(song: self, from: bandID)
+//    }
 }
 
 

@@ -14,29 +14,31 @@ struct Band {
     let id: String
 
     var name: String { didSet { DBManager.rename(band: self, to: name) } }
-    var lists = [Songlist]()
+    var songs: [Song]
+    var lists: [Songlist]
     
-    init(name: String) {
+    init(name: String, songs: [Song] = [Song](), lists: [Songlist] = [Songlist](), isNew: Bool = true) {
         self.name = name
         self.id = DBManager.generateDocumentID(type: .band, name: self.name)
-        DBManager.create(band: self, id: self.id)
+        self.songs = songs
+        self.lists = lists
+        if isNew {
+            DBManager.create(band: self)
+        }
     }
     
     func delete() {
         DBManager.delete(band: self)
     }
     
-    mutating func moveList(fromIndex: Int, toIndex: Int) {
-        lists.moveElement(fromIndex: fromIndex, toIndex: toIndex)
-        
-        // Update indices
-        for index in min(fromIndex, toIndex)...max(fromIndex, toIndex) {
-            lists[index].index = index
-            DBManager.set(index: index, for: lists[index])
-        }
+    func createSong(text: String, timestamp: Timestamp) -> Song {
+        let songID = DBManager.generateDocumentID(type: .song, name: String(text.prefix(20)))
+        let song = Song(text: text, id: songID, band: self, timestamp: timestamp)
+        DBManager.create(song: song)
+        return song
     }
     
-    mutating func createList(title: String, timestamp: Timestamp) {
+    mutating func createList(title: String, timestamp: Timestamp) -> Songlist {
         // Prepare the other lists' indices to make room at position 0
         for (i, _) in lists.enumerated() {
             let index = i + 1
@@ -46,27 +48,29 @@ struct Band {
         
         // Create the new list
         let listID = DBManager.generateDocumentID(type: .list, name: title)
-        let newList = Songlist(title: title, id: listID, bandID: self.id, timestamp: timestamp)
+        let newList = Songlist(title: title, id: listID, band: self, timestamp: timestamp)
         lists.insert(newList, at: lists.startIndex)
         DBManager.create(list: newList)
-    }
-    
-    func createSong(text: String, timestamp: Timestamp) {
-        let songID = DBManager.generateDocumentID(type: .song, name: String(text.prefix(20)))
-        let song = Song(text: text, id: songID, bandID: self.id, timestamp: timestamp)
-        DBManager.create(song: song)
-    }
-    
-    func delete(list: Songlist) {
-        DBManager.delete(list: list)
+        
+        return newList
     }
     
     func delete(song: Song) {
         DBManager.delete(song: song)
     }
     
-    func load(song: Song) {
+    func delete(list: Songlist) {
+        DBManager.delete(list: list)
+    }
+
+    mutating func moveList(fromIndex: Int, toIndex: Int) {
+        lists.moveElement(fromIndex: fromIndex, toIndex: toIndex)
         
+        // Update indices
+        for index in min(fromIndex, toIndex)...max(fromIndex, toIndex) {
+            lists[index].index = index
+            DBManager.set(index: index, for: lists[index])
+        }
     }
 }
 

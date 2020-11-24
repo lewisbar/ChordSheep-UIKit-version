@@ -20,7 +20,7 @@ class ListVC: SongtableVC {
 
     init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist, isNewList: Bool = false) {
         self.songlist = songlist
-        super.init(style: .insetGrouped)
+        super.init(mainVC: mainVC, pageVC: pageVC, band: songlist.band)
         self.mainVC = mainVC
         self.pageVC = pageVC
         self.isNewList = isNewList
@@ -29,7 +29,7 @@ class ListVC: SongtableVC {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dropDelegate = self
@@ -40,30 +40,12 @@ class ListVC: SongtableVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        snapshotListener = songlist.ref?.addSnapshotListener() {snapshot, error in
-            guard let songlistDict = snapshot?.data() else {
-                print("Songs couldn't be read.")
-                return
-            }
+        snapshotListener = DBManager.listenForList(songlist) { list in
+            self.songlist = list
             
-            self.songlist = Songlist(from: songlistDict, reference: self.songlist.ref!)
-            
-            // Make sure the songs are put in the right order. Async fetching tends to mix them up.
-            self.songs = [Song](repeating: Song(with: ""), count: self.songlist.songRefs.count)
-            for (i, songRef) in self.songlist.songRefs.enumerated() {
-                songRef.getDocument { document, error in
-                    guard let data = document?.data() else {
-                        print("Song \(songRef.path) has no data")
-                        if let error = error {
-                            print(error.localizedDescription)
-                        }
-                        return
-                    }
-                    self.songs[i] = Song(from: data, reference: songRef)
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }
+            DBManager.getSongsFromList(list) { songs in
+                self.songs = songs
+                DispatchQueue.main.async { self.tableView.reloadData() }
             }
         }
                         
@@ -86,20 +68,20 @@ class ListVC: SongtableVC {
         // Make sure the IndexPath exists. Then restore the selection (because editing a song removes it).
         guard songs.count > storedSelection.row else { return }
         tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
-        pageVC.didSelectSongAtRow(storedSelection.row)
+        pageVC?.didSelectSongAtRow(storedSelection.row)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        mainVC.hidePickVC()
+        mainVC?.hidePickVC()
     }
     
     @objc override func addButtonPressed() {
         if !addButton.isSelected {
-            mainVC.showPickVC(delegate: self)
+            mainVC?.showPickVC(delegate: self)
             addButton.isSelected = true
         } else {
-            mainVC.hidePickVC()
+            mainVC?.hidePickVC()
             addButton.isSelected = false
         }
     }
@@ -130,7 +112,7 @@ class ListVC: SongtableVC {
             songlist.removeSong(at: indexPath.row)
 
             // For deleting the last song, the listener doesn't seem to fire, so I need to do this manually
-            if songlist.songRefs.count < 1 {
+            if songlist.songIDs.count < 1 {
                 songs.removeAll()
                 tableView.reloadData()
             }
@@ -169,8 +151,8 @@ extension ListVC: SongPickVCDelegate {
         addButton.isSelected = false
     }
     
-    func picked(songRef: DocumentReference) {
-        songlist.songRefs.append(songRef)
+    func picked(songID: SongID) {
+        songlist.songIDs.append(songID)
     }
 }
 
@@ -199,12 +181,12 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
             let destinationIndexPathForItem = IndexPath(row: destinationIndexPath.row + row, section: destinationIndexPath.section)
             
             // 1. Local drags
-            if let songRef = item.dragItem.localObject as? DocumentReference {
+            if let songID = item.dragItem.localObject as? SongID {
                 if let sourceIndexPath = item.sourceIndexPath {  // Meaning: If the drag is coming from the same table (then remove from old position before inserting into the new one)
                     self.songlist.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
                 } else {
                     // Insert song in setlist
-                    songlist.addSong(ref: songRef, at: destinationIndexPath.row)
+                    songlist.add(songID: songID, at: destinationIndexPath.row)
                 }
             }
                 
@@ -213,14 +195,14 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
                 coordinator.session.loadObjects(ofClass: NSString.self) { items in
                     for item in items {
                         if let text = item as? String,
-                            let band = self.mainVC.currentBand {
+                           let band = self.mainVC?.currentBand {
                             
                             // Add song to All Songs
-                            let songRef = band.createSong(with: text)
+                            let song = band.createSong(text: text, timestamp: Timestamp(date: Date()))
                             // let songRef = allSongsRef.addDocument(data: Song(with: text).dict)
                             
                             // Insert song in setlist
-                            self.songlist.addSong(ref: songRef, at: destinationIndexPathForItem.row)
+                            self.songlist.add(songID: song.id, at: destinationIndexPathForItem.row)
                             // self.songlist.songRefs = self.inserting(songRef: songRef, into: self.songlist.songRefs, at: destinationIndexPathForItem.row)
                         }
                     }

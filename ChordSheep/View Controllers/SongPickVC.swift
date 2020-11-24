@@ -12,7 +12,7 @@ import MobileCoreServices
 
 protocol SongPickVCDelegate {
     func pickVCWasHidden()
-    func picked(songRef: DocumentReference)
+    func picked(songID: SongID)
 }
 
 class SongPickVC: UITableViewController {
@@ -21,12 +21,21 @@ class SongPickVC: UITableViewController {
     var db: Firestore!
     var snapshotListener: ListenerRegistration?
     var songs = [Song]()
-    var songsRef: CollectionReference?
+    var band: Band
     
 //    convenience init(songsRef: CollectionReference) {
 //        self.init(style: .insetGrouped)
 //        self.songsRef = songsRef
 //    }
+    
+    init(band: Band) {
+        self.band = band
+        super.init(style: .insetGrouped)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,18 +52,25 @@ class SongPickVC: UITableViewController {
     }
     
     func startListener() {
-        snapshotListener = songsRef?.order(by: "title").addSnapshotListener() { snapshot, error in
-            guard let documents = snapshot?.documents else {
-                if let error = error {
-                    print(error.localizedDescription)
-                }
-                return
-            }
-            self.songs = documents.map { Song(from: $0.data(), reference: $0.reference) }
+        snapshotListener = DBManager.listenForAllSongs(in: band) { songs in
+            self.songs = songs
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
+        
+//        snapshotListener = songsRef?.order(by: "title").addSnapshotListener() { snapshot, error in
+//            guard let documents = snapshot?.documents else {
+//                if let error = error {
+//                    print(error.localizedDescription)
+//                }
+//                return
+//            }
+//            self.songs = documents.map { Song(from: $0.data(), reference: $0.reference) }
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
     }
     
     func stopListener() {
@@ -81,19 +97,17 @@ class SongPickVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let ref = songs[indexPath.row].ref else { print("Song has no document reference"); return }
-        delegate?.picked(songRef: ref)
+        delegate?.picked(songID: songs[indexPath.row].id)
     }
 }
 
 extension SongPickVC: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let song = songs[indexPath.row]
-        guard let songRef = song.ref,
-            let textData = song.text.data(using: .utf8) else { return [] }
+        guard let textData = song.text.data(using: .utf8) else { return [] }
         let itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = songRef
+        dragItem.localObject = song.id
         return [dragItem]
     }
 }

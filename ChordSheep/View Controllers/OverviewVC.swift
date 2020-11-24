@@ -14,7 +14,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     var mainVC: MainVC!
     var db: Firestore!
     var snapshotListeners = [ListenerRegistration]()
-    var user = User()
+    var user: User?
     var bands = [Band]()
     var closedSections = Set<Int>()
     let editButton = UIButton(type: .custom)
@@ -119,40 +119,20 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         // Show no song
         mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
         
+        // The listeners for auth, bands, and lists depend on each other and are therefore nested
         // Listen for the currently logged in user
-        // let authHandle =  // This was in front of the next line, but I don't need it right now. I'm leaving it here to remind me that it is possible to store the return value of addStateDidChangeListener, and I might need it in the future.
-        Auth.auth().addStateDidChangeListener { (auth, user) in
-            guard let user = user else { print("No user logged in"); return }
-            self.user.name = user.displayName ?? user.email ?? user.phoneNumber ?? "Unknown User"
-            self.user.uid = user.uid
-//            self.user.transpositions = user.transpositions
-//            self.user.notes = user.notes
-//            self.user.zoomLevels = user.zoomLevels
+        let _ = DBManager.listenForAuthState { user in
+            self.user = user
             
             // Listen to the bands the user is in
-            let bandListener = self.db.collection("bands").whereField("members.\(user.uid)", isGreaterThan: -1).addSnapshotListener() { querySnapshot, error in
-                guard let userBands = querySnapshot?.documents else {
-                    print("The user's bands could not be fetched.")
-                    return
-                }
+            let bandListener = DBManager.listenForBands(with: user.uid) { bands in
+                self.bands = bands
                 
                 // For every one of the user's bands, listen to the bands lists
-                // self.bands.removeAll()
-                self.bands = userBands.map { Band(name: $0.data()["name"] as! String, ref: $0.reference) }
-                for band in self.bands {
-                    // guard let bandName = band.data()["name"] as? String else { continue }
-                    // var currentBand = Band(name: bandName, ref: band.reference)
-                    // self.bands.append(currentBand)
-                    
-                    let listListener = band.ref.collection("lists").order(by: "index").addSnapshotListener() { snapshot, error in
-                        guard let snapshot = snapshot?.documents else {
-                            print(error!.localizedDescription)
-                            return
-                        }
-                        band.lists = snapshot.map { Songlist(from: $0.data(), reference: $0.reference) }
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
+                for (i, band) in self.bands.enumerated() {
+                    let listListener = DBManager.listenForLists(in: band) { lists in
+                        self.bands[i].lists = lists
+                        DispatchQueue.main.async { self.tableView.reloadData() }
                     }
                     self.snapshotListeners.append(listListener)
                 }
@@ -176,7 +156,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !closedSections.contains(section) {
-            return bands[section].songlists.count + 2
+            return bands[section].lists.count + 2
         }
         return 0
     }
@@ -192,7 +172,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             cell = tableView.dequeueReusableCell(withIdentifier: "addListCell", for: indexPath)
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexPath)
-            cell?.textLabel?.text = bands[indexPath.section].songlists[indexPath.row - 2].title
+            cell?.textLabel?.text = bands[indexPath.section].lists[indexPath.row - 2].title
         }
         
         return cell!
@@ -233,8 +213,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         switch indexPath.row {
         
         case 0:  // All Songs
-            let songsRef = band.ref.collection("songs")
-            let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, songsRef: songsRef)  // db.collection("bands/\(bandID)/songs"))
+            let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, band: band)  // db.collection("bands/\(bandID)/songs"))
             mainVC.pageVC.songtableVC = allSongsVC
             navigationController?.pushViewController(allSongsVC, animated: true)
             
@@ -244,16 +223,14 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             formatter.dateFormat = "yyyy-MM-dd"
             let formattedDate = formatter.string(from: timestamp.dateValue())
             
-            let newList = band.createSonglist(title: formattedDate, timestamp: timestamp)
-            // band.ref.collection("lists").addDocument(data: newList.dataDict)
-
+            let newList = bands[indexPath.section].createList(title: formattedDate, timestamp: timestamp)
             
             let listVC = ListVC(mainVC: self.mainVC, pageVC: self.mainVC.pageVC, songlist: newList, isNewList: true)
             self.mainVC.pageVC.songtableVC = listVC
             self.navigationController?.pushViewController(listVC, animated: true)
             
         default:
-            let songlist = band.songlists[indexPath.row - 2]
+            let songlist = band.lists[indexPath.row - 2]
             
             let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
             mainVC.pageVC.songtableVC = listVC
@@ -273,13 +250,9 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
 
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let band = bands[indexPath.section]
-
+        
         if editingStyle == .delete {
-            if let ref = band.songlists[indexPath.row - 2].ref {            
-                // Delete the row from the data source
-                band.deleteSonglist(ref: ref)
-            }
+            bands[indexPath.section].delete(list: bands[indexPath.section].lists[indexPath.row - 2])
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -304,32 +277,21 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     // MARK: Reordering of single items
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         guard indexPath.row >= 2 else { return [] }
-        let songlist = bands[indexPath.section].songlists[indexPath.row - 2]
-        var text = songlist.title
+        let songlist = bands[indexPath.section].lists[indexPath.row - 2]
+        var textForExport = songlist.title + "\n"
         
-        // Make sure the songs are put in the right order. Async fetching tends to mix them up.
-        var songtitles = [String](repeating: "", count: songlist.songRefs.count)
-        for (i, songRef) in songlist.songRefs.enumerated() {
-            songRef.getDocument { document, error in
-                if let document = document,
-                   document.exists,
-                   let title = document.get("title") as? String {
-                    
-                    songtitles[i] = title
-                } else {
-                    print("Document does not exist")
-                }
-            }
+        DBManager.getSongsFromList(songlist) { songs in
+            let titles = songs.map { $0.title }
+            textForExport = titles.joined(separator: "\n")
+            // TODO: This doesn't work as the method returns before this task is completed.
         }
-        for title in songtitles {
-            text += "\n" + title
-        }
+
         var itemProvider = NSItemProvider()  // Fallback in case the next line cannot convert to data. Just use an empty item provider.
-        if let textData = text.data(using: .utf8) {
+        if let textData = textForExport.data(using: .utf8) {
             itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
         }
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = songlist.ref
+        dragItem.localObject = songlist.id
         return [dragItem]
     }
     
@@ -349,13 +311,11 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         guard sourceIndexPath.section == destinationIndexPath.section,
               destinationIndexPath.row >= 2 else { return }
         
-        let band = bands[sourceIndexPath.section]
         let oldIndex = sourceIndexPath.row - 2  // -2 because there are All Songs and New List cells at the top of the table
         let newIndex = destinationIndexPath.row - 2
         
         // Update the lists indices
-        let movingList = band.songlists.remove(at: oldIndex)
-        band.songlists.insert(movingList, at: newIndex)
+        bands[sourceIndexPath.section].moveList(fromIndex: oldIndex, toIndex: newIndex)
     }
 }
 

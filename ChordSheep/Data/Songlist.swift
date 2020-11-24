@@ -12,124 +12,94 @@ import Firebase
 
 struct Songlist {
     
-    let bandID: String
     let id: String
+    let band: Band
     let timestamp: Timestamp
-
-    var title = "" { didSet { DBManager.rename(list: self, to: title) } }
     
-    var index = 0
-    var songRefs = [DocumentReference]()
+    var title: String { didSet { DBManager.rename(list: self, to: title) } }
+    var index: Int
+    var songIDs: [SongID]
     
     
-    init(title: String, id: ListID, bandID: String, timestamp: Timestamp) {
+    init(title: String, id: ListID, band: Band, timestamp: Timestamp, index: Int = 0, songIDs: [SongID] = [SongID]()) {
         /* This is the initializer for creating a new songlist (as opposed to initializing an existing one from the database). To be called via band.create(songlist:title)*/
-        self.bandID = bandID
+        self.band = band
         self.title = title
         self.timestamp = timestamp
         self.id = id
+        self.index = index
+        self.songIDs = songIDs
     }
     
-    mutating func move(fromIndex: Int, toIndex: Int) {
-        songRefs.moveElement(fromIndex: fromIndex, toIndex: toIndex)
+    mutating func moveSong(fromIndex: Int, toIndex: Int) {
+        songIDs.moveElement(fromIndex: fromIndex, toIndex: toIndex)
         DBManager.updateSongRefs(for: self)
     }
     
-    mutating func add(songRef: DocumentReference, at index: Int) {
-        songRefs.insert(songRef, at: index)
+    mutating func add(songID: SongID, at index: Int) {
+        songIDs.insert(songID, at: index)
         DBManager.updateSongRefs(for: self)
-    }
-    
-    mutating func remove(at index: Int) {
-        songRefs.remove(at: index)
-        DBManager.updateSongRefs(for: self)
-    }
-    
-    
-    
-    init(from dict: [String : Any], ref: DocumentReference) {
-        /* This is the initializer for existing songs in the database (as opposed to creating a new song). */
-        self.ref = ref
-        self.title = dict["title"] as? String ?? ""
-        if let timestamp = dict["timestamp"] as? Timestamp {
-            self.timestamp = timestamp
-        } else {
-            // If the list, for some reason, has no timestamp, create one and add it to the document
-            self.timestamp = Timestamp(date: Date())
-            self.ref?.setData(["timestamp": timestamp], merge: true)
-            print("Songlist \(self.title) has no timestamp. Using new timestamp.")
-        }
-        // self.timestamp = dict["timestamp"] as! Timestamp  // ?? Timestamp(date: Date())
-        if let songDict = dict["songs"] as? [String:DocumentReference] {
-            self.songRefs = Songlist.refArray(from: songDict)
-        }
-        if let i = dict["index"] as? Int {
-            self.index = i  // dict["index"] as! Int
-        } else {
-            self.index = 99  // TODO: No good solution. This should never happen, but you never know.
-            print(self.title, "has no index.")
-        }
-    }
-    
-
-    
-    mutating func addSong(ref: DocumentReference, at index: Int) {
-        if index < songRefs.count {
-            songRefs.insert(ref, at: index)
-        } else {
-            songRefs.append(ref)
-        }
-        submitSongRefs()
     }
     
     mutating func removeSong(at index: Int) {
-        songRefs.remove(at: index)
-        submitSongRefs()
-    }
-    
-//    mutating func moveSong(fromIndex: Int, toIndex: Int) {
-//        guard fromIndex < songRefs.count, toIndex < songRefs.count else {
-//            print("Invalid indices", fromIndex, toIndex)
-//            return
-//        }
-//        let songRef = songRefs.remove(at: fromIndex)
-//        songRefs.insert(songRef, at: toIndex)
-//        submitSongRefs()
-//    }
-//    
-//    func submitSongRefs() {
-//        self.ref?.setData(["songs": songRefDict], merge: true)
-//    }
-    
-    var dataDict: [String: Any] {
-        var dict = [String: Any]()
-        dict["title"] = self.title
-        dict["timestamp"] = self.timestamp
-        dict["songs"] = self.songRefDict
-        dict["index"] = self.index
-        return dict
-    }
-    
-    static func refArray(from dict: [String: DocumentReference]) -> [DocumentReference] {
-        var refs = [DocumentReference]()
-        guard dict.count > 0 else { return refs }
-        for i in 0...dict.count-1 {
-            if let songRef = dict[String(i)] {
-                refs.append(songRef)
-            }
-        }
-        return refs
-    }
-    
-    var songRefDict: [String: DocumentReference] {
-        var dict = [String: DocumentReference]()
-        guard self.songRefs.count > 0 else { return dict }
-        for i in 0...self.songRefs.count-1 {
-            dict[String(i)] = self.songRefs[i]
-        }
-        return dict
+        songIDs.remove(at: index)
+        DBManager.updateSongRefs(for: self)
     }
 }
+    
+//    init(from dict: [String : Any], ref: DocumentReference) {
+//        /* This is the initializer for existing songs in the database (as opposed to creating a new song). */
+//        self.ref = ref
+//        self.title = dict["title"] as? String ?? ""
+//        if let timestamp = dict["timestamp"] as? Timestamp {
+//            self.timestamp = timestamp
+//        } else {
+//            // If the list, for some reason, has no timestamp, create one and add it to the document
+//            self.timestamp = Timestamp(date: Date())
+//            self.ref?.setData(["timestamp": timestamp], merge: true)
+//            print("Songlist \(self.title) has no timestamp. Using new timestamp.")
+//        }
+//        // self.timestamp = dict["timestamp"] as! Timestamp  // ?? Timestamp(date: Date())
+//        if let songDict = dict["songs"] as? [String:DocumentReference] {
+//            self.songRefs = Songlist.refArray(from: songDict)
+//        }
+//        if let i = dict["index"] as? Int {
+//            self.index = i  // dict["index"] as! Int
+//        } else {
+//            self.index = 99  // TODO: No good solution. This should never happen, but you never know.
+//            print(self.title, "has no index.")
+//        }
+//    }
+    
+    
+//    var dataDict: [String: Any] {
+//        var dict = [String: Any]()
+//        dict["title"] = self.title
+//        dict["timestamp"] = self.timestamp
+//        dict["songs"] = self.songRefDict
+//        dict["index"] = self.index
+//        return dict
+//    }
+//
+//    static func refArray(from dict: [String: DocumentReference]) -> [DocumentReference] {
+//        var refs = [DocumentReference]()
+//        guard dict.count > 0 else { return refs }
+//        for i in 0...dict.count-1 {
+//            if let songRef = dict[String(i)] {
+//                refs.append(songRef)
+//            }
+//        }
+//        return refs
+//    }
+//
+//    var songRefDict: [String: DocumentReference] {
+//        var dict = [String: DocumentReference]()
+//        guard self.songRefs.count > 0 else { return dict }
+//        for i in 0...self.songRefs.count-1 {
+//            dict[String(i)] = self.songRefs[i]
+//        }
+//        return dict
+//    }
 
 
 //extension Songlist: Equatable, Comparable {

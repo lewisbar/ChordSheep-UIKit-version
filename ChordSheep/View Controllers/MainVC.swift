@@ -16,11 +16,13 @@ class MainVC: UIViewController {
     let stackView = UIStackView()
     let pageVC = PageVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
     let listWidthMultiplier: CGFloat = 0.25  // This could be set in the user settings later
-    let pickVC = SongPickVC(style: .insetGrouped)
+    let pickVC = SongPickVC(band: Band(name: "", isNew: false))
     let navVC = UINavigationController()
     var currentBand: Band? {
         didSet {
-            self.pickVC.songsRef = currentBand?.ref.collection("songs")
+            if let band = currentBand {
+                self.pickVC.band = band
+            }
         }
     }
 

@@ -23,7 +23,7 @@ class AllSongsVC: SongtableVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        snapshotListener = DBManager.listenForAllSongs(in: bandID) { songs in
+        snapshotListener = DBManager.listenForAllSongs(in: band) { songs in
             self.songs = songs
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -63,7 +63,7 @@ class AllSongsVC: SongtableVC {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let song = self.songs[indexPath.row]
-            song.delete()
+            band.delete(song: song)
             tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: .none)
             // TODO: Deletion must be handled in setlists that use the deleted song.
         }
@@ -94,9 +94,8 @@ class AllSongsVC: SongtableVC {
     }
      */
     
-    override func receive(newSong song: Song) {
-        // Add song to database
-        songsRef.addDocument(data: song.dict)
+    override func receive(newText: String) {
+        let _ = band.createSong(text: newText, timestamp: Timestamp(date: Date()))
         
         //        guard let row = songs.index(of: song) else { return }
         //        let path = IndexPath(row: row, section: 0)
@@ -121,7 +120,7 @@ extension AllSongsVC: UITableViewDropDelegate {
         for item in coordinator.items {
             item.dragItem.itemProvider.loadObject(ofClass: NSString.self) { (provider, error) in
                 if let text = provider as? String {
-                    self.receive(newSong: Song(with: text))
+                    self.receive(newText: text)
                 }
             }
         }

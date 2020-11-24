@@ -16,7 +16,7 @@ class SongtableVC: UITableViewController, AddVCDelegate {
     weak var pageVC: PageVC?
     let db: Firestore = Firestore.firestore()
     var snapshotListener: ListenerRegistration?
-    var bandID: BandID
+    var band: Band
     var songs = [Song]() {
         didSet {
             editSongButton.isHidden = songs.isEmpty
@@ -46,10 +46,12 @@ class SongtableVC: UITableViewController, AddVCDelegate {
     let addButton = UIButton(type: .custom)
     let editSongButton = UIButton(type: .custom)
     
-    init(mainVC: MainVC, pageVC: PageVC, bandID: BandID) {
+    init(mainVC: MainVC, pageVC: PageVC, band: Band) {
         self.mainVC = mainVC
         self.pageVC = pageVC
-        self.bandID = bandID
+        self.band = band
+        super.init(style: .insetGrouped)
+        // self.tableView = UITableView(frame: self.tableView.frame, style: .insetGrouped)
     }
     
     required init?(coder: NSCoder) {
@@ -170,13 +172,13 @@ class SongtableVC: UITableViewController, AddVCDelegate {
         }
         DispatchQueue.main.async {
             tableView.selectRow(at: newSelection, animated: true, scrollPosition: .none)
-            self.pageVC.didSelectSongAtRow(newSelection.row)
+            self.pageVC?.didSelectSongAtRow(newSelection.row)
         }
     }
 
     
     // MARK: - Handle new songs and song updates
-    func receive(newSong song: Song) {
+    func receive(newText: String) {
         // Implement in subclass
     }
     
@@ -208,11 +210,10 @@ extension SongtableVC: UITableViewDragDelegate {
     
     func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
         let song = songs[indexPath.row]
-        guard let songRef = song.ref,
-            let textData = song.text.data(using: .utf8) else { return [] }
+        guard let textData = song.text.data(using: .utf8) else { return [] }
         let itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = songRef
+        dragItem.localObject = song.id
         return [dragItem]
     }
 }
