@@ -10,7 +10,9 @@ import UIKit
 import Firebase
 import MobileCoreServices
 
-class SongtableVC: UITableViewController, AddVCDelegate {
+class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
+    let cache: DBCache
+    
 
     weak var mainVC: MainVC?
     weak var pageVC: PageVC?

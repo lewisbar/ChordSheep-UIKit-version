@@ -1,5 +1,5 @@
 //
-//  SongPickVC.swift
+//  PickVC.swift
 //  ChordSheep
 //
 //  Created by Lennart Wisbar on 14.02.20.
@@ -10,14 +10,16 @@ import UIKit
 import Firebase
 import MobileCoreServices
 
-protocol SongPickVCDelegate {
+protocol PickVCDelegate {
     func pickVCWasHidden()
     func picked(songID: SongID)
 }
 
-class SongPickVC: UITableViewController {
+class PickVC: UITableViewController, DatabaseDependent {
+    let cache: DBCache
+    
 
-    var delegate: SongPickVCDelegate?
+    var delegate: PickVCDelegate?
     var db: Firestore!
     var snapshotListener: ListenerRegistration?
     var songs = [Song]()
@@ -101,7 +103,7 @@ class SongPickVC: UITableViewController {
     }
 }
 
-extension SongPickVC: UITableViewDragDelegate {
+extension PickVC: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let song = songs[indexPath.row]
         guard let textData = song.text.data(using: .utf8) else { return [] }

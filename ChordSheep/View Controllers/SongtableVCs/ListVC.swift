@@ -146,7 +146,7 @@ class ListVC: SongtableVC {
 }
 
 
-extension ListVC: SongPickVCDelegate {
+extension ListVC: PickVCDelegate {
     func pickVCWasHidden() {
         addButton.isSelected = false
     }

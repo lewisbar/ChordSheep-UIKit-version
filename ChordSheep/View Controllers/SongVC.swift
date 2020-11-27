@@ -12,7 +12,9 @@ import UIKit
 //    func receiveUpdate(for: Song)
 //}
 
-class SongVC: UIViewController {
+class SongVC: UIViewController, DatabaseDependent {
+    let cache: DBCache
+    
     
     // weak var delegate: SongVCDelegate?
     var songLabel = UILabel()

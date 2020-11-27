@@ -7,9 +7,38 @@
 //
 
 import Foundation
-import Firebase
 
-struct Song {
+class Song: DatabaseStorable {
+    var id: DocID?  // If nil, song has not been saved to db yet.
+    var name = ""
+    var text = ""
+    var artist = ""
+    var body = ""
+    
+    init(id: DocID? = nil, text: String = "") {
+        self.id = id
+        self.text = text
+        let properties = evaluate(text: text)
+        self.name = properties[.name]!
+        self.artist = properties[.artist]!
+        self.body = properties[.body]!
+    }
+    
+    enum metaData { case name, artist, body }
+    
+    func evaluate(text: String) -> [metaData: String] {
+        // Fill properties based on text
+        // ...
+        let lines = text.components(separatedBy: "\n") + Array(repeating: "", count: 3)  // Appending empty lines to prevent out-of-bounds errors.
+        return [.name: lines.first ?? "",
+                .artist: lines.count > 1 ? lines[1] : "",
+                .body: lines.count > 2 ? lines[2..<lines.endIndex].joined(separator: "\n") : ""]
+    }
+}
+
+
+
+struct SongOld {
     
     // TODO: Create my own data types for key and signature?
     let id: String

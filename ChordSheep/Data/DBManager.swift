@@ -9,6 +9,43 @@
 import Foundation
 import Firebase
 
+class DBManager {
+    static func generateID(for doc: DatabaseStorable) -> DocID {
+        // Create date stamp
+        let formatter = DateFormatter()
+        formatter.dateFormat = "y-M-d H:m:s-SSSS"
+        let stamp = formatter.string(from: Date())
+        
+        // Remove unallowed characters
+        let characterSet = CharacterSet(charactersIn: "./")
+        let components = doc.name.components(separatedBy: characterSet)
+        let filteredName = components.joined(separator: "")
+        
+        return filteredName + stamp
+    }
+    
+    static func create(band: Band) {
+        band.id = generateID(for: band)
+        print("bands.document(band.id).setData(dict(for: band))")
+    }
+    
+    static func create(song: Song, in band: Band) {
+        song.id = generateID(for: song)
+        print("bands.document(band.id).collection('songs').document(song.id).setData(dict(for: song))")
+    }
+    
+    static func create(list: List, in band: Band) {
+        list.id = generateID(for: list)
+        print("bands.document(band.id).collection('lists').document(list.id).setData(dict(for: list))")
+    }
+}
+
+
+
+
+
+
+
 typealias UserID = String
 typealias BandID = String
 typealias SongID = String
@@ -40,10 +77,10 @@ struct Fields {
 }
 
 
-struct DBManager {
-    static let db = Firestore.firestore()
-    static let bands = db.collection(Collections.bands)
-    static let users = db.collection(Collections.users)
+struct DBManagerOld {
+    static var db: Firestore { Firestore.firestore() }
+    static var bands: CollectionReference { db.collection(Collections.bands) }
+    static var users: CollectionReference { db.collection(Collections.users) }
     
     // MARK: - Creating
     static func create(user: User) {
@@ -233,65 +270,11 @@ struct DBManager {
         }
         completion(songs)
     }
-
-    // Band Level: Contains Songs and Lists
-//    static func createSong(text: String, in bandRef: DocumentReference, completion: @escaping (_ song: Song) -> ()) {
-//        var song = Song(with: text)
-//        var ref: DocumentReference? = nil
-//        ref = bandRef.collection(Collections.songs).addDocument(data: song.dict) { error in
-//            if let error = error {
-//                print("Song could not be added to database. -", error.localizedDescription)
-//            } else if let ref = ref {
-//                song.ref = ref
-//                completion(song)
-//            }
-//        }
-//    }
-//    static func deleteSong(ref: DocumentReference) {
-//        ref.delete()
-//    }
-//
-//    static func createList(in bandRef: DocumentReference, completion: @escaping (_ list: Songlist) -> ()) {
-//        // Create timestamp and date-based default title
-//        let timestamp = Timestamp(date: Date())
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-dd"
-//        let formattedDate = formatter.string(from: timestamp.dateValue())
-//
-//        var list = Songlist(title: formattedDate, timestamp: timestamp)
-//        var ref: DocumentReference? = nil
-//        ref = bandRef.collection(Collections.lists).addDocument(data: list.dataDict) { error in
-//            if let error = error {
-//                print("Songlist could not be added to database. -", error.localizedDescription)
-//            } else if let ref = ref {
-//                list.ref = ref
-//                completion(list)
-//            }
-//        }
-//    }
-//    static func deleteList(ref: DocumentReference) {
-//        ref.delete()
-//    }
-//
-//
-//    // List Level: Contains Song References
-//    static func addSong(ref: DocumentReference, to list: inout Songlist, at index: Int) {
-//        if index < list.songRefs.count {
-//            list.songRefs.insert(ref, at: index)
-//        } else {
-//            list.songRefs.append(ref)
-//        }
-//        list.ref?.setData([Fields.songs: list.songRefDict], merge: true)
-//    }
-//    static func removeSong(at index: Int, from list: inout Songlist) {
-//        list.songRefs.remove(at: index)
-//        list.ref?.setData([Fields.songs: list.songRefDict], merge: true)
-//    }
 }
 
 
 // MARK: - Helper Functions
-extension DBManager {
+extension DBManagerOld {
     
     static func generateDocumentID(type: DocumentType, name: String) -> String {
         // Create date stamp
@@ -306,19 +289,7 @@ extension DBManager {
         
         return type.rawValue + filteredName + stamp
     }
-//
-//    static func dict(for song: Song) -> [String: Any] {
-//        var dict = [String: Any]()
-//        dict[Fields.text] = song.text
-//        dict[Fields.title] = song.title
-//        dict[Fields.timestamp] = song.timestamp
-//        if let artist = song.artist { dict[Fields.artist] = artist }
-//        if let key = song.key { dict[Fields.key] = key }
-//        if let tempo = song.tempo { dict[Fields.tempo] = tempo }
-//        if let signature = song.signature { dict[Fields.signature] = signature }
-//        if let body = song.body { dict[Fields.body] = body }
-//        return dict
-//    }
+
     
     // Creating Band, Song and List instances from existing database entries
     static func makeBand(dict: [String: Any], id: BandID) -> Band {
@@ -338,7 +309,7 @@ extension DBManager {
         let title = dict[Fields.title] as! String // ?? ""
         let timestamp = dict[Fields.timestamp] as! Timestamp // ?? Timestamp(date: Date())
         let index = dict[Fields.index] as! Int
-        let songIDDict = dict[Fields.songs] as! [String: SongID]
+        let songIDDict = dict[Fields.songs] as? [String: SongID] ?? [String: SongID]()
         
         var songIDs = [SongID]()
         for (i, _) in songIDDict.enumerated() {

@@ -11,12 +11,14 @@
 
 import UIKit
 
-class MainVC: UIViewController {
+class MainVC: UIViewController, DatabaseDependent {
+    let cache: DBCache
+    
     
     let stackView = UIStackView()
     let pageVC = PageVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
     let listWidthMultiplier: CGFloat = 0.25  // This could be set in the user settings later
-    let pickVC = SongPickVC(band: Band(name: "", isNew: false))
+    let pickVC = PickVC(band: Band(name: "", isNew: false))
     let navVC = UINavigationController()
     var currentBand: Band? {
         didSet {
@@ -97,7 +99,7 @@ class MainVC: UIViewController {
         }
     }
     
-    func showPickVC(delegate: SongPickVCDelegate) {
+    func showPickVC(delegate: PickVCDelegate) {
         guard pickVC.view.isHidden else { return }
         self.pickVC.startListener()
         self.pickVC.delegate = delegate

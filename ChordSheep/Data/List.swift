@@ -1,5 +1,5 @@
 //
-//  Songlist.swift
+//  List.swift
 //  ChordSheep
 //
 //  Created by Lennart Wisbar on 14.01.20.
@@ -7,10 +7,25 @@
 //
 
 import Foundation
-import Firebase
+
+class List: DatabaseStorable {
+    var id: DocID?  // If nil, list has not been saved to db yet.
+    var name: String
+    var index: Int
+    var songs: [Song]
+    
+    init(id: DocID? = nil, index: Int = 0, name: String = "", songs: [Song] = [Song]()) {
+        self.id = id
+        self.index = index
+        self.name = name
+        self.songs = songs
+    }
+}
 
 
-struct Songlist {
+
+
+struct ListOld {
     
     let id: String
     let band: Band

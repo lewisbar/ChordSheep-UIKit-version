@@ -8,16 +8,30 @@
 
 
 import Foundation
-import Firebase
 
-struct Band {
+class Band: DatabaseStorable {
+    var id: DocID?  // If nil, band has not been saved to db yet.
+    var name: String
+    var songs: [Song]
+    var lists: [List]
+    
+    init(id: DocID? = nil, name: String = "", songs: [Song] = [Song](), lists: [List] = [List]()) {
+        self.id = id
+        self.name = name
+        self.songs = songs
+        self.lists = lists
+    }
+}
+
+
+struct BandOld {
     let id: String
 
     var name: String { didSet { DBManager.rename(band: self, to: name) } }
     var songs: [Song]
     var lists: [Songlist]
     
-    init(name: String, songs: [Song] = [Song](), lists: [Songlist] = [Songlist](), isNew: Bool = true) {
+    init(name: String, songs: [Song] = [Song](), lists: [Songlist] = [Songlist](), isNew: Bool) {
         self.name = name
         self.id = DBManager.generateDocumentID(type: .band, name: self.name)
         self.songs = songs

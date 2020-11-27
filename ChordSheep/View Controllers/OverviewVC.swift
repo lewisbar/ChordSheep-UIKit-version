@@ -10,7 +10,9 @@ import UIKit
 import Firebase
 import MobileCoreServices  // for kUTTypePlainText for dragging
 
-class OverviewVC: UITableViewController, UITableViewDragDelegate {
+class OverviewVC: UITableViewController, UITableViewDragDelegate, DatabaseDependent {
+    let cache: DBCache
+    
     var mainVC: MainVC!
     var db: Firestore!
     var snapshotListeners = [ListenerRegistration]()

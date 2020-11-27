@@ -1,6 +1,6 @@
 //
 //  PageVC.swift
-//  Choly
+//  ChordSheep
 //
 //  Created by Lennart Wisbar on 02.04.19.
 //  Copyright © 2019 Lennart Wisbar. All rights reserved.
@@ -11,7 +11,9 @@
 
 import UIKit
 
-class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, DatabaseDependent {
+    let cache: DBCache
+    
 
     weak var songtableVC: SongtableVC?
     weak var mainVC: MainVC?
