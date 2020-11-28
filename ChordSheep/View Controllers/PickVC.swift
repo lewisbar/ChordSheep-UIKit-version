@@ -16,7 +16,7 @@ protocol PickVCDelegate {
 }
 
 class PickVC: UITableViewController, DatabaseDependent {
-    let cache: DBCache
+    let store: DBStore
     
 
     var delegate: PickVCDelegate?

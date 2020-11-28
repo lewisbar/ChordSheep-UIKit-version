@@ -15,27 +15,61 @@ protocol DatabaseStorable {
     var name: String { get set }
 }
 protocol DatabaseDependent {
-    var cache: DBCache { get }
+    var store: DBStore { get }
+    func databaseDidChange(changedItems: [DatabaseStorable])
 }
 
-class DBCache {
+
+class DBStore {
     /* Offline representation of the whole database, that is, the bands the user is in, including their songs and lists. */
+    var user: User?
     private(set) var bands = [Band]()
+    var subscribers = [DatabaseDependent]()
+
     init(bands: [Band] = [Band]()) { self.bands = bands }
     
-    func create(band: Band) {
+    func store(user: User) {
+        DBManager.create(user: User)
+    }
+    
+    func store(band: Band) {
         bands.append(band)
         DBManager.create(band: band)
     }
-    func create(song: Song, in band: Band) {
+    func store(song: Song, in band: Band) {
         band.songs.append(song)
         DBManager.create(song: song, in: band)
     }
-    func create(list: List, in band: Band) {
+    func store(list: List, in band: Band) {
         band.lists.append(list)
         DBManager.create(list: list, in: band)
     }
     
+    func addListeners() {
+        // The listeners for auth, bands, and lists depend on each other and are therefore nested
+        // Listen for the currently logged in user
+        let _ = DBManager.listenForAuthState { user in
+            self.user = user
+            for sub in self.subscribers { sub.databaseDidChange(changedItems: [user])}
+            
+            // Listen to the bands the user is in
+            let bandListener = DBManager.listenForBands(with: user.uid) { bands in
+                self.bands = bands
+                for sub in self.subscribers { sub.databaseDidChange(changedItems: bands)}
+                
+                // For every one of the user's bands, listen to the bands lists
+                for (i, band) in self.bands.enumerated() {
+                    let listListener = DBManager.listenForLists(in: band) { lists in
+                        self.bands[i].lists = lists
+                        for sub in self.subscribers { sub.databaseDidChange(changedItems: lists)}
+                        // DispatchQueue.main.async { self.tableView.reloadData() }
+                    }
+                    self.snapshotListeners.append(listListener)
+                }
+            }
+            self.snapshotListeners.append(bandListener)
+        }
+    }
     /*
      Install listeners here? (tl;dr: YES!)
      To watch the whole database, I think I would need the following listeners

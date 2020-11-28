@@ -13,80 +13,39 @@ class Song: DatabaseStorable {
     var name = ""
     var text = ""
     var artist = ""
+    var key = ""
+    var tempo = 0
+    var signature = ""
     var body = ""
     
     init(id: DocID? = nil, text: String = "") {
         self.id = id
         self.text = text
         let properties = evaluate(text: text)
-        self.name = properties[.name]!
-        self.artist = properties[.artist]!
-        self.body = properties[.body]!
+        self.name = properties.name
+        self.artist = properties.artist
+        self.key = properties.key
+        self.tempo = properties.tempo
+        self.signature = properties.signature
+        self.body = properties.body
     }
-    
-    enum metaData { case name, artist, body }
-    
-    func evaluate(text: String) -> [metaData: String] {
-        // Fill properties based on text
-        // ...
-        let lines = text.components(separatedBy: "\n") + Array(repeating: "", count: 3)  // Appending empty lines to prevent out-of-bounds errors.
-        return [.name: lines.first ?? "",
-                .artist: lines.count > 1 ? lines[1] : "",
-                .body: lines.count > 2 ? lines[2..<lines.endIndex].joined(separator: "\n") : ""]
-    }
-}
-
-
-
-struct SongOld {
-    
-    // TODO: Create my own data types for key and signature?
-    let id: String
-    let band: Band
-    let timestamp: Timestamp
-    
-    var text: String { didSet { evaluateText(); DBManager.update(song: self) } }
-    var title = ""
-    var artist: String?
-    var key: String?
-    var tempo: Int?
-    var signature: String?
-    var body: String?
-    
-    
+        
     // Compose a summary of all meta data for the detail label in the songlist
     var metadataDescription: String {
         var description = ""
-        if let key = key {
+        if !key.isEmpty {
             description += key + "  "
         }
-        if let artist = artist {
+        if !artist.isEmpty {
             description += artist + "  "
         }
-        if let tempo = tempo {
+        if tempo > 0 {
             description += String(tempo) + "  "
         }
-        if let signature = signature {
+        if !signature.isEmpty {
             description += signature
         }
         return description.trimmingCharacters(in: .whitespaces)
-    }
-    
-    
-    init(text: String, id: SongID, band: Band, timestamp: Timestamp) {
-        self.text = text
-        self.id = id
-        self.band = band
-        self.timestamp = timestamp
-        evaluateText()
-    }
-    
-    init() {
-        /* Only for dummy Songs. Doesn't even evaluateText(). */
-        self.text = ""
-        self.id = ""
-        self.band = Band(name: "", isNew: false)
-        self.timestamp = Timestamp()
     }
     
     enum Key: String {
@@ -166,9 +125,20 @@ struct SongOld {
         }
     }
     
-    mutating func evaluateText() {
+    struct Meta {
+        var name = ""
+        var artist = ""
+        var key = ""
+        var tempo = 0
+        var signature = ""
+        var body = ""
+    }
+    
+    func evaluate(text: String) -> Meta {
         let lines = text.components(separatedBy: .newlines)
         var lineIndex = -1
+        
+        var meta = Meta()
         
         for line in lines {
             lineIndex += 1
@@ -176,16 +146,16 @@ struct SongOld {
             // First and second line return title and artist without the need for a tag
             guard line.contains(":") else {
                 if lineIndex == 0 {
-                    title = line.trimmingCharacters(in: .whitespacesAndNewlines)
+                    meta.name = line.trimmingCharacters(in: .whitespacesAndNewlines)
                     continue
                 }
                 else if lineIndex == 1 {
-                    artist = line.trimmingCharacters(in: .whitespacesAndNewlines)
+                    meta.artist = line.trimmingCharacters(in: .whitespacesAndNewlines)
                     continue
                 }
                 else {
-                    body = lines[lineIndex..<lines.endIndex].joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
-                    return
+                    meta.body = lines[lineIndex..<lines.endIndex].joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+                    return meta
                 }
             }
             
@@ -194,38 +164,90 @@ struct SongOld {
             guard let potentialTag = splitLine.first?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
                 let value = splitLine.last?.trimmingCharacters(in: .whitespacesAndNewlines)
                 else {
-                    body = lines[lineIndex..<lines.endIndex].joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
-                    return
+                meta.body = lines[lineIndex..<lines.endIndex].joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+                    return meta
             }
             
             // Get properties from tags
             switch potentialTag {
-            case "title", "t":
-                title = value
+            case "name", "t":
+                meta.name = value
             case "artist", "subtitle", "st":
-                artist = value
+                meta.artist = value
             case "key", "k":
                 if let key = Key.key(from: value.lowercased()) {
-                    self.key = key
+                    meta.key = key
                 }
             case "tempo", "bpm":
                 if var t = Int(value) {
                     
-                    if t < 30 { t = 30 }
-                    else if t > 360 { t = 360 }
+                    // if t < 30 { t = 30 }
+                    if t > 360 { t = 360 }
                     
-                    tempo = t
+                    meta.tempo = t
                 }
             case "signature", "sign":
                 if ["2/4", "3/4", "4/4", "6/8", "5/4", "7/4"].contains(value) {
-                    signature = value
+                    meta.signature = value
                 }
             default:
-                body = lines[lineIndex..<lines.endIndex].joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
-                return
+                meta.body = lines[lineIndex..<lines.endIndex].joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+                return meta
             }
         }
     }
+}
+
+extension Song: Equatable, Comparable {
+    
+    static func == (lhs: Song, rhs: Song) -> Bool {
+        return lhs.text == rhs.text
+    }
+    
+    static func < (lhs: Song, rhs: Song) -> Bool {
+        return lhs.text < rhs.text
+    }
+}
+
+
+
+struct SongOld {
+    
+    // TODO: Create my own data types for key and signature?
+    let id: String
+    let band: Band
+    let timestamp: Timestamp
+    
+    var text: String { didSet { evaluateText(); DBManager.update(song: self) } }
+    var title = ""
+    var artist: String?
+    var key: String?
+    var tempo: Int?
+    var signature: String?
+    var body: String?
+    
+    
+
+    
+    init(text: String, id: SongID, band: Band, timestamp: Timestamp) {
+        self.text = text
+        self.id = id
+        self.band = band
+        self.timestamp = timestamp
+        evaluateText()
+    }
+    
+    init() {
+        /* Only for dummy Songs. Doesn't even evaluateText(). */
+        self.text = ""
+        self.id = ""
+        self.band = Band(name: "", isNew: false)
+        self.timestamp = Timestamp()
+    }
+    
+    
+    
+
 //    
 //    func delete() {
 //        // Delete from database.
@@ -269,15 +291,3 @@ struct SongOld {
 //        return dict
 //    }
 //}
-
-
-extension Song: Equatable, Comparable {
-    
-    static func == (lhs: Song, rhs: Song) -> Bool {
-        return lhs.text == rhs.text
-    }
-    
-    static func < (lhs: Song, rhs: Song) -> Bool {
-        return lhs.text < rhs.text
-    }
-}

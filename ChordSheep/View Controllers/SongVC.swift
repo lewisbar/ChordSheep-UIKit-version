@@ -13,7 +13,7 @@ import UIKit
 //}
 
 class SongVC: UIViewController, DatabaseDependent {
-    let cache: DBCache
+    let store: DBStore
     
     
     // weak var delegate: SongVCDelegate?

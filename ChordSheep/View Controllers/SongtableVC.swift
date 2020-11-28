@@ -11,7 +11,7 @@ import Firebase
 import MobileCoreServices
 
 class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
-    let cache: DBCache
+    let store: DBStore
     
 
     weak var mainVC: MainVC?
@@ -48,11 +48,12 @@ class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
     let addButton = UIButton(type: .custom)
     let editSongButton = UIButton(type: .custom)
     
-    init(mainVC: MainVC, pageVC: PageVC, band: Band) {
+    init(store: DBStore, mainVC: MainVC, pageVC: PageVC, band: Band) {
+        super.init(style: .insetGrouped)
         self.mainVC = mainVC
         self.pageVC = pageVC
         self.band = band
-        super.init(style: .insetGrouped)
+        self.store = store
         // self.tableView = UITableView(frame: self.tableView.frame, style: .insetGrouped)
     }
     
@@ -147,7 +148,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "songCell", for: indexPath)
         let song = songs[indexPath.row]
-        cell.textLabel?.text = song.title
+        cell.textLabel?.text = song.name
         cell.detailTextLabel?.text = song.metadataDescription
         return cell
     }

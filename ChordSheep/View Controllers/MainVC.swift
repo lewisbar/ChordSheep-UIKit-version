@@ -11,9 +11,7 @@
 
 import UIKit
 
-class MainVC: UIViewController, DatabaseDependent {
-    let cache: DBCache
-    
+class MainVC: UIViewController {    
     
     let stackView = UIStackView()
     let pageVC = PageVC(transitionStyle: .scroll, navigationOrientation: .horizontal)

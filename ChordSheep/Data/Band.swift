@@ -14,6 +14,7 @@ class Band: DatabaseStorable {
     var name: String
     var songs: [Song]
     var lists: [List]
+    var index = 0
     
     init(id: DocID? = nil, name: String = "", songs: [Song] = [Song](), lists: [List] = [List]()) {
         self.id = id

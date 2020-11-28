@@ -12,7 +12,7 @@
 import UIKit
 
 class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, DatabaseDependent {
-    let cache: DBCache
+    let store: DBStore
     
 
     weak var songtableVC: SongtableVC?

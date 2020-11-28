@@ -11,7 +11,7 @@ import Firebase
 import MobileCoreServices  // for kUTTypePlainText for dragging
 
 class OverviewVC: UITableViewController, UITableViewDragDelegate, DatabaseDependent {
-    let cache: DBCache
+    let store: DBStore
     
     var mainVC: MainVC!
     var db: Firestore!
@@ -20,6 +20,13 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate, DatabaseDepend
     var bands = [Band]()
     var closedSections = Set<Int>()
     let editButton = UIButton(type: .custom)
+    
+    init(store: DBStore) {
+        super.init(style: .insetGrouped)
+        self.store = store
+    }
+    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     override func viewDidLoad() {
         super.viewDidLoad()
