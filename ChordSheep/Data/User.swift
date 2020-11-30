@@ -9,22 +9,21 @@
 import Foundation
 import Firebase
 
-class User: DatabaseStorable {
-    var id: DocID?
-    var name: String
-    
-    // var ref: DocumentReference?
+typealias BandAccess = [BandID: Int]
 
+class User: DatabaseStorable {
+    var id: DocID?  // If nil, user has not been stored in database
+    var name: String
+    var bandAccess: BandAccess
+    
 //    var transpositions = [DocumentReference: Int]()    // [SongID: TranspositionLevel], example: [4jsflkj22434ksjf: -2]
 //    var notes = [DocumentReference: String]()          // [SongID: Note], example: [240siljjfd290j: "Play this song slowly."]
 //    var zoomLevels = [DocumentReference: Float]()      // [SongID: ZoomLevel], example: [984hf8ejefq84: 1.2432]
     
-    init(name: String = "", id: UserID = "", isNew: Bool) {
-        self.name = name
+    init(id: UserID? = nil, name: String = "", bandAccess: BandAccess = BandAccess()) {
         self.id = id
-        if isNew  {
-            DBManager.create(user: self)
-        }
+        self.name = name
+        self.bandAccess = bandAccess
     }
 }
 

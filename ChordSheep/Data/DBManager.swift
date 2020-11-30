@@ -14,49 +14,23 @@ typealias BandID = String
 typealias SongID = String
 typealias ListID = String
 
-enum DocumentType: String {
-    case user, band, song, list
-}
-
-struct Collections {
-    static let users = "users"
-    static let bands = "bands"
-    static let songs = "songs"
-    static let lists = "lists"
-}
-
-struct Fields {
-    static let name = "name"
-    static let title = "title"
-    static let songs = "songs"
-    static let text = "text"
-    static let timestamp = "timestamp"
-    static let artist = "artist"
-    static let key = "key"
-    static let tempo = "tempo"
-    static let signature = "signature"
-    static let body = "body"
-    static let index = "index"
-}
 
 class DBManager {
+//    enum DocumentType: String {
+//        case user, band, song, list
+//    }
+
+    struct Collections {
+        static let users = "users", bands = "bands", songs = "songs", lists = "lists"
+    }
+
+    struct Fields {
+        static let name = "name", title = "title", songs = "songs", text = "text", created = "created", modified = "modified", artist = "artist", key = "key", tempo = "tempo", signature = "signature", body = "body", index = "index", bandAccess = "bandAccess"
+    }
+    
     static var db: Firestore { Firestore.firestore() }
     static var bands: CollectionReference { db.collection(Collections.bands) }
     static var users: CollectionReference { db.collection(Collections.users) }
-    
-    static func generateID(for doc: DatabaseStorable) -> DocID {
-        // Create date stamp
-        let formatter = DateFormatter()
-        formatter.dateFormat = "y-M-d H:m:s-SSSS"
-        let stamp = formatter.string(from: Date())
-        
-        // Remove unallowed characters
-        let characterSet = CharacterSet(charactersIn: "./")
-        let components = doc.name.components(separatedBy: characterSet)
-        let filteredName = components.joined(separator: "")
-        
-        return filteredName + stamp
-    }
 
     // MARK: - Creating
     static func create(user: User) {
@@ -79,7 +53,9 @@ class DBManager {
         
         var dict = [String: Any]()
         dict[Fields.name] = band.name
-        dict[Fields.timestamp] = Timestamp(date: Date())
+        let timestamp = Timestamp(date: Date())
+        dict[Fields.created] = timestamp
+        dict[Fields.modified] = timestamp
         dict[Fields.index] = band.index
         
         bands.document(id).setData(dict) { error in
@@ -98,7 +74,9 @@ class DBManager {
         
         var dict = [String: Any]()
         dict[Fields.text] = song.text
-        dict[Fields.timestamp] = Timestamp(date: Date())
+        let timestamp = Timestamp(date: Date())
+        dict[Fields.created] = timestamp
+        dict[Fields.modified] = timestamp
         
         bands.document(bandID).collection(Collections.songs).document(songID).setData(dict) { error in
             if let error = error {
@@ -116,7 +94,9 @@ class DBManager {
         
         var dict = [String: Any]()
         dict[Fields.name] = list.name
-        dict[Fields.timestamp] = Timestamp(date: Date())
+        let timestamp = Timestamp(date: Date())
+        dict[Fields.created] = timestamp
+        dict[Fields.modified] = timestamp
         dict[Fields.index] = list.index
         
         bands.document(bandID).collection(Collections.lists).document(listID).setData(dict) { error in
@@ -130,40 +110,114 @@ class DBManager {
     
     
     // MARK: - Deleting
-    static func deleteUser(uid: UserID) {
-        users.document(uid).delete()
+    static func delete(user: User) {
+        guard let id = user.id else { fatalError("User has no ID") }
+        users.document(id).delete() { error in
+            if let error = error {
+                print("User could not be deleted from database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
     
     static func delete(band: Band) {
-        bands.document(band.id).delete()
+        guard let id = band.id else { fatalError("Band has no ID") }
+        bands.document(id).delete() { error in
+            if let error = error {
+                print("Band could not be deleted from database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
         // TODO: Subcollections should be deleted, too, but this is only possible via a cloud function (if at all). Maybe I can just leave the stuff there?
     }
     
-    static func delete(song: Song) {
-        bands.document(song.band.id).collection(Collections.songs).document(song.id).delete()
+    static func delete(song: Song, in band: Band) {
+        guard let bandID = band.id else { fatalError("Band has no ID") }
+        guard let songID = song.id else { fatalError("Song has no ID") }
+        bands.document(bandID).collection(Collections.songs).document(songID).delete() { error in
+            if let error = error {
+                print("Song could not be deleted from database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
         // TODO: Handle playlists that use that song
     }
     
-    static func delete(list: Songlist) {
-        bands.document(list.band.id).collection(Collections.lists).document(list.id).delete()
+    static func delete(list: List, in band: Band) {
+        guard let bandID = band.id else { fatalError("Band has no ID") }
+        guard let listID = list.id else { fatalError("List has no ID") }
+        bands.document(bandID).collection(Collections.lists).document(listID).delete() { error in
+            if let error = error {
+                print("List could not be deleted from database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
     
     
     // MARK: - Renaming
     static func rename(user: User, to name: String) {
-        users.document(user.uid).setData([Fields.name: name], merge: true)
+        guard let id = user.id else { fatalError("User has no ID") }
+        var dict = [String: Any]()
+        dict[Fields.name] = name
+        dict[Fields.modified] = Timestamp(date: Date())
+        users.document(id).setData(dict, merge: true) { error in
+            if let error = error {
+                print("User could not be renamed in database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
     
     static func rename(band: Band, to name: String) {
-        bands.document(band.id).setData([Fields.name: name], merge: true)
+        guard let id = band.id else { fatalError("Band has no ID") }
+        var dict = [String: Any]()
+        dict[Fields.name] = name
+        dict[Fields.modified] = Timestamp(date: Date())
+        bands.document(id).setData(dict, merge: true) { error in
+            if let error = error {
+                print("Band could not be renamed in database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
     
-    static func update(song: Song) {
-        create(song: song)
+    static func update(song: Song, in band: Band) {
+        guard let bandID = band.id else { fatalError("Band has no ID") }
+        guard let songID = song.id else { fatalError("Song has no ID") }
+        
+        var dict = [String: Any]()
+        dict[Fields.text] = song.text
+        dict[Fields.modified] = Timestamp(date: Date())
+        
+        bands.document(bandID).collection(Collections.songs).document(songID).setData(dict) { error in
+            if let error = error {
+                print("Song could not be changed in database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
     
-    static func rename(list: Songlist, to title: String) {
-        bands.document(list.band.id).collection(Collections.lists).document(list.id).setData([Fields.title: title], merge: true)
+    static func rename(list: List, in band: Band, to name: String) {
+        guard let bandID = band.id else { fatalError("Band has no ID") }
+        guard let listID = list.id else { fatalError("List has no ID") }
+        var dict = [String: Any]()
+        dict[Fields.name] = name
+        dict[Fields.modified] = Timestamp(date: Date())
+        bands.document(bandID).collection(Collections.lists).document(listID).setData(dict, merge: true) { error in
+            if let error = error {
+                print("List could not be renamed in database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
         
     
@@ -172,50 +226,81 @@ class DBManager {
         // TODO. But drag and drop reordering of bands has not been implemented anyway as of now.
     }
     
-    static func set(index: Int, for list: Songlist) {
-        bands.document(list.band.id).collection(Collections.lists).document(list.id).setData([Fields.index: index], merge: true)
+    static func set(index: Int, for list: List, in band: Band) {
+        guard let bandID = band.id else { fatalError("Band has no ID") }
+        guard let listID = list.id else { fatalError("List has no ID") }
+        bands.document(bandID).collection(Collections.lists).document(listID).setData([Fields.index: index], merge: true) { error in
+            if let error = error {
+                print("List index could not be written to database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
     
-    static func updateSongRefs(for list: Songlist) {
+    static func updateSongs(for list: List, in band: Band) {
+        guard let bandID = band.id else { fatalError("Band has no ID") }
+        guard let listID = list.id else { fatalError("List has no ID") }
         var dict = [String: SongID]()
         
         // Use the songID array to create a dictionary
-        for (index, songID) in list.songIDs.enumerated() {
+        for (index, song) in list.songs.enumerated() {
+            guard let songID = song.id else { fatalError("Song has no ID") }
             dict[String(index)] = songID
         }
-        bands.document(list.band.id).collection(Collections.lists).document(list.id).setData([Fields.songs: dict], merge: true)
+        bands.document(bandID).collection(Collections.lists).document(listID).setData([Fields.songs: dict], merge: true) { error in
+            if let error = error {
+                print("SongIDs for list \(list.name) could not be written to database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
 }
     
-    // MARK: - Listeners
+// MARK: - Listeners
 extension DBManager {
     static func listenForAuthState(onChange: @escaping (_ user: User) -> ()) -> AuthStateDidChangeListenerHandle {
         return Auth.auth().addStateDidChangeListener { (auth, user) in
             guard let userAuth = user else { print("No user logged in"); return }
             let name = userAuth.displayName ?? userAuth.email ?? userAuth.phoneNumber ?? "Unknown User"
-            let uid = userAuth.uid
-            let user = User(name: name, uid: uid, isNew: false)
-            onChange(user)
+            let id = userAuth.uid
+            self.users.document(id).getDocument() { (document, error) in
+                if let document = document, document.exists {
+                    if let data = document.data() {
+                        let bandAccess = data[self.Fields.bandAccess] as? BandAccess ?? BandAccess()
+                        let user = User(id: id, name: name, bandAccess: bandAccess)
+                        onChange(user)
+                    }
+                } else {
+                    print("Document does not exist.", error?.localizedDescription ?? "")
+                }
+            }
         }
     }
     
-    static func listenForBands(with userID: UserID, onChange: @escaping (_ bands: [Band]) -> ()) -> ListenerRegistration {
+    static func listenForBands(with user: User, onChange: @escaping (_ bands: [Band]) -> ()) -> ListenerRegistration {
+        // Needed by: OverviewVC (and later SettingsVC?)
         // Listen for bands the user is in
+        guard let userID = user.id else { fatalError("User has no ID") }
         return bands.whereField("members.\(userID)", isGreaterThan: -1).addSnapshotListener() { snapshot, error in
             guard let documents = snapshot?.documents else {
-                print("The user's bands could not be fetched. -", error!.localizedDescription)
+                print("The user's bands could not be fetched.", error?.localizedDescription ?? "")
                 return
             }
             let bands = documents.map { makeBand(dict: $0.data(), id: $0.documentID) }
+            // Songs and lists are not filled into the band objects here. Those are listened for seperately.
+
             onChange(bands)
         }
     }
     
     static func listenForLists(in band: Band, onChange: @escaping (_ lists: [List]) -> ()) -> ListenerRegistration {
+        // Needed by OverviewVC
         guard let bandID = band.id else { fatalError("Band has no ID") }
         return bands.document(bandID).collection(Collections.lists).order(by: Fields.index).addSnapshotListener() { snapshot, error in
             guard let documents = snapshot?.documents else {
-                print("The band's lists could not be fetched. -", error!.localizedDescription)
+                print("The band's lists could not be fetched.", error?.localizedDescription ?? "")
                 return
             }
             let lists = documents.map { makeList(dict: $0.data(), id: $0.documentID, band: band) }
@@ -223,11 +308,12 @@ extension DBManager {
         }
     }
     
-    static func listenForAllSongs(in band: Band, onChange: @escaping (_ songs: [Song]) -> ()) -> ListenerRegistration {
+    static func listenForSongs(in band: Band, onChange: @escaping (_ songs: [Song]) -> ()) -> ListenerRegistration {
+        // Needed by AllSongsVC and PickVC
         guard let bandID = band.id else { fatalError("Band has no ID") }
         return bands.document(bandID).collection(Collections.songs).order(by: Fields.title).addSnapshotListener() { snapshot, error in
             guard let documents = snapshot?.documents else {
-                print("The band's songs could not be fetched. -", error!.localizedDescription)
+                print("The band's songs could not be fetched.", error?.localizedDescription ?? "")
                 return
             }
             let songs = documents.map { makeSong(dict: $0.data(), id: $0.documentID, band: band) }
@@ -236,23 +322,24 @@ extension DBManager {
     }
     
     static func listenForList(_ list: List, in band: Band, onChange: @escaping (_ list: List) -> ()) -> ListenerRegistration {
+        // Needed by ListVC. Listens not only for the list's songs, but also for its name, so it cannot return an array of songs but must return an new list.
         guard let bandID = band.id else { fatalError("Band has no ID") }
         guard let listID = list.id else { fatalError("List has no ID") }
-        bands.document(bandID).collection(Collections.lists).document(listID).addSnapshotListener() { snapshot, error in
-            guard let songlistDict = snapshot?.data() else {
-                print("Songlist could not be fetched. -", error!.localizedDescription)
+        return bands.document(bandID).collection(Collections.lists).document(listID).addSnapshotListener() { snapshot, error in
+            guard let listDict = snapshot?.data() else {
+                print("Songlist could not be fetched.", error?.localizedDescription ?? "")
                 return
             }
             
             // Create a new list with the same IDs, but updated data
-            let songlist = makeList(dict: songlistDict, id: listID, band: band)
-            onChange(songlist)
+            let list = makeList(dict: listDict, id: listID, band: band)
+            onChange(list)
         }
     }
     
     static func getSongsFromList(_ list: List, in band: Band, completion: @escaping (_ songs: [Song]) -> ()) {
         guard let bandID = band.id else { fatalError("Band has no ID") }
-
+        
         // Make sure the songs are put in the right order. Async fetching tends to mix them up.
         var songs = [Song](repeating: Song(), count: list.songs.count)
         
@@ -260,7 +347,7 @@ extension DBManager {
             guard let songID = song.id else { fatalError("Song has no ID") }
             bands.document(bandID).collection(Collections.songs).document(songID).getDocument { document, error in
                 guard let document = document else {
-                    print("Song could not be fetched. -", error!.localizedDescription)
+                    print("Song could not be fetched.", error?.localizedDescription ?? "")
                     return
                 }
                 guard let data = document.data() else {
@@ -291,35 +378,49 @@ extension DBManager {
 //
 //        return type.rawValue + filteredName + stamp
 //    }
+    
+    static func generateID(for doc: DatabaseStorable) -> DocID {
+        // Create date stamp
+        let formatter = DateFormatter()
+        formatter.dateFormat = "y-M-d H:m:s-SSSS"
+        let stamp = formatter.string(from: Date())
+        
+        // Remove unallowed characters
+        let characterSet = CharacterSet(charactersIn: "./")
+        let components = doc.name.components(separatedBy: characterSet)
+        let filteredName = components.joined(separator: "")
+        
+        return filteredName + stamp
+    }
 
     
     // Creating Band, Song and List instances from existing database entries
     static func makeBand(dict: [String: Any], id: BandID) -> Band {
         let name = dict[Fields.name] as? String ?? ""
-        let songs = dict[Collections.songs] as? [Song] ?? [Song]()
-        let lists = dict[Collections.lists] as? [List] ?? [List]()
-        return Band(name: name, songs: songs, lists: lists, isNew: false)
+        
+        // TODO: The following two lines won't work. Instead, I would need two listeners to fill the band's songs and lists
+//        let songs = dict[Collections.songs] as? [Song] ?? [Song]()
+//        let lists = dict[Collections.lists] as? [List] ?? [List]()
+        return Band(id: id, name: name)  //, songs: songs, lists: lists)
     }
     
     static func makeSong(dict: [String: Any], id: SongID, band: Band) -> Song {
         let text = dict[Fields.text] as? String ?? ""
-        let timestamp = dict[Fields.timestamp] as? Timestamp ?? Timestamp(date: Date())
-        return Song(text: text, id: id, band: band, timestamp: timestamp)
+        return Song(id: id, text: text)
     }
     
     static func makeList(dict: [String: Any], id: SongID, band: Band) -> List {
-        let title = dict[Fields.title] as! String // ?? ""
-        let timestamp = dict[Fields.timestamp] as! Timestamp // ?? Timestamp(date: Date())
+        let name = dict[Fields.name] as! String // ?? ""
         let index = dict[Fields.index] as! Int
         let songIDDict = dict[Fields.songs] as? [String: SongID] ?? [String: SongID]()
         
-        var songIDs = [SongID]()
+        var songs = [Song]()
         for (i, _) in songIDDict.enumerated() {
-            if let songID = songIDDict[String(i)] {
-                songIDs.append(songID)
+            if let songID = songIDDict[String(i)], let song = band.songs.first(where: { $0.id == songID }) {
+                songs.append(song)
             }
         }
         
-        return Songlist(title: title, id: id, band: band, timestamp: timestamp, index: index, songIDs: songIDs)
+        return List(id: id, index: index, name: name, songs: songs)
     }
 }

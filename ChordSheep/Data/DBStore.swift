@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 typealias DocID = String
 
@@ -25,13 +26,25 @@ class DBStore {
     var user: User?
     private(set) var bands = [Band]()
     var subscribers = [DatabaseDependent]()
+    
+    // For OverviewVC
+    var bandsOfTheUserListener: ListenerRegistration?
+    var listsOfABandListeners = [ListenerRegistration]()
+    
+    // For AllSongsVC and PickVC
+    var songsOfABandListener: ListenerRegistration?
+    
+    // For ListVC
+    var songsInAListListener: ListenerRegistration?
+    
 
     init(bands: [Band] = [Band]()) { self.bands = bands }
     
-    func store(user: User) {
-        DBManager.create(user: User)
-    }
     
+    // Storing objects to the database. To be called by ViewControllers that present the data to the user and let them edit it.
+    func store(user: User) {
+        DBManager.create(user: user)
+    }
     func store(band: Band) {
         bands.append(band)
         DBManager.create(band: band)
@@ -45,7 +58,10 @@ class DBStore {
         DBManager.create(list: list, in: band)
     }
     
-    func addListeners() {
+    
+    /* Listeners. I decided to seperate the listeners based on in which views they will be needed. To be called by ViewControllers in viewWillAppear (to add) and viewWillDisappear (to remove). */
+    // For OverViewVC:
+    func addListenersForTheUsersBandsAndTheirLists() {
         // The listeners for auth, bands, and lists depend on each other and are therefore nested
         // Listen for the currently logged in user
         let _ = DBManager.listenForAuthState { user in
@@ -53,23 +69,53 @@ class DBStore {
             for sub in self.subscribers { sub.databaseDidChange(changedItems: [user])}
             
             // Listen to the bands the user is in
-            let bandListener = DBManager.listenForBands(with: user.uid) { bands in
+            self.bandsOfTheUserListener = DBManager.listenForBands(with: user) { bands in
                 self.bands = bands
-                for sub in self.subscribers { sub.databaseDidChange(changedItems: bands)}
+                for sub in self.subscribers { sub.databaseDidChange(changedItems: bands) }
                 
-                // For every one of the user's bands, listen to the bands lists
+                // For every one of the user's bands, listen to the band's lists
                 for (i, band) in self.bands.enumerated() {
                     let listListener = DBManager.listenForLists(in: band) { lists in
                         self.bands[i].lists = lists
                         for sub in self.subscribers { sub.databaseDidChange(changedItems: lists)}
                         // DispatchQueue.main.async { self.tableView.reloadData() }
                     }
-                    self.snapshotListeners.append(listListener)
+                    self.listsOfABandListeners.append(listListener)
                 }
             }
-            self.snapshotListeners.append(bandListener)
         }
     }
+    func removeListenersForTheUsersBandsAndTheirLists() {
+        for listener in listsOfABandListeners {
+            listener.remove()
+        }
+        bandsOfTheUserListener?.remove()
+    }
+    
+    // For AllSongsVC and PickVC:
+    func addListenerForAllSongs(in band: Band) {
+        songsOfABandListener = DBManager.listenForSongs(in: band) { songs in
+            band.songs = songs
+            for sub in self.subscribers { sub.databaseDidChange(changedItems: songs) }
+        }
+    }
+    func removeCurrentListenerForAllSongs() {
+        songsOfABandListener?.remove()
+    }
+    
+    // For ListVC:
+    func addListenerForList(_ list: List, in band: Band) {
+        songsInAListListener = DBManager.listenForList(list, in: band) { newList in
+            list.songs = newList.songs
+            list.name = newList.name
+            list.index = newList.index
+            for sub in self.subscribers { sub.databaseDidChange(changedItems: [list]) }
+        }
+    }
+    func removeCurrentListenerForList(_ list: List) {
+        songsInAListListener?.remove()
+    }
+    
     /*
      Install listeners here? (tl;dr: YES!)
      To watch the whole database, I think I would need the following listeners
