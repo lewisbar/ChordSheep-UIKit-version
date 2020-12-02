@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import MobileCoreServices  // for kUTTypePlainText for dragging
 
-class OverviewVC: UITableViewController, UITableViewDragDelegate, DatabaseDependent {
+class OverviewVC: UITableViewController, UITableViewDragDelegate {
     let store: DBStore
     
     var mainVC: MainVC!
@@ -22,8 +22,8 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate, DatabaseDepend
     let editButton = UIButton(type: .custom)
     
     init(store: DBStore) {
-        super.init(style: .insetGrouped)
         self.store = store
+        super.init(style: .insetGrouped)
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -328,6 +328,12 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate, DatabaseDepend
     }
 }
 
+
+extension OverviewVC: DatabaseDependent {
+    func databaseDidChange(changedItems: [DatabaseStorable]) {
+        //TODO
+    }
+}
 /*
 extension OverviewVC: UITableViewDropDelegate {
     // "Local drags with one item go through the existing `tableView(_:moveRowAt:to:)` method on the data source." (https://developer.apple.com/documentation/uikit/drag_and_drop/adopting_drag_and_drop_in_a_table_view)

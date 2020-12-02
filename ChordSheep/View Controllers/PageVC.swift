@@ -11,9 +11,7 @@
 
 import UIKit
 
-class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, DatabaseDependent {
-    let store: DBStore
-    
+class PageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
 
     weak var songtableVC: SongtableVC?
     weak var mainVC: MainVC?

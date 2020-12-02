@@ -17,21 +17,20 @@ protocol PickVCDelegate {
 
 class PickVC: UITableViewController, DatabaseDependent {
     let store: DBStore
-    
 
     var delegate: PickVCDelegate?
-    var db: Firestore!
     var snapshotListener: ListenerRegistration?
-    var songs = [Song]()
-    var band: Band
+    // var songs = [Song]()
+    var band: Band?
     
 //    convenience init(songsRef: CollectionReference) {
 //        self.init(style: .insetGrouped)
 //        self.songsRef = songsRef
 //    }
     
-    init(band: Band) {
+    init(band: Band? = nil, store: DBStore) {
         self.band = band
+        self.store = store
         super.init(style: .insetGrouped)
     }
     
@@ -111,5 +110,11 @@ extension PickVC: UITableViewDragDelegate {
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = song.id
         return [dragItem]
+    }
+}
+
+extension PickVC: DatabaseDependent {
+    func databaseDidChange(changedItems: [DatabaseStorable]) {
+        // TODO
     }
 }

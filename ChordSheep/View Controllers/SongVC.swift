@@ -12,10 +12,8 @@ import UIKit
 //    func receiveUpdate(for: Song)
 //}
 
-class SongVC: UIViewController, DatabaseDependent {
-    let store: DBStore
-    
-    
+class SongVC: UIViewController {
+        
     // weak var delegate: SongVCDelegate?
     var songLabel = UILabel()
     var song: Song? /* {
@@ -31,6 +29,8 @@ class SongVC: UIViewController, DatabaseDependent {
         self.song = song
         self.index = index
     }
+    
+//    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,3 +116,10 @@ class SongVC: UIViewController, DatabaseDependent {
 //        // Needs to be here to be able to have an unwind segue
 //    }
 }
+
+//
+//extension SongVC: DatabaseDependent {
+//    func databaseDidChange(changedItems: [DatabaseStorable]) {
+//        //TODO
+//    }
+//}

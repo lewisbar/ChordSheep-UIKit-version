@@ -12,11 +12,11 @@
 import UIKit
 
 class MainVC: UIViewController {    
-    
+    let store = DBStore()
     let stackView = UIStackView()
     let pageVC = PageVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
     let listWidthMultiplier: CGFloat = 0.25  // This could be set in the user settings later
-    let pickVC = PickVC(band: Band(name: "", isNew: false))
+    var pickVC: PickVC!
     let navVC = UINavigationController()
     var currentBand: Band? {
         didSet {
@@ -30,7 +30,10 @@ class MainVC: UIViewController {
         super.viewDidLoad()
         
         pageVC.mainVC = self
-        let overviewVC = OverviewVC(style: .insetGrouped)
+        
+        pickVC = PickVC(store: store)
+        
+        let overviewVC = OverviewVC(store: store)
         overviewVC.mainVC = self
         navVC.setViewControllers([overviewVC], animated: false)
         navVC.navigationBar.tintColor = .white

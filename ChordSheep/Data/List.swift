@@ -25,42 +25,42 @@ class List: DatabaseStorable {
 
 
 
-struct ListOld {
-    
-    let id: String
-    let band: Band
-    let timestamp: Timestamp
-    
-    var title: String { didSet { DBManager.rename(list: self, to: title) } }
-    var index: Int
-    var songIDs: [SongID]
-    
-    
-    init(title: String, id: ListID, band: Band, timestamp: Timestamp, index: Int = 0, songIDs: [SongID] = [SongID]()) {
-        /* This is the initializer for creating a new songlist (as opposed to initializing an existing one from the database). To be called via band.create(songlist:title)*/
-        self.band = band
-        self.title = title
-        self.timestamp = timestamp
-        self.id = id
-        self.index = index
-        self.songIDs = songIDs
-    }
-    
-    mutating func moveSong(fromIndex: Int, toIndex: Int) {
-        songIDs.moveElement(fromIndex: fromIndex, toIndex: toIndex)
-        DBManager.updateSongRefs(for: self)
-    }
-    
-    mutating func add(songID: SongID, at index: Int) {
-        songIDs.insert(songID, at: index)
-        DBManager.updateSongRefs(for: self)
-    }
-    
-    mutating func removeSong(at index: Int) {
-        songIDs.remove(at: index)
-        DBManager.updateSongRefs(for: self)
-    }
-}
+//struct ListOld {
+//    
+//    let id: String
+//    let band: Band
+//    let timestamp: Timestamp
+//    
+//    var title: String { didSet { DBManager.rename(list: self, to: title) } }
+//    var index: Int
+//    var songIDs: [SongID]
+//    
+//    
+//    init(title: String, id: ListID, band: Band, timestamp: Timestamp, index: Int = 0, songIDs: [SongID] = [SongID]()) {
+//        /* This is the initializer for creating a new songlist (as opposed to initializing an existing one from the database). To be called via band.create(songlist:title)*/
+//        self.band = band
+//        self.title = title
+//        self.timestamp = timestamp
+//        self.id = id
+//        self.index = index
+//        self.songIDs = songIDs
+//    }
+//    
+//    mutating func moveSong(fromIndex: Int, toIndex: Int) {
+//        songIDs.moveElement(fromIndex: fromIndex, toIndex: toIndex)
+//        DBManager.updateSongRefs(for: self)
+//    }
+//    
+//    mutating func add(songID: SongID, at index: Int) {
+//        songIDs.insert(songID, at: index)
+//        DBManager.updateSongRefs(for: self)
+//    }
+//    
+//    mutating func removeSong(at index: Int) {
+//        songIDs.remove(at: index)
+//        DBManager.updateSongRefs(for: self)
+//    }
+//}
     
 //    init(from dict: [String : Any], ref: DocumentReference) {
 //        /* This is the initializer for existing songs in the database (as opposed to creating a new song). */

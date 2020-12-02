@@ -24,7 +24,7 @@ protocol DatabaseDependent {
 class DBStore {
     /* Offline representation of the whole database, that is, the bands the user is in, including their songs and lists. */
     var user: User?
-    private(set) var bands = [Band]()
+    var bands = [Band]()
     var subscribers = [DatabaseDependent]()
     
     // For OverviewVC
@@ -36,10 +36,7 @@ class DBStore {
     
     // For ListVC
     var songsInAListListener: ListenerRegistration?
-    
-
-    init(bands: [Band] = [Band]()) { self.bands = bands }
-    
+        
     
     // Storing objects to the database. To be called by ViewControllers that present the data to the user and let them edit it.
     func store(user: User) {
