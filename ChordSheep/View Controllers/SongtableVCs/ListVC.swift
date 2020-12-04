@@ -16,7 +16,10 @@ import Firebase
 class ListVC: SongtableVC {
 
     var list: List
-    var isNewList = false    
+    var isNewList = false
+    override var songs: [Song] {
+        return list.songs
+    }
 
     init(store: DBStore, mainVC: MainVC, pageVC: PageVC, band: Band, list: List, isNewList: Bool = false) {
         self.list = list
@@ -39,7 +42,6 @@ class ListVC: SongtableVC {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
 //        snapshotListener = DBManager.listenForList(list) { list in
 //            self.songlist = list
 //
@@ -64,11 +66,6 @@ class ListVC: SongtableVC {
             header.becomeFirstResponder()
             header.selectAll(nil)
         }
-        
-        // Make sure the IndexPath exists. Then restore the selection (because editing a song removes it).
-        guard songs.count > storedSelection.row else { return }
-        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
-        pageVC?.didSelectSongAtRow(storedSelection.row)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -112,11 +109,11 @@ class ListVC: SongtableVC {
             store.remove(songAt: indexPath.row, from: list, in: band)
             // list.removeSong(at: indexPath.row)
 
-            // For deleting the last song, the listener doesn't seem to fire, so I need to do this manually
-            if list.songs.count < 1 {
-                songs.removeAll()
-                tableView.reloadData()
-            }
+//            // For deleting the last song, the listener doesn't seem to fire, so I need to do this manually
+//            if list.songs.count < 1 {
+//                songs.removeAll()
+//                tableView.reloadData()
+//            }
         }
     }
     

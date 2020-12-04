@@ -30,9 +30,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // db = Firestore.firestore()
-        
+                
         tableView.register(AllSongsCell.self, forCellReuseIdentifier: "allSongsCell")
         tableView.register(AddListCell.self, forCellReuseIdentifier: "addListCell")
         tableView.register(ListCell.self, forCellReuseIdentifier: "listCell")
@@ -127,11 +125,18 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         
         // Show no song
         mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
+        store.subscribe(self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        store.unsubscribe(self)
     }
     
     
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
+        print("Number of bands: \(store.bands.count)")
         return store.bands.count
     }
 
@@ -316,6 +321,10 @@ extension OverviewVC: DatabaseDependent {
     func databaseDidChange(changedItems: [DatabaseStorable]) {
         //TODO: Surround this with DispatchQueue.main.async?
         // DispatchQueue.main.async {
+        print("---")
+        print("Changed Items:")
+        print(changedItems)
+        print("---")
             self.tableView.reloadData()
         // }
     }

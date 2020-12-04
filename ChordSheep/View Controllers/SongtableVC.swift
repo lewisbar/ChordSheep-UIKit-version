@@ -15,15 +15,16 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     
     weak var mainVC: MainVC?
     weak var pageVC: PageVC?
-    let db: Firestore = Firestore.firestore()
-    var snapshotListener: ListenerRegistration?
     var band: Band
-    var songs = [Song]() {
-        didSet {
-            editSongButton.isHidden = songs.isEmpty
-            pageVC?.didDeselectAllSongs()
-        }
+    var songs: [Song] {
+        return band.songs
     }
+//    var songs = [Song]() {  // TODO: Make this a computed property in the subclasses, if possible
+//        didSet {
+//            editSongButton.isHidden = songs.isEmpty
+//            pageVC?.didDeselectAllSongs()
+//        }
+//    }
     var selection: Int? {
         return tableView.indexPathForSelectedRow?.row
     }
@@ -98,11 +99,23 @@ class SongtableVC: UITableViewController, DatabaseDependent {
 //        NotificationCenter.default.addObserver(self, selector: #selector(selectionDidChange), name: UITableView.selectionDidChangeNotification, object: tableView)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        store.subscribe(self)
+    }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Make sure the IndexPath exists. Then restore the selection (because editing a song removes it).
+        guard songs.count > storedSelection.row else { return }
+        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
+        pageVC?.didSelectSongAtRow(storedSelection.row)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // Subclasses should add a snapshotListener in viewWillAppear
-        snapshotListener?.remove()
+        store.unsubscribe(self)
     }
     
     func databaseDidChange(changedItems: [DatabaseStorable]) {

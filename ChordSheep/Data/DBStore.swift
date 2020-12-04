@@ -15,7 +15,8 @@ protocol DatabaseStorable {
     var id: DocID? { get }
     var name: String { get set }
 }
-protocol DatabaseDependent {
+protocol DatabaseDependent: class {
+    /* DatabaseDependent types should also subscribe to their store by calling store.subcribe(_:subscriberID:) and unsubcribe on deallocation at latest. */
     var store: DBStore { get }
     func databaseDidChange(changedItems: [DatabaseStorable])
 }
@@ -25,8 +26,8 @@ class DBStore {
     /* Offline representation of the whole database, that is, the bands the user is in, including their songs and lists. */
     var user: User?
     private(set) var bands = [Band]()
-    var subscribers = [DatabaseDependent]()
-    var listeners = [ListenerRegistration]()
+    private var subscribers = [String: DatabaseDependent]()
+    private var listeners = [ListenerRegistration]()
 
     
     
@@ -109,28 +110,41 @@ class DBStore {
         DBManager.updateSongs(for: list, in: band)
     }
     
+    private func id(for subscriber: DatabaseDependent) -> String {
+        return String(UInt(bitPattern: ObjectIdentifier(subscriber)))
+    }
+    func subscribe(_ subscriber: DatabaseDependent) {
+        subscribers[id(for: subscriber)] = subscriber
+    }
+    func unsubscribe(_ subscriber: DatabaseDependent) {
+        subscribers.removeValue(forKey: id(for: subscriber))
+    }
     
     func startListening() {
         // The listeners for auth, bands, and lists depend on each other and are therefore nested
         // Listen for the currently logged in user
         let _ = DBManager.listenForAuthState { user in
             self.user = user
-            for sub in self.subscribers { sub.databaseDidChange(changedItems: [user])}
+            self.subscribers.forEach { $0.value.databaseDidChange(changedItems: [user]) }
+            // for sub in self.subscribers { sub.databaseDidChange(changedItems: [user])}
             
             // Listen to the bands the user is in
             let bandListener = DBManager.listenForBands(with: user) { bands in
                 self.bands = bands
-                for sub in self.subscribers { sub.databaseDidChange(changedItems: bands) }
+                self.subscribers.forEach { $0.value.databaseDidChange(changedItems: bands) }
+                // for sub in self.subscribers { sub.databaseDidChange(changedItems: bands) }
                 
                 // For every one of the user's bands, listen to the band's lists
                 for (i, band) in self.bands.enumerated() {
                     let songListener = DBManager.listenForSongs(in: band) { songs in
                         band.set(songs: songs)
-                        for sub in self.subscribers { sub.databaseDidChange(changedItems: songs) }
+                        self.subscribers.forEach { $0.value.databaseDidChange(changedItems: songs) }
+                        // for sub in self.subscribers { sub.databaseDidChange(changedItems: songs) }
                         
                         let listListener = DBManager.listenForLists(in: band) { lists in
                             self.bands[i].set(lists: lists)
-                            for sub in self.subscribers { sub.databaseDidChange(changedItems: lists)}
+                            self.subscribers.forEach { $0.value.databaseDidChange(changedItems: lists) }
+                            // for sub in self.subscribers { sub.databaseDidChange(changedItems: lists)}
                             // DispatchQueue.main.async { self.tableView.reloadData() }
                         }
                         self.listeners.append(listListener)
