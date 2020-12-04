@@ -14,10 +14,10 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     let store: DBStore
     
     var mainVC: MainVC!
-    var db: Firestore!
-    var snapshotListeners = [ListenerRegistration]()
-    var user: User?
-    var bands = [Band]()
+    // var db: Firestore!
+    // var snapshotListeners = [ListenerRegistration]()
+    // var user: User?
+    // var bands = [Band]()
     var closedSections = Set<Int>()
     let editButton = UIButton(type: .custom)
     
@@ -31,7 +31,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        db = Firestore.firestore()
+        // db = Firestore.firestore()
         
         tableView.register(AllSongsCell.self, forCellReuseIdentifier: "allSongsCell")
         tableView.register(AddListCell.self, forCellReuseIdentifier: "addListCell")
@@ -127,45 +127,17 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         
         // Show no song
         mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
-        
-        // The listeners for auth, bands, and lists depend on each other and are therefore nested
-        // Listen for the currently logged in user
-        let _ = DBManager.listenForAuthState { user in
-            self.user = user
-            
-            // Listen to the bands the user is in
-            let bandListener = DBManager.listenForBands(with: user.uid) { bands in
-                self.bands = bands
-                
-                // For every one of the user's bands, listen to the bands lists
-                for (i, band) in self.bands.enumerated() {
-                    let listListener = DBManager.listenForLists(in: band) { lists in
-                        self.bands[i].lists = lists
-                        DispatchQueue.main.async { self.tableView.reloadData() }
-                    }
-                    self.snapshotListeners.append(listListener)
-                }
-            }
-            self.snapshotListeners.append(bandListener)
-        }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        for snapshotListener in snapshotListeners {
-            snapshotListener.remove()
-        }
-    }
-
     
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return bands.count
+        return store.bands.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !closedSections.contains(section) {
-            return bands[section].lists.count + 2
+            return store.bands[section].lists.count + 2
         }
         return 0
     }
@@ -181,7 +153,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             cell = tableView.dequeueReusableCell(withIdentifier: "addListCell", for: indexPath)
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexPath)
-            cell?.textLabel?.text = bands[indexPath.section].lists[indexPath.row - 2].title
+            cell?.textLabel?.text = store.bands[indexPath.section].lists[indexPath.row - 2].name
         }
         
         return cell!
@@ -189,7 +161,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let button = UIButton()
-        button.setTitle(bands[section].name, for: .normal)
+        button.setTitle(store.bands[section].name, for: .normal)
         button.contentEdgeInsets.top = 10
         button.contentEdgeInsets.bottom = 10
         button.backgroundColor = PaintCode.medium
@@ -216,13 +188,13 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // guard let bandRef = currentBandRef, let band = currentBand else { return }
-        let band = bands[indexPath.section]
+        let band = store.bands[indexPath.section]
         mainVC.currentBand = band
         
         switch indexPath.row {
         
         case 0:  // All Songs
-            let allSongsVC = AllSongsVC(mainVC: mainVC, pageVC: mainVC.pageVC, band: band)  // db.collection("bands/\(bandID)/songs"))
+            let allSongsVC = AllSongsVC(store: store, mainVC: mainVC, pageVC: mainVC.pageVC, band: band)  // db.collection("bands/\(bandID)/songs"))
             mainVC.pageVC.songtableVC = allSongsVC
             navigationController?.pushViewController(allSongsVC, animated: true)
             
@@ -232,16 +204,20 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             formatter.dateFormat = "yyyy-MM-dd"
             let formattedDate = formatter.string(from: timestamp.dateValue())
             
-            let newList = bands[indexPath.section].createList(title: formattedDate, timestamp: timestamp)
+            let newList = List(name: formattedDate)
+            store.store(list: newList, in: band)
+            // let newList = bands[indexPath.section].createList(title: formattedDate, timestamp: timestamp)
             
-            let listVC = ListVC(mainVC: self.mainVC, pageVC: self.mainVC.pageVC, songlist: newList, isNewList: true)
+            let listVC = ListVC(store: store, mainVC: mainVC, pageVC: mainVC.pageVC, band: band, list: newList, isNewList: true)
+            // let listVC = ListVC(mainVC: self.mainVC, pageVC: self.mainVC.pageVC, songlist: newList, isNewList: true)
             self.mainVC.pageVC.songtableVC = listVC
             self.navigationController?.pushViewController(listVC, animated: true)
             
         default:
-            let songlist = band.lists[indexPath.row - 2]
+            let list = band.lists[indexPath.row - 2]
             
-            let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
+            let listVC = ListVC(store: store, mainVC: mainVC, pageVC: mainVC.pageVC, band: band, list: list)
+            // let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
             mainVC.pageVC.songtableVC = listVC
             navigationController?.pushViewController(listVC, animated: true)
         }
@@ -259,9 +235,11 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
 
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
+        let band = store.bands[indexPath.section]
+        let list = band.lists[indexPath.row - 2]
         if editingStyle == .delete {
-            bands[indexPath.section].delete(list: bands[indexPath.section].lists[indexPath.row - 2])
+            store.delete(list: list, from: band)
+            // store.bands[indexPath.section].delete(list: bands[indexPath.section].lists[indexPath.row - 2])
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -286,21 +264,24 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     // MARK: Reordering of single items
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         guard indexPath.row >= 2 else { return [] }
-        let songlist = bands[indexPath.section].lists[indexPath.row - 2]
-        var textForExport = songlist.title + "\n"
+        let list = store.bands[indexPath.section].lists[indexPath.row - 2]
+        var textForExport = list.name + "\n"
         
-        DBManager.getSongsFromList(songlist) { songs in
-            let titles = songs.map { $0.title }
-            textForExport = titles.joined(separator: "\n")
-            // TODO: This doesn't work as the method returns before this task is completed.
-        }
+        let names = list.songs.map { $0.name }
+        textForExport = names.joined(separator: "\n")
+
+//        DBManager.getSongsFromList(list, in: <#Band#>) { songs in
+//            let names = songs.map { $0.name }
+//            textForExport = names.joined(separator: "\n")
+//            // TODO: This doesn't work as the method returns before this task is completed.
+//        }
 
         var itemProvider = NSItemProvider()  // Fallback in case the next line cannot convert to data. Just use an empty item provider.
         if let textData = textForExport.data(using: .utf8) {
             itemProvider = NSItemProvider(item: textData as NSData, typeIdentifier: kUTTypePlainText as String)
         }
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = songlist.id
+        dragItem.localObject = list.id
         return [dragItem]
     }
     
@@ -324,14 +305,19 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         let newIndex = destinationIndexPath.row - 2
         
         // Update the lists indices
-        bands[sourceIndexPath.section].moveList(fromIndex: oldIndex, toIndex: newIndex)
+        let band = store.bands[sourceIndexPath.section]
+        store.moveList(fromIndex: oldIndex, toIndex: newIndex, in: band)
+        // store.bands[sourceIndexPath.section].moveList(fromIndex: oldIndex, toIndex: newIndex)
     }
 }
 
 
 extension OverviewVC: DatabaseDependent {
     func databaseDidChange(changedItems: [DatabaseStorable]) {
-        //TODO
+        //TODO: Surround this with DispatchQueue.main.async?
+        // DispatchQueue.main.async {
+            self.tableView.reloadData()
+        // }
     }
 }
 /*

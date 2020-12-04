@@ -11,12 +11,16 @@ import Foundation
 class Song: DatabaseStorable {
     var id: DocID?  // If nil, song has not been saved to db yet.
     var name = ""
-    var text = ""
-    var artist = ""
-    var key = ""
-    var tempo = 0
-    var signature = ""
-    var body = ""
+    private(set) var text = ""
+    private(set) var artist = ""
+    private(set) var key = ""
+    private(set) var tempo = 0
+    private(set) var signature = ""
+    private(set) var body = ""
+    
+    func set(text: String) {
+        self.text = text
+    }
     
     init(id: DocID? = nil, text: String = "") {
         self.id = id

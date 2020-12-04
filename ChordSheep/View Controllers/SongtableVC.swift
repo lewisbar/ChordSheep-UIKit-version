@@ -10,10 +10,9 @@ import UIKit
 import Firebase
 import MobileCoreServices
 
-class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
-    let store: DBStore
+class SongtableVC: UITableViewController, DatabaseDependent {
+    var store: DBStore
     
-
     weak var mainVC: MainVC?
     weak var pageVC: PageVC?
     let db: Firestore = Firestore.firestore()
@@ -49,11 +48,11 @@ class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
     let editSongButton = UIButton(type: .custom)
     
     init(store: DBStore, mainVC: MainVC, pageVC: PageVC, band: Band) {
-        super.init(style: .insetGrouped)
+        self.store = store
         self.mainVC = mainVC
         self.pageVC = pageVC
         self.band = band
-        self.store = store
+        super.init(style: .insetGrouped)
         // self.tableView = UITableView(frame: self.tableView.frame, style: .insetGrouped)
     }
     
@@ -106,6 +105,10 @@ class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
         snapshotListener?.remove()
     }
     
+    func databaseDidChange(changedItems: [DatabaseStorable]) {
+        // TODO: Surround this with DispatchQueue.main.async?
+        tableView.reloadData()
+    }
     
     @objc func editSongButtonPressed() {
         guard let selection = selection else { return }
@@ -114,7 +117,7 @@ class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
         storedSelection = tableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
         storedSelectedSong = songs[storedSelection.row]
         
-        let editVC = EditVC(song: songs[selection])
+        let editVC = EditVC(store: store, song: songs[selection], band: band)
         editVC.modalPresentationStyle = .fullScreen
         self.present(editVC, animated: true)
     }
@@ -180,15 +183,15 @@ class SongtableVC: UITableViewController, AddVCDelegate, DatabaseDependent {
     }
 
     
-    // MARK: - Handle new songs and song updates
-    func receive(newText: String) {
-        // Implement in subclass
-    }
-    
-    func update(song: Song) {
-        /* This method is called while the EditVC is still onscreen, so all selections made here would be removed when the view appears. That's why, instead of selecting the row here, I set the variable storedSelection. In viewDidAppear, this variable will be used to select a row.*/
-        // Implement in subclasses
-    }
+//    // MARK: - Handle new songs and song updates
+//    func receive(newText: String) {
+//        // Implement in subclass
+//    }
+//
+//    func update(song: Song) {
+//        /* This method is called while the EditVC is still onscreen, so all selections made here would be removed when the view appears. That's why, instead of selecting the row here, I set the variable storedSelection. In viewDidAppear, this variable will be used to select a row.*/
+//        // Implement in subclasses
+//    }
 }
 
 // MARK: Handle PageVC swipes

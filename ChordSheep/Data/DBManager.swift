@@ -133,7 +133,7 @@ class DBManager {
         // TODO: Subcollections should be deleted, too, but this is only possible via a cloud function (if at all). Maybe I can just leave the stuff there?
     }
     
-    static func delete(song: Song, in band: Band) {
+    static func delete(song: Song, from band: Band) {
         guard let bandID = band.id else { fatalError("Band has no ID") }
         guard let songID = song.id else { fatalError("Song has no ID") }
         bands.document(bandID).collection(Collections.songs).document(songID).delete() { error in
@@ -146,7 +146,7 @@ class DBManager {
         // TODO: Handle playlists that use that song
     }
     
-    static func delete(list: List, in band: Band) {
+    static func delete(list: List, from band: Band) {
         guard let bandID = band.id else { fatalError("Band has no ID") }
         guard let listID = list.id else { fatalError("List has no ID") }
         bands.document(bandID).collection(Collections.lists).document(listID).delete() { error in
@@ -222,7 +222,7 @@ class DBManager {
         
     
     // MARK: - Reordering
-    static func move(band: Band, fromIndex: Int, toIndex: Int) {
+    static func moveBand(fromIndex: Int, toIndex: Int) {
         // TODO. But drag and drop reordering of bands has not been implemented anyway as of now.
     }
     
@@ -267,11 +267,9 @@ extension DBManager {
             let id = userAuth.uid
             self.users.document(id).getDocument() { (document, error) in
                 if let document = document, document.exists {
-                    if let data = document.data() {
-                        let bandAccess = data[self.Fields.bandAccess] as? BandAccess ?? BandAccess()
-                        let user = User(id: id, name: name, bandAccess: bandAccess)
-                        onChange(user)
-                    }
+                    // TODO: I don't even use the document here but use name and id of userAuth. That may be fine, but then I don't need if let.
+                    let user = User(id: id, name: name)
+                    onChange(user)
                 } else {
                     print("Document does not exist.", error?.localizedDescription ?? "")
                 }
@@ -321,21 +319,21 @@ extension DBManager {
         }
     }
     
-    static func listenForList(_ list: List, in band: Band, onChange: @escaping (_ list: List) -> ()) -> ListenerRegistration {
-        // Needed by ListVC. Listens not only for the list's songs, but also for its name, so it cannot return an array of songs but must return an new list.
-        guard let bandID = band.id else { fatalError("Band has no ID") }
-        guard let listID = list.id else { fatalError("List has no ID") }
-        return bands.document(bandID).collection(Collections.lists).document(listID).addSnapshotListener() { snapshot, error in
-            guard let listDict = snapshot?.data() else {
-                print("Songlist could not be fetched.", error?.localizedDescription ?? "")
-                return
-            }
-            
-            // Create a new list with the same IDs, but updated data
-            let list = makeList(dict: listDict, id: listID, band: band)
-            onChange(list)
-        }
-    }
+//    static func listenForList(_ list: List, in band: Band, onChange: @escaping (_ list: List) -> ()) -> ListenerRegistration {
+//        // Needed by ListVC. Listens not only for the list's songs, but also for its name, so it cannot return an array of songs but must return an new list. UPDATE: No, this listener is already covered by listenForLists(in:onChange:)!
+//        guard let bandID = band.id else { fatalError("Band has no ID") }
+//        guard let listID = list.id else { fatalError("List has no ID") }
+//        return bands.document(bandID).collection(Collections.lists).document(listID).addSnapshotListener() { snapshot, error in
+//            guard let listDict = snapshot?.data() else {
+//                print("Songlist could not be fetched.", error?.localizedDescription ?? "")
+//                return
+//            }
+//            
+//            // Create a new list with the same IDs, but updated data
+//            let list = makeList(dict: listDict, id: listID, band: band)
+//            onChange(list)
+//        }
+//    }
     
     static func getSongsFromList(_ list: List, in band: Band, completion: @escaping (_ songs: [Song]) -> ()) {
         guard let bandID = band.id else { fatalError("Band has no ID") }
@@ -409,7 +407,8 @@ extension DBManager {
         return Song(id: id, text: text)
     }
     
-    static func makeList(dict: [String: Any], id: SongID, band: Band) -> List {
+    static func makeList(dict: [String: Any], id: ListID, band: Band) -> List {
+        // TODO: Is it good to crash if name or index cannot be fetched?
         let name = dict[Fields.name] as! String // ?? ""
         let index = dict[Fields.index] as! Int
         let songIDDict = dict[Fields.songs] as? [String: SongID] ?? [String: SongID]()

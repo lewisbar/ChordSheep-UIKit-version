@@ -8,19 +8,17 @@
 
 import UIKit
 
-protocol AddVCDelegate: AnyObject {
-    func receive(newText: String)
-}
-
 // TODO: Add a title label in the ModalBar that gets filled automatically. Maybe even more meta data that just the title, preferably all of it, so you get immediate feedback what your input will produce.
 class AddVC: TextViewVC {
-
-    weak var delegate: AddVCDelegate?
+    
+    override func databaseDidChange(changedItems: [DatabaseStorable]) {
+        // TODO: React to weird events like when the current band has just been deleted?
+    }
     
     override func doneButtonPressed() {
         songTextView.resignFirstResponder()  // Otherwise the keyboard disappears a bit after the AddVC
-        
-        self.delegate?.receive(newText: self.songTextView.text)
+        let song = Song(text: songTextView.text)
+        store.store(song: song, in: band)
         dismiss(animated: true)
     }
 }

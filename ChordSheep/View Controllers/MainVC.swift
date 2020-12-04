@@ -12,7 +12,7 @@
 import UIKit
 
 class MainVC: UIViewController {    
-    let store = DBStore()
+    let store: DBStore
     let stackView = UIStackView()
     let pageVC = PageVC(transitionStyle: .scroll, navigationOrientation: .horizontal)
     let listWidthMultiplier: CGFloat = 0.25  // This could be set in the user settings later
@@ -25,7 +25,16 @@ class MainVC: UIViewController {
             }
         }
     }
-
+    
+    init(store: DBStore) {
+        self.store = store
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -102,7 +111,7 @@ class MainVC: UIViewController {
     
     func showPickVC(delegate: PickVCDelegate) {
         guard pickVC.view.isHidden else { return }
-        self.pickVC.startListener()
+        // self.pickVC.startListener()
         self.pickVC.delegate = delegate
         UIView.animate(withDuration: 0.3) {
             self.pickVC.view.isHidden = false
@@ -112,7 +121,7 @@ class MainVC: UIViewController {
     
     func hidePickVC() {
         guard !pickVC.view.isHidden else { return }
-        self.pickVC.stopListener()
+        // self.pickVC.stopListener()
         UIView.animate(withDuration: 0.3) {
             self.pickVC.view.isHidden = true
             self.stackView.layoutIfNeeded()

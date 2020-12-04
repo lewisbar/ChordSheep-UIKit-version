@@ -11,14 +11,32 @@ import Foundation
 class List: DatabaseStorable {
     var id: DocID?  // If nil, list has not been saved to db yet.
     var name: String
-    var index: Int
-    var songs: [Song]
+    private(set) var songs: [Song]
+    private(set) var index: Int
     
     init(id: DocID? = nil, index: Int = 0, name: String = "", songs: [Song] = [Song]()) {
         self.id = id
         self.index = index
         self.name = name
         self.songs = songs
+    }
+    
+    // Songs and other private(set) vars should only be changed via DBStore, so the changes get saved to the database. While it's still possible for any class to change the songs, because the songs array is private(set), you have to use the methods below to modify it, so you'll hopefully won't do it by accident. These methods should generally only be called by the DBStore class (unless you know what you're doing, meaning: Your changes won't be saved to the database).
+    func set(songs: [Song]) {
+        self.songs = songs
+    }
+    func moveSong(fromIndex: Int, toIndex: Int) {
+        songs.moveElement(fromIndex: fromIndex, toIndex: toIndex)
+    }
+    func insert(song: Song, at index: Int) {
+        songs.insert(song, at: index)
+    }
+    func removeSong(at index: Int) {
+        songs.remove(at: index)
+    }
+    
+    func set(index: Int) {
+        self.index = index
     }
 }
 

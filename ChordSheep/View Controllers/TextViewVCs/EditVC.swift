@@ -9,12 +9,11 @@
 import UIKit
 
 class EditVC: TextViewVC {
+    let song: Song
     
-    var song: Song
-    
-    init(song: Song) {
+    init(store: DBStore, song: Song, band: Band) {
         self.song = song
-        super.init(nibName: nil, bundle: nil)
+        super.init(store: store, band: band)
     }
     
     required init?(coder: NSCoder) {
@@ -28,7 +27,11 @@ class EditVC: TextViewVC {
     
     override func doneButtonPressed() {
         songTextView.resignFirstResponder()  // Otherwise the keyboard disappears a bit after the AddVC
-        song.text = songTextView.text
+        store.retext(song: song, in: band, with: songTextView.text)
         dismiss(animated: true)
+    }
+    
+    override func databaseDidChange(changedItems: [DatabaseStorable]) {
+        // TODO: What to do if the song changes while the user is editing it? Notify the user?
     }
 }

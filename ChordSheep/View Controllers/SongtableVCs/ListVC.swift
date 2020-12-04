@@ -15,12 +15,12 @@ import Firebase
 
 class ListVC: SongtableVC {
 
-    var songlist: Songlist
+    var list: List
     var isNewList = false    
 
-    init(mainVC: MainVC, pageVC: PageVC, songlist: Songlist, isNewList: Bool = false) {
-        self.songlist = songlist
-        super.init(mainVC: mainVC, pageVC: pageVC, band: songlist.band)
+    init(store: DBStore, mainVC: MainVC, pageVC: PageVC, band: Band, list: List, isNewList: Bool = false) {
+        self.list = list
+        super.init(store: store, mainVC: mainVC, pageVC: pageVC, band: band)
         self.mainVC = mainVC
         self.pageVC = pageVC
         self.isNewList = isNewList
@@ -33,21 +33,21 @@ class ListVC: SongtableVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dropDelegate = self
-        header.text = songlist.title
+        header.text = list.name
         header.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        snapshotListener = DBManager.listenForList(songlist) { list in
-            self.songlist = list
-            
-            DBManager.getSongsFromList(list) { songs in
-                self.songs = songs
-                DispatchQueue.main.async { self.tableView.reloadData() }
-            }
-        }
+//        snapshotListener = DBManager.listenForList(list) { list in
+//            self.songlist = list
+//
+//            DBManager.getSongsFromList(list) { songs in
+//                self.songs = songs
+//                DispatchQueue.main.async { self.tableView.reloadData() }
+//            }
+//        }
                         
         // isMovingToParent: Only true on first appearance, not when AddVC is dismissed, so after adding a song, that new song will be selected
         if isMovingToParent, self.songs.count > 0 {
@@ -109,10 +109,11 @@ class ListVC: SongtableVC {
     // TODO: If last song is deleted, hide edit button?
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            songlist.removeSong(at: indexPath.row)
+            store.remove(songAt: indexPath.row, from: list, in: band)
+            // list.removeSong(at: indexPath.row)
 
             // For deleting the last song, the listener doesn't seem to fire, so I need to do this manually
-            if songlist.songIDs.count < 1 {
+            if list.songs.count < 1 {
                 songs.removeAll()
                 tableView.reloadData()
             }
@@ -151,8 +152,8 @@ extension ListVC: PickVCDelegate {
         addButton.isSelected = false
     }
     
-    func picked(songID: SongID) {
-        songlist.songIDs.append(songID)
+    func picked(song: Song) {
+        store.store(song: song, in: band)
     }
 }
 
@@ -181,12 +182,14 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
             let destinationIndexPathForItem = IndexPath(row: destinationIndexPath.row + row, section: destinationIndexPath.section)
             
             // 1. Local drags
-            if let songID = item.dragItem.localObject as? SongID {
+            if let song = item.dragItem.localObject as? Song {
                 if let sourceIndexPath = item.sourceIndexPath {  // Meaning: If the drag is coming from the same table (then remove from old position before inserting into the new one)
-                    self.songlist.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
+                    store.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPathForItem.row, in: list, in: band)
+                    // self.songlist.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
                 } else {
                     // Insert song in setlist
-                    songlist.add(songID: songID, at: destinationIndexPath.row)
+                    store.add(song: song, at: destinationIndexPathForItem.row, in: list, in: band)
+                    // songlist.add(songID: songID, at: destinationIndexPath.row)
                 }
             }
                 
@@ -198,11 +201,14 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
                            let band = self.mainVC?.currentBand {
                             
                             // Add song to All Songs
-                            let song = band.createSong(text: text, timestamp: Timestamp(date: Date()))
+                            let song = Song(text: text)
+                            self.store.store(song: song, in: band)
+                            // let song = band.createSong(text: text, timestamp: Timestamp(date: Date()))
                             // let songRef = allSongsRef.addDocument(data: Song(with: text).dict)
                             
                             // Insert song in setlist
-                            self.songlist.add(songID: song.id, at: destinationIndexPathForItem.row)
+                            self.store.add(song: song, at: destinationIndexPath.row, in: self.list, in: band)
+                            // self.songlist.add(songID: song.id, at: destinationIndexPathForItem.row)
                             // self.songlist.songRefs = self.inserting(songRef: songRef, into: self.songlist.songRefs, at: destinationIndexPathForItem.row)
                         }
                     }
@@ -243,7 +249,8 @@ extension ListVC: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         mainVC?.view.removeGestureRecognizer(tapToDismissKeyboard)
         if let text = textField.text {
-            songlist.title = text
+            store.rename(list: list, to: text, in: band)
+            // list.name = text
         }
     }
 }
