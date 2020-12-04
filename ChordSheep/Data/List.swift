@@ -31,6 +31,9 @@ class List: DatabaseStorable {
     func insert(song: Song, at index: Int) {
         songs.insert(song, at: index)
     }
+    func append(song: Song) {
+        songs.append(song)
+    }
     func removeSong(at index: Int) {
         songs.remove(at: index)
     }

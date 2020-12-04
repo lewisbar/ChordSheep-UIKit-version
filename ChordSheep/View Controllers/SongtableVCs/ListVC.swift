@@ -107,8 +107,9 @@ class ListVC: SongtableVC {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             store.remove(songAt: indexPath.row, from: list, in: band)
-            // list.removeSong(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
 
+            // TODO: When you cancel a delete swipe at an index lower than the selection, the selection is still reduced by 1.
 //            // For deleting the last song, the listener doesn't seem to fire, so I need to do this manually
 //            if list.songs.count < 1 {
 //                songs.removeAll()
@@ -150,7 +151,8 @@ extension ListVC: PickVCDelegate {
     }
     
     func picked(song: Song) {
-        store.store(song: song, in: band)
+        store.add(song: song, in: list, in: band)
+        // TODO: Restore selection
     }
 }
 

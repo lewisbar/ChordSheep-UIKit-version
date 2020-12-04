@@ -19,12 +19,6 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     var songs: [Song] {
         return band.songs
     }
-//    var songs = [Song]() {  // TODO: Make this a computed property in the subclasses, if possible
-//        didSet {
-//            editSongButton.isHidden = songs.isEmpty
-//            pageVC?.didDeselectAllSongs()
-//        }
-//    }
     var selection: Int? {
         return tableView.indexPathForSelectedRow?.row
     }
@@ -54,7 +48,6 @@ class SongtableVC: UITableViewController, DatabaseDependent {
         self.pageVC = pageVC
         self.band = band
         super.init(style: .insetGrouped)
-        // self.tableView = UITableView(frame: self.tableView.frame, style: .insetGrouped)
     }
     
     required init?(coder: NSCoder) {
@@ -67,8 +60,6 @@ class SongtableVC: UITableViewController, DatabaseDependent {
         tableView.backgroundColor = PaintCode.mediumDark
         tableView.allowsMultipleSelectionDuringEditing = true
         
-        // db = Firestore.firestore()
-
         tableView.register(SongCell.self, forCellReuseIdentifier: "songCell")
         self.clearsSelectionOnViewWillAppear = false
         
@@ -189,7 +180,7 @@ class SongtableVC: UITableViewController, DatabaseDependent {
         } else {
             newSelection = storedSelection
         }
-        DispatchQueue.main.async {
+        DispatchQueue.main.async {  // Why this DispatchQueue? Am I not already on the main thread?
             tableView.selectRow(at: newSelection, animated: true, scrollPosition: .none)
             self.pageVC?.didSelectSongAtRow(newSelection.row)
         }
@@ -236,3 +227,4 @@ extension SongtableVC: UITableViewDragDelegate {
         return [dragItem]
     }
 }
+

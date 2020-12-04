@@ -50,9 +50,12 @@ class DBStore {
     func store(list: List, in band: Band) {
         DBManager.create(list: list, in: band)
     }
-    func add(song: Song, at index: Int, in list: List, in band: Band) {
-        // list.songs.insert(song, at: index)
-        list.insert(song: song, at: index)
+    func add(song: Song, at index: Int? = nil, in list: List, in band: Band) {
+        if let index = index {
+            list.insert(song: song, at: index)
+        } else {
+            list.append(song: song)
+        }
         DBManager.updateSongs(for: list, in: band)
     }
     
