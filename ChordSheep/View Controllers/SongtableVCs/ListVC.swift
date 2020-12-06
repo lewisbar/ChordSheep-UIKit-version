@@ -128,12 +128,11 @@ class ListVC: SongtableVC {
      }
      */
     
-    /*
      // Override to support rearranging the table view.
      override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
+        store.moveSong(fromIndex: fromIndexPath.row, toIndex: to.row, in: list, in: band)
+        tableView.moveRow(at: fromIndexPath, to: to)
      }
-     */
     
     /*
      // Override to support conditional rearranging of the table view.
@@ -182,13 +181,14 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
             
             // 1. Local drags
             if let song = item.dragItem.localObject as? Song {
-                if let sourceIndexPath = item.sourceIndexPath {  // Meaning: If the drag is coming from the same table (then remove from old position before inserting into the new one)
+                // Is the drag coming from same table?
+                if let sourceIndexPath = item.sourceIndexPath {
                     store.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPathForItem.row, in: list, in: band)
-                    // self.songlist.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
+                    tableView.moveRow(at: sourceIndexPath, to: destinationIndexPathForItem)
                 } else {
                     // Insert song in setlist
                     store.add(song: song, at: destinationIndexPathForItem.row, in: list, in: band)
-                    // songlist.add(songID: songID, at: destinationIndexPath.row)
+                    tableView.insertRows(at: [destinationIndexPathForItem], with: .automatic)
                 }
             }
                 
@@ -202,13 +202,10 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
                             // Add song to All Songs
                             let song = Song(text: text)
                             self.store.store(song: song, in: band)
-                            // let song = band.createSong(text: text, timestamp: Timestamp(date: Date()))
-                            // let songRef = allSongsRef.addDocument(data: Song(with: text).dict)
                             
                             // Insert song in setlist
                             self.store.add(song: song, at: destinationIndexPath.row, in: self.list, in: band)
-                            // self.songlist.add(songID: song.id, at: destinationIndexPathForItem.row)
-                            // self.songlist.songRefs = self.inserting(songRef: songRef, into: self.songlist.songRefs, at: destinationIndexPathForItem.row)
+                            tableView.insertRows(at: [destinationIndexPath], with: .automatic)
                         }
                     }
                 }
@@ -217,16 +214,16 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
         }
     }
     
-    func inserting(songRef: DocumentReference, into songRefs: [DocumentReference], at index: Int) -> [DocumentReference] {
-        var songRefs = songRefs
-        
-        if songRefs.count > 0 {
-            songRefs.insert(songRef, at: index)
-        } else {
-            songRefs.append(songRef)
-        }
-        return songRefs
-    }
+//    func inserting(songRef: DocumentReference, into songRefs: [DocumentReference], at index: Int) -> [DocumentReference] {
+//        var songRefs = songRefs
+//
+//        if songRefs.count > 0 {
+//            songRefs.insert(songRef, at: index)
+//        } else {
+//            songRefs.append(songRef)
+//        }
+//        return songRefs
+//    }
 }
 
 

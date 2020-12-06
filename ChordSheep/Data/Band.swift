@@ -14,13 +14,14 @@ class Band: DatabaseStorable {
     var name: String
     private(set) var songs: [Song]
     private(set) var lists: [List]
-    private(set) var index = 0
+    private(set) var index: Int
     
-    init(id: DocID? = nil, name: String = "", songs: [Song] = [Song](), lists: [List] = [List]()) {
+    init(id: DocID? = nil, name: String = "", songs: [Song] = [Song](), lists: [List] = [List](), index: Int = 0) {
         self.id = id
         self.name = name
         self.songs = songs
         self.lists = lists
+        self.index = index
     }
     
     // Songs and lists and other private(set) vars should only be changed via DBStore, so the changes get saved to the database. While it's still possible for any class to change the songs or lists, because the songs and list arrays are private(set), you have to use the methods below to modify them, so you'll hopefully won't do it by accident. These methods should generally only be called by the DBStore class (unless you know what you're doing, meaning: Your changes won't be saved to the database).
@@ -30,8 +31,9 @@ class Band: DatabaseStorable {
     func moveSong(fromIndex: Int, toIndex: Int) {
         songs.moveElement(fromIndex: fromIndex, toIndex: toIndex)
     }
-    func insert(song: Song, at index: Int) {
-        songs.insert(song, at: index)
+    func add(song: Song) {
+        songs.append(song)
+        songs.sort()
     }
     func removeSong(at index: Int) {
         songs.remove(at: index)
@@ -46,6 +48,9 @@ class Band: DatabaseStorable {
     }
     func insert(list: List, at index: Int) {
         lists.insert(list, at: index)
+        for (i, list) in self.lists.enumerated() {
+            list.set(index: i)
+        }
     }
     func removeList(at index: Int) {
         lists.remove(at: index)

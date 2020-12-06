@@ -125,7 +125,7 @@ extension Song: Equatable, Comparable {
     }
     
     static func < (lhs: Song, rhs: Song) -> Bool {
-        return lhs.text < rhs.text
+        return lhs.name < rhs.name
     }
 }
 

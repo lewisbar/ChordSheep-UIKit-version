@@ -38,16 +38,22 @@ class DBStore {
     
     // Manipulating objects in the database. To be called by ViewControllers that present the data to the user and let them edit it. In most cases, we just have to make the change in the database. Then the corresponding listener will take care of the rest.
     // Storing
+    // In general, I want to first change the data locally and then I write them to the database. If I would instead only write to the database and then rely on the listeners to update my local data, I would always have to wait for the data to be updated. This would lead to strange misbehavior, for example when deleting a song in a tableview. ViewControllers must also update their interface directly instead of waiting for the listener callback. Otherwise, you could, for example, get an out-of-bounds error when deleting the last song if it's already been deleted in the model, but the view hasn't received the update yet.
     func store(user: User) {
+        // TODO: Also set self.user to the user? Not sure, but I don't think so, because self.user must always be the currently logged in user as reported by the auth listener.
         DBManager.create(user: user)
     }
-    func store(band: Band) {
+    func store(band: Band) {  // TODO: Not implemented in UI
+        band.set(index: self.bands.count)
+        self.bands.append(band)
         DBManager.create(band: band)
     }
     func store(song: Song, in band: Band) {
+        band.add(song: song)
         DBManager.create(song: song, in: band)
     }
     func store(list: List, in band: Band) {
+        band.insert(list: list, at: 0)
         DBManager.create(list: list, in: band)
     }
     func add(song: Song, at index: Int? = nil, in list: List, in band: Band) {
@@ -61,28 +67,35 @@ class DBStore {
     
     // Deleting
     func delete(user: User) {
+        // TODO: How to delete that user locally?
         DBManager.delete(user: user)
     }
     func delete(band: Band) {
+        bands.remove(at: band.index)
+        for (i, band) in bands.enumerated() { band.set(index: i) }
         DBManager.delete(band: band)
     }
-    func delete(song: Song, from band: Band) {
+    func delete(song: Song, index: Int, from band: Band) {
+        band.removeSong(at: index)
         DBManager.delete(song: song, from: band)
     }
     func delete(list: List, from band: Band) {
+        band.removeList(at: list.index)
+        for (i, list) in band.lists.enumerated() { list.set(index: i) }
         DBManager.delete(list: list, from: band)
     }
     func remove(songAt index: Int, from list: List, in band: Band) {
         list.removeSong(at: index)
-        // list.songs.remove(at: index)
         DBManager.updateSongs(for: list, in: band)
     }
     
     // Renaming
     func rename(user: User, to name: String) {
+        user.name = name
         DBManager.rename(user: user, to: name)
     }
     func rename(band: Band, to name: String) {
+        band.name = name
         DBManager.rename(band: band, to: name)
     }
     func retext(song: Song, in band: Band, with text: String) {
@@ -90,16 +103,22 @@ class DBStore {
         DBManager.update(song: song, in: band)
     }
     func rename(list: List, to name: String, in band: Band) {
+        list.name = name
         DBManager.rename(list: list, in: band, to: name)
     }
     
     // Reordering
-    func moveBand(fromIndex: Int, toIndex: Int) {
-        DBManager.moveBand(fromIndex: fromIndex, toIndex: toIndex)
+    func move(fromIndex: Int, toIndex: Int) {
+        bands.moveElement(fromIndex: fromIndex, toIndex: toIndex)
+        
+        // Update indices
+        for index in min(fromIndex, toIndex)...max(fromIndex, toIndex) {
+            bands[index].set(index: index)
+            DBManager.set(index: index, for: bands[index])
+        }
     }
     func moveList(fromIndex: Int, toIndex: Int, in band: Band) {
         band.moveList(fromIndex: fromIndex, toIndex: toIndex)
-        // band.lists.moveElement(fromIndex: fromIndex, toIndex: toIndex)
         
         // Update indices
         for index in min(fromIndex, toIndex)...max(fromIndex, toIndex) {
@@ -109,7 +128,6 @@ class DBStore {
     }
     func moveSong(fromIndex: Int, toIndex: Int, in list: List, in band: Band) {
         list.moveSong(fromIndex: fromIndex, toIndex: toIndex)
-        // list.songs.moveElement(fromIndex: fromIndex, toIndex: toIndex)
         DBManager.updateSongs(for: list, in: band)
     }
     

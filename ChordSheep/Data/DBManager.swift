@@ -222,8 +222,15 @@ class DBManager {
         
     
     // MARK: - Reordering
-    static func moveBand(fromIndex: Int, toIndex: Int) {
-        // TODO. But drag and drop reordering of bands has not been implemented anyway as of now.
+    static func set(index: Int, for band: Band) {
+        guard let bandID = band.id else { fatalError("Band has no ID") }
+        bands.document(bandID).setData([Fields.index: index], merge: true) { error in
+            if let error = error {
+                print("List index could not be written to database. -", error.localizedDescription)
+            } else {
+                print("Document successfully written.")
+            }
+        }
     }
     
     static func set(index: Int, for list: List, in band: Band) {

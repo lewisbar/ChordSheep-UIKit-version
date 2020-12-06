@@ -40,7 +40,7 @@ class AllSongsVC: SongtableVC {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let song = self.songs[indexPath.row]
-            store.delete(song: song, from: band)
+            store.delete(song: song, index: indexPath.row, from: band)
             // band.delete(song: song)
             tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: .none)
             // TODO: Deletion must be handled in setlists that use the deleted song.
