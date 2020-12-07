@@ -21,9 +21,9 @@ class PickVC: UITableViewController {
     var band: Band?
     
     
-    init(band: Band? = nil, store: DBStore) {
-        self.band = band
+    init(store: DBStore, band: Band? = nil) {
         self.store = store
+        self.band = band
         super.init(style: .insetGrouped)
     }
     

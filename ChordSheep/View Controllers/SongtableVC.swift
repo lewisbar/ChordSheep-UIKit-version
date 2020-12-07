@@ -86,8 +86,6 @@ class SongtableVC: UITableViewController, DatabaseDependent {
         
         tableView.dragDelegate = self
         tableView.dragInteractionEnabled = true
-        
-//        NotificationCenter.default.addObserver(self, selector: #selector(selectionDidChange), name: UITableView.selectionDidChangeNotification, object: tableView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -161,14 +159,18 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Store the selection in order to be able to restore it after editing, for example
+        storedSelection = indexPath
+        storedSelectedSong = songs[indexPath.row]
+        
         pageVC?.didSelectSongAtRow(indexPath.row)
         editSongButton.isHidden = false
     }
     
-    override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
-        // Store the current selection because editing cancels the selection
-        storedSelection = tableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
-    }
+//    override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+//        // Store the current selection because editing cancels the selection
+//        storedSelection = tableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
+//    }
     
     override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         // Restore the selection because editing cancels the selection
@@ -185,17 +187,6 @@ class SongtableVC: UITableViewController, DatabaseDependent {
             self.pageVC?.didSelectSongAtRow(newSelection.row)
         }
     }
-
-    
-//    // MARK: - Handle new songs and song updates
-//    func receive(newText: String) {
-//        // Implement in subclass
-//    }
-//
-//    func update(song: Song) {
-//        /* This method is called while the EditVC is still onscreen, so all selections made here would be removed when the view appears. That's why, instead of selecting the row here, I set the variable storedSelection. In viewDidAppear, this variable will be used to select a row.*/
-//        // Implement in subclasses
-//    }
 }
 
 // MARK: Handle PageVC swipes

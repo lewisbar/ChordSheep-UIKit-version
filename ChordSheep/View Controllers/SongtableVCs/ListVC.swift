@@ -151,6 +151,7 @@ extension ListVC: PickVCDelegate {
     
     func picked(song: Song) {
         store.add(song: song, in: list, in: band)
+        // tableView.insertRows(at: <#T##[IndexPath]#>, with: <#T##UITableView.RowAnimation#>)
         // TODO: Restore selection
     }
 }

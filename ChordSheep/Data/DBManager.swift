@@ -316,54 +316,38 @@ extension DBManager {
     static func listenForSongs(in band: Band, onChange: @escaping (_ songs: [Song]) -> ()) -> ListenerRegistration {
         // Needed by AllSongsVC and PickVC
         guard let bandID = band.id else { fatalError("Band has no ID") }
-        return bands.document(bandID).collection(Collections.songs).order(by: Fields.title).addSnapshotListener() { snapshot, error in
+        return bands.document(bandID).collection(Collections.songs).addSnapshotListener() { snapshot, error in
             guard let documents = snapshot?.documents else {
                 print("The band's songs could not be fetched.", error?.localizedDescription ?? "")
                 return
             }
             let songs = documents.map { makeSong(dict: $0.data(), id: $0.documentID, band: band) }
-            onChange(songs)
+            onChange(songs.sorted())
         }
     }
     
-//    static func listenForList(_ list: List, in band: Band, onChange: @escaping (_ list: List) -> ()) -> ListenerRegistration {
-//        // Needed by ListVC. Listens not only for the list's songs, but also for its name, so it cannot return an array of songs but must return an new list. UPDATE: No, this listener is already covered by listenForLists(in:onChange:)!
+//    static func getSongsFromList(_ list: List, in band: Band, completion: @escaping (_ songs: [Song]) -> ()) {
 //        guard let bandID = band.id else { fatalError("Band has no ID") }
-//        guard let listID = list.id else { fatalError("List has no ID") }
-//        return bands.document(bandID).collection(Collections.lists).document(listID).addSnapshotListener() { snapshot, error in
-//            guard let listDict = snapshot?.data() else {
-//                print("Songlist could not be fetched.", error?.localizedDescription ?? "")
-//                return
+//
+//        // Make sure the songs are put in the right order. Async fetching tends to mix them up.
+//        var songs = [Song](repeating: Song(), count: list.songs.count)
+//
+//        for (i, song) in list.songs.enumerated() {
+//            guard let songID = song.id else { fatalError("Song has no ID") }
+//            bands.document(bandID).collection(Collections.songs).document(songID).getDocument { document, error in
+//                guard let document = document else {
+//                    print("Song could not be fetched.", error?.localizedDescription ?? "")
+//                    return
+//                }
+//                guard let data = document.data() else {
+//                    print("Song has no data.")
+//                    return
+//                }
+//                songs[i] = makeSong(dict: data, id: document.documentID, band: band)
 //            }
-//            
-//            // Create a new list with the same IDs, but updated data
-//            let list = makeList(dict: listDict, id: listID, band: band)
-//            onChange(list)
 //        }
+//        completion(songs)
 //    }
-    
-    static func getSongsFromList(_ list: List, in band: Band, completion: @escaping (_ songs: [Song]) -> ()) {
-        guard let bandID = band.id else { fatalError("Band has no ID") }
-        
-        // Make sure the songs are put in the right order. Async fetching tends to mix them up.
-        var songs = [Song](repeating: Song(), count: list.songs.count)
-        
-        for (i, song) in list.songs.enumerated() {
-            guard let songID = song.id else { fatalError("Song has no ID") }
-            bands.document(bandID).collection(Collections.songs).document(songID).getDocument { document, error in
-                guard let document = document else {
-                    print("Song could not be fetched.", error?.localizedDescription ?? "")
-                    return
-                }
-                guard let data = document.data() else {
-                    print("Song has no data.")
-                    return
-                }
-                songs[i] = makeSong(dict: data, id: document.documentID, band: band)
-            }
-        }
-        completion(songs)
-    }
 }
 
 

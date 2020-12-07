@@ -199,7 +199,7 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         switch indexPath.row {
         
         case 0:  // All Songs
-            let allSongsVC = AllSongsVC(store: store, mainVC: mainVC, pageVC: mainVC.pageVC, band: band)  // db.collection("bands/\(bandID)/songs"))
+            let allSongsVC = AllSongsVC(store: store, mainVC: mainVC, pageVC: mainVC.pageVC, band: band)
             mainVC.pageVC.songtableVC = allSongsVC
             navigationController?.pushViewController(allSongsVC, animated: true)
             
@@ -211,10 +211,9 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             
             let newList = List(name: formattedDate)
             store.store(list: newList, in: band)
-            // let newList = bands[indexPath.section].createList(title: formattedDate, timestamp: timestamp)
             
             let listVC = ListVC(store: store, mainVC: mainVC, pageVC: mainVC.pageVC, band: band, list: newList, isNewList: true)
-            // let listVC = ListVC(mainVC: self.mainVC, pageVC: self.mainVC.pageVC, songlist: newList, isNewList: true)
+
             self.mainVC.pageVC.songtableVC = listVC
             self.navigationController?.pushViewController(listVC, animated: true)
             
@@ -222,7 +221,6 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
             let list = band.lists[indexPath.row - 2]
             
             let listVC = ListVC(store: store, mainVC: mainVC, pageVC: mainVC.pageVC, band: band, list: list)
-            // let listVC = ListVC(mainVC: mainVC, pageVC: mainVC.pageVC, songlist: songlist)
             mainVC.pageVC.songtableVC = listVC
             navigationController?.pushViewController(listVC, animated: true)
         }
@@ -269,17 +267,11 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     // MARK: Reordering of single items
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         guard indexPath.row >= 2 else { return [] }
+        
         let list = store.bands[indexPath.section].lists[indexPath.row - 2]
         var textForExport = list.name + "\n"
-        
         let names = list.songs.map { $0.name }
         textForExport = names.joined(separator: "\n")
-
-//        DBManager.getSongsFromList(list, in: <#Band#>) { songs in
-//            let names = songs.map { $0.name }
-//            textForExport = names.joined(separator: "\n")
-//            // TODO: This doesn't work as the method returns before this task is completed.
-//        }
 
         var itemProvider = NSItemProvider()  // Fallback in case the next line cannot convert to data. Just use an empty item provider.
         if let textData = textForExport.data(using: .utf8) {
