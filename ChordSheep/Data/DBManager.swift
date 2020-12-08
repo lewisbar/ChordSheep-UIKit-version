@@ -255,7 +255,7 @@ class DBManager {
             guard let songID = song.id else { fatalError("Song has no ID") }
             dict[String(index)] = songID
         }
-        bands.document(bandID).collection(Collections.lists).document(listID).setData([Fields.songs: dict], merge: true) { error in
+        bands.document(bandID).collection(Collections.lists).document(listID).updateData([Fields.songs: dict]) { error in
             if let error = error {
                 print("SongIDs for list \(list.name) could not be written to database. -", error.localizedDescription)
             } else {

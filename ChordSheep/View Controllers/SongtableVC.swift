@@ -178,7 +178,9 @@ class SongtableVC: UITableViewController, DatabaseDependent {
               !songs.isEmpty else { return }
         let newSelection: IndexPath
         if deletedIndexPath <= storedSelection {
-            newSelection = IndexPath(row: storedSelection.row - 1, section: 0)
+            let newRow = (storedSelection.row > 0) ? storedSelection.row - 1 : storedSelection.row
+            newSelection = IndexPath(row: newRow, section: 0)
+            storedSelection = newSelection
         } else {
             newSelection = storedSelection
         }
