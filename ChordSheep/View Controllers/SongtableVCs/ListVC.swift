@@ -130,6 +130,7 @@ class ListVC: SongtableVC {
     
      // Override to support rearranging the table view.
      override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+        print("movingRow")
         store.moveSong(fromIndex: fromIndexPath.row, toIndex: to.row, in: list, in: band)
         tableView.moveRow(at: fromIndexPath, to: to)
      }
@@ -162,11 +163,14 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
     }
     
     func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-        let isFromSameTable = (session.localDragSession?.localContext as? UITableView) === tableView
+        print("dropSessionDidUpdate")
+        let isFromSameTable = tableView.hasActiveDrag  // (session.localDragSession?.localContext as? UITableView) === tableView
+        // return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
         return UITableViewDropProposal(operation: isFromSameTable ? .move : .copy, intent: .insertAtDestinationIndexPath)
     }
     
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        print("performDrop")
         let destinationIndexPath: IndexPath
 
         if let indexPath = coordinator.destinationIndexPath {
@@ -181,6 +185,8 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
             let destinationIndexPathForItem = IndexPath(row: destinationIndexPath.row + row, section: destinationIndexPath.section)
             
             // 1. Local drags
+            // TODO: I don't drag songs, but song ids!
+            // cast to String (SongID), then search band.songs for the id
             if let song = item.dragItem.localObject as? Song {
                 // Is the drag coming from same table?
                 if let sourceIndexPath = item.sourceIndexPath {
@@ -249,5 +255,18 @@ extension ListVC: UITextFieldDelegate {
             store.rename(list: list, to: text, in: band)
             // list.name = text
         }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let firstLine = string.components(separatedBy: .newlines)[0]
+        textField.text = String(firstLine.prefix(20))
+        return false
+    }
+}
+
+extension ListVC: UITextPasteDelegate {
+    override func paste(itemProviders: [NSItemProvider]) {
+        guard let provider = itemProviders.first else { return }
+        provider.local
     }
 }
