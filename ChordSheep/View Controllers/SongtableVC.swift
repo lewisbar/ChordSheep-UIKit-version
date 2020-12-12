@@ -111,6 +111,7 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     func databaseDidChange(changedItems: [DatabaseStorable]) {
         // TODO: Surround this with DispatchQueue.main.async?
         tableView.reloadData()
+        tableView.selectRow(at: storedSelection, animated: false, scrollPosition: .none)
     }
     
     @objc func editSongButtonPressed() {

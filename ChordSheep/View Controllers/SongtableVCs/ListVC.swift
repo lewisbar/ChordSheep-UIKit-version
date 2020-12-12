@@ -150,9 +150,10 @@ extension ListVC: PickVCDelegate {
     }
     
     func picked(song: Song) {
+        // Called when tapping on a song in PickVC (not when dragging it over)
         store.add(song: song, in: list, in: band)
-        // tableView.insertRows(at: <#T##[IndexPath]#>, with: <#T##UITableView.RowAnimation#>)
-        // TODO: Restore selection
+        let endIndexPath = IndexPath(row: tableView.numberOfRows(inSection: 0), section: 0)
+        tableView.insertRows(at: [endIndexPath], with: .automatic)
     }
 }
 
