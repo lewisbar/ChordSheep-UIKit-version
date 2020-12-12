@@ -185,9 +185,9 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
             let destinationIndexPathForItem = IndexPath(row: destinationIndexPath.row + row, section: destinationIndexPath.section)
             
             // 1. Local drags
-            // TODO: I don't drag songs, but song ids!
-            // cast to String (SongID), then search band.songs for the id
-            if let song = item.dragItem.localObject as? Song {
+            // This part is executed when dragging from PickVC; but not the "same table" part, because drags from the same table go through moveRow instead, at least for single items, but I don't get the table to accept multiple items, anyway.
+            if let songID = item.dragItem.localObject as? SongID,
+               let song = songs.first(where: { $0.id == songID }) {
                 // Is the drag coming from same table?
                 if let sourceIndexPath = item.sourceIndexPath {
                     store.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPathForItem.row, in: list, in: band)
@@ -236,6 +236,7 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
 
 extension ListVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.selectAll(nil)
         tapToDismissKeyboard.addTarget(self, action: #selector(dismissKeyboard))
         mainVC?.view.addGestureRecognizer(tapToDismissKeyboard)
     }
@@ -250,23 +251,13 @@ extension ListVC: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        // Remove newlines from drops and pastes and limit to a reasonable length in case someone pastes a novel into the header
+        if let newText = header.text?.components(separatedBy: .newlines).first {
+            header.text = String(newText.prefix(30))
+        }
         mainVC?.view.removeGestureRecognizer(tapToDismissKeyboard)
         if let text = textField.text {
             store.rename(list: list, to: text, in: band)
-            // list.name = text
         }
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let firstLine = string.components(separatedBy: .newlines)[0]
-        textField.text = String(firstLine.prefix(20))
-        return false
-    }
-}
-
-extension ListVC: UITextPasteDelegate {
-    override func paste(itemProviders: [NSItemProvider]) {
-        guard let provider = itemProviders.first else { return }
-        provider.local
     }
 }

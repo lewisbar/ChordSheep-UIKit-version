@@ -36,6 +36,7 @@ class SongtableVC: UITableViewController, DatabaseDependent {
         header.adjustsFontSizeToFitWidth = true
         header.textColor = PaintCode.light
         header.spellCheckingType = .no
+        header.autocapitalizationType = .words
         return header
     }()
     let editButton = UIButton(type: .custom)
