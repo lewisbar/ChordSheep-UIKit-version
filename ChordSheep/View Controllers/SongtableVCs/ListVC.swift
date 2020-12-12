@@ -163,7 +163,6 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
     
     func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
         let isFromSameTable = tableView.hasActiveDrag  // (session.localDragSession?.localContext as? UITableView) === tableView
-        // return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
         return UITableViewDropProposal(operation: isFromSameTable ? .move : .copy, intent: .insertAtDestinationIndexPath)
     }
     
@@ -218,17 +217,6 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
             // coordinator.drop(item.dragItem, toRowAt: destinationIndexPathForItem)  // Looks strange, maybe because changing the model automatically reloads the tableview.
         }
     }
-    
-//    func inserting(songRef: DocumentReference, into songRefs: [DocumentReference], at index: Int) -> [DocumentReference] {
-//        var songRefs = songRefs
-//
-//        if songRefs.count > 0 {
-//            songRefs.insert(songRef, at: index)
-//        } else {
-//            songRefs.append(songRef)
-//        }
-//        return songRefs
-//    }
 }
 
 
