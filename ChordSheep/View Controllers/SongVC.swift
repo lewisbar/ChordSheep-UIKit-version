@@ -14,14 +14,8 @@ import UIKit
 
 class SongVC: UIViewController {
         
-    // weak var delegate: SongVCDelegate?
     var songLabel = UILabel()
-    var song: Song? /* {
-        didSet {
-            print("didSet song")
-            songLabel.attributedText = Style.styledText(for: song?.body ?? "")
-        }
-    } */
+    var song: Song?
     var index = 0
     
     convenience init(with song: Song, index: Int) {
@@ -30,7 +24,6 @@ class SongVC: UIViewController {
         self.index = index
     }
     
-//    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,35 +84,4 @@ class SongVC: UIViewController {
         
         songLabel.font = UIFont(name: songLabel.font.fontName, size: pointSize)
     }
-    
-//    @IBAction func listButtonPressed(_ sender: UIButton) {
-//        if let mainVC =  mainVC,
-//            let container = mainVC.listContainer,
-//            let stackView = mainVC.containerStackView {
-//            
-//            UIView.animate(withDuration: 0.3) {
-//                container.isHidden = !container.isHidden
-//                stackView.layoutIfNeeded()
-//            }
-//        }
-//    }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let nav = segue.destination as? UINavigationController,
-//            let editVC = nav.topViewController as? EditVC,
-//            let song = self.song {
-//            editVC.song = song
-//        }
-//    }
-//
-//    @IBAction func unwindToSongVC(_ segue: UIStoryboardSegue) {
-//        // Needs to be here to be able to have an unwind segue
-//    }
 }
-
-//
-//extension SongVC: DatabaseDependent {
-//    func databaseDidChange(changedItems: [DatabaseStorable]) {
-//        //TODO
-//    }
-//}

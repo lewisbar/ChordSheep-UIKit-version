@@ -130,7 +130,6 @@ class ListVC: SongtableVC {
     
      // Override to support rearranging the table view.
      override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-        print("movingRow")
         store.moveSong(fromIndex: fromIndexPath.row, toIndex: to.row, in: list, in: band)
         tableView.moveRow(at: fromIndexPath, to: to)
      }
@@ -163,7 +162,6 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
     }
     
     func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-        print("dropSessionDidUpdate")
         let isFromSameTable = tableView.hasActiveDrag  // (session.localDragSession?.localContext as? UITableView) === tableView
         // return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
         return UITableViewDropProposal(operation: isFromSameTable ? .move : .copy, intent: .insertAtDestinationIndexPath)
@@ -251,7 +249,6 @@ extension ListVC: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("\n---\nend editing\n\n")
         // Remove newlines from drops and pastes and limit to a reasonable length in case someone pastes a novel into the header
         if let newText = header.text?.components(separatedBy: .newlines).first {
             header.text = String(newText.prefix(30))

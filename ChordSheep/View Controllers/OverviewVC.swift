@@ -14,10 +14,6 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     let store: DBStore
     
     var mainVC: MainVC!
-    // var db: Firestore!
-    // var snapshotListeners = [ListenerRegistration]()
-    // var user: User?
-    // var bands = [Band]()
     var closedSections = Set<Int>()
     let editButton = UIButton(type: .custom)
     
@@ -53,59 +49,8 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         
         // Make the Back button only be an arrow, without a title
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-
-        
-        // loadData()
-//        Importer.text("""
-//Wege vor mir
-//Samuel Harfst
-//Key: F#m
-//Capo: 2
-//
-//  Em        Em/D Cmaj7             Am
-//1. So viele Wege liegen, Herr, vor mir
-//Em        Em/D Cmaj7          Am
-// So wenig Wege führen mich zu dir
-//Em        Em/D    Cmaj7            Am
-// So viele Wege versprechen mir das Glück
-//    Em         Em/D     Cmaj7            Am
-//Doch wohin ich gehe, da führt kein Weg zurück
-//
-//  Em       Em/D      Cmaj7          Am
-//2. Große Gedanken verlaufen sich im Sand
-//Em         Em/D         Cmaj7         Am
-// Geben dem nächsten die Klinke in die Hand
-//Em          Em/D         Cmaj7             Am
-// Vergöttern Wissen, doch wissen nichts von Gott
-//Em        Em/D       Cmaj7           Am
-// Heute am Blühen und morgen schon verdorrt
-//
-//Refrain:
-//Em              D/F#  G6             Am7          Em
-//Herr, an deinem Segen ist mir mehr gelegen als an Gold
-//           D              Cmaj7Bm7
-//Auf deinen Wegen will ich gehn
-//Em              D     Cmaj7          Bm7          Em
-//Herr, an deinen Wegen ist mir mehr gelegen als an Gold
-//           D              Cmaj7Bm7
-//Mit deinem Segen will ich gehn
-//""", bandID: bandID)
     }
-    
-//    func loadData() {
-//        db.collection("bands").document(bandID).collection("lists").getDocuments() {
-//            querySnapshot, error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            }
-//            self.songlists = querySnapshot!.documents.compactMap({ Songlist(dictionary: $0.data()) })
-//            print(self.songlists.count)
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
-//    }
+
     
     @objc func editButtonPressed() {
         if !tableView.isEditing {
@@ -138,7 +83,6 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
     
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        print("Number of bands: \(store.bands.count)")
         return store.bands.count
     }
 
@@ -186,12 +130,6 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         }
         tableView.reloadSections(IndexSet(integer: sender.tag), with: .automatic)
     }
-
-    
-//    @objc func addSetlistButtonPressed() {
-//        // TODO: Implement adding setlists
-//        print("Adding setlists is not implemented yet.")
-//    }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // guard let bandRef = currentBandRef, let band = currentBand else { return }
@@ -305,7 +243,6 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         // Update the lists indices
         let band = store.bands[sourceIndexPath.section]
         store.moveList(fromIndex: oldIndex, toIndex: newIndex, in: band)
-        // store.bands[sourceIndexPath.section].moveList(fromIndex: oldIndex, toIndex: newIndex)
     }
 }
 
@@ -313,13 +250,11 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
 extension OverviewVC: DatabaseDependent {
     func databaseDidChange(changedItems: [DatabaseStorable]) {
         //TODO: Surround this with DispatchQueue.main.async?
-        // DispatchQueue.main.async {
         print("---")
         print("Changed Items:")
         print(changedItems)
         print("---")
-            self.tableView.reloadData()
-        // }
+        self.tableView.reloadData()
     }
 }
 /*
