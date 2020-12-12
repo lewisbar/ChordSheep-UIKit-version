@@ -251,6 +251,7 @@ extension ListVC: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        print("\n---\nend editing\n\n")
         // Remove newlines from drops and pastes and limit to a reasonable length in case someone pastes a novel into the header
         if let newText = header.text?.components(separatedBy: .newlines).first {
             header.text = String(newText.prefix(30))

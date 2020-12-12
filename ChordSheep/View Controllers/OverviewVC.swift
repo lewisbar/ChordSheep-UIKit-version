@@ -122,10 +122,12 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
                 
         // Hide Song Edit Button
         // mainVC.pageVC.editButton.isHidden = true
-        
+
         // Show no song
         mainVC.pageVC.setViewControllers([UIViewController()], direction: .reverse, animated: true)
         store.subscribe(self)
+        
+        tableView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -242,7 +244,6 @@ class OverviewVC: UITableViewController, UITableViewDragDelegate {
         let list = band.lists[indexPath.row - 2]
         if editingStyle == .delete {
             store.delete(list: list, from: band)
-            // store.bands[indexPath.section].delete(list: bands[indexPath.section].lists[indexPath.row - 2])
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
