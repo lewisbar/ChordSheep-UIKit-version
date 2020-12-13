@@ -111,7 +111,7 @@ class MainVC: UIViewController {
     
     func showPickVC(delegate: PickVCDelegate) {
         guard pickVC.view.isHidden else { return }
-        // self.pickVC.startListener()
+        self.pickVC.tableView.reloadData()
         self.pickVC.delegate = delegate
         UIView.animate(withDuration: 0.3) {
             self.pickVC.view.isHidden = false

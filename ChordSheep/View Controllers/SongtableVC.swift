@@ -25,7 +25,7 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     
     
     // For remembering the selection in case it is removed, for example after editing mode
-    var storedSelection = IndexPath(row: 0, section: 0)
+    var storedSelection: IndexPath?
     var storedSelectedSong: Song?
 
     let tapToDismissKeyboard = UITapGestureRecognizer()
@@ -49,6 +49,7 @@ class SongtableVC: UITableViewController, DatabaseDependent {
         self.pageVC = pageVC
         self.band = band
         super.init(style: .insetGrouped)
+        if !self.songs.isEmpty { storedSelection = IndexPath(row: 0, section: 0) }
     }
     
     required init?(coder: NSCoder) {
@@ -97,10 +98,11 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Make sure the IndexPath exists. Then restore the selection (because editing a song removes it).
-        guard songs.count > storedSelection.row else { return }
-        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
-        pageVC?.didSelectSongAtRow(storedSelection.row)
+        // Restore the selection (because editing mode removes the selection).
+        guard let selection = storedSelection else { return }
+        // guard songs.count > storedSelection.row else { return }
+        tableView.selectRow(at: selection, animated: true, scrollPosition: .none)
+        pageVC?.didSelectSongAtRow(selection.row)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -111,6 +113,8 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     func databaseDidChange(changedItems: [DatabaseStorable]) {
         // TODO: Surround this with DispatchQueue.main.async?
         tableView.reloadData()
+        guard !songs.isEmpty else { storedSelection = nil; return }
+        guard let storedSelection = storedSelection else { return }
         tableView.selectRow(at: storedSelection, animated: false, scrollPosition: .none)
     }
     
@@ -118,7 +122,8 @@ class SongtableVC: UITableViewController, DatabaseDependent {
         guard let selection = selection else { return }
         
         // So the selection can be restored after the edit
-        storedSelection = tableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
+        // storedSelection = tableView.indexPathForSelectedRow ?? IndexPath(row: 0, section: 0)
+        guard let storedSelection = storedSelection else { return }
         storedSelectedSong = songs[storedSelection.row]
         
         let editVC = EditVC(store: store, song: songs[selection], band: band)
@@ -176,20 +181,9 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     
     override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         // Restore the selection because editing cancels the selection
-        guard let deletedIndexPath = indexPath,
-              !songs.isEmpty else { return }
-        let newSelection: IndexPath
-        if deletedIndexPath <= storedSelection {
-            let newRow = (storedSelection.row > 0) ? storedSelection.row - 1 : storedSelection.row
-            newSelection = IndexPath(row: newRow, section: 0)
-            storedSelection = newSelection
-        } else {
-            newSelection = storedSelection
-        }
-        DispatchQueue.main.async {  // Why this DispatchQueue? Am I not already on the main thread?
-            tableView.selectRow(at: newSelection, animated: true, scrollPosition: .none)
-            self.pageVC?.didSelectSongAtRow(newSelection.row)
-        }
+        guard let storedSelection = storedSelection else { return }
+        tableView.selectRow(at: storedSelection, animated: true, scrollPosition: .none)
+        self.pageVC?.didSelectSongAtRow(storedSelection.row)
     }
 }
 
