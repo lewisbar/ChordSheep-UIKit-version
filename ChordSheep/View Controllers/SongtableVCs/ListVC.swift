@@ -140,7 +140,6 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
     }
     
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
-        print("performDrop")
         let destinationIndexPath: IndexPath
 
         if let indexPath = coordinator.destinationIndexPath {
@@ -153,11 +152,12 @@ extension ListVC: UITableViewDropDelegate {  // Note: Drag delegate stuff is in 
         
         for (row, item) in coordinator.items.enumerated() {
             let destinationIndexPathForItem = IndexPath(row: destinationIndexPath.row + row, section: destinationIndexPath.section)
-            
+
             // 1. Local drags
-            // This part is executed when dragging from PickVC; but not the "same table" part, because drags from the same table go through moveRow instead, at least for single items, but I don't get the table to accept multiple items, anyway.
+            // This part is executed when dragging from PickVC; but not the "same table" part, because drags from the same table go through moveRow instead, at least for single items, but I don't get the table to accept multiple items anyway.
             if let songID = item.dragItem.localObject as? SongID,
-               let song = songs.first(where: { $0.id == songID }) {
+               let song = band.songs.first(where: { $0.id == songID }) {
+                
                 // Is the drag coming from same table?
                 if let sourceIndexPath = item.sourceIndexPath {
                     store.moveSong(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPathForItem.row, in: list, in: band)
