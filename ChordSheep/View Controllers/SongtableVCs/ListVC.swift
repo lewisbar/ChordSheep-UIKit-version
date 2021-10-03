@@ -109,6 +109,9 @@ class ListVC: SongtableVC {
      override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         store.moveSong(fromIndex: fromIndexPath.row, toIndex: to.row, in: list, in: band)
         tableView.moveRow(at: fromIndexPath, to: to)
+         
+        // TODO: Update selection
+        // if fromIndexPath.row > to
      }
 }
 
