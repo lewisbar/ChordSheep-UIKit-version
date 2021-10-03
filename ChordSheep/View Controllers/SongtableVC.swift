@@ -111,11 +111,18 @@ class SongtableVC: UITableViewController, DatabaseDependent {
     }
     
     func databaseDidChange(changedItems: [DatabaseStorable]) {
-        // TODO: Surround this with DispatchQueue.main.async?
-        tableView.reloadData()
+        print("databaseDidChange\n\n\n-------")
+        
+        // TODO: The dragging sometimes doesn't start. Also, the order often gets messed up, which only seems to happen when dragging the first or last item. I think I may have mixed UI related code and model/database related code, and this is what makes the behavior unstable. I should try to clean up my code structure.
+        // DispatchQueue.main.async {
+            self.tableView.reloadData()
+        // }
         guard !songs.isEmpty else { storedSelection = nil; return }
         guard let storedSelection = storedSelection else { return }
-        tableView.selectRow(at: storedSelection, animated: false, scrollPosition: .none)
+        // DispatchQueue.main.async {
+            self.tableView.selectRow(at: storedSelection, animated: false, scrollPosition: .none)
+
+        // }
     }
     
     @objc func editSongButtonPressed() {

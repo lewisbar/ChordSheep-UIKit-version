@@ -111,7 +111,9 @@ class ListVC: SongtableVC {
         tableView.moveRow(at: fromIndexPath, to: to)
          
         // TODO: Update selection
-        // if fromIndexPath.row > to
+        // if fromIndexPath.row > to.row {
+        //     selection
+        // }
      }
 }
 
