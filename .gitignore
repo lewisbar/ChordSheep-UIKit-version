@@ -33,8 +33,8 @@ profile
 DerivedData
 *.hmap
 *.ipa
-ChordSheep.xcodeproj/xcuserdata/
-Pods/Pods.xcodeproj/xcuserdata/
+ChordSheep.xcodeproj/xcuserdata/lewisbar.xcuserdatad/xcschemes/xcschememanagement.plist
+Pods/Pods.xcodeproj/xcuserdata/lewisbar.xcuserdatad/xcschemes/xcschememanagement.plist
 
 # Bundler
 .bundle
