@@ -30,5 +30,35 @@ class ChordSheepTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
+    
+//    func testStyledText() {
+//        let text = """
+//            Song Title
+//            Artist
+//            
+//            Verse 1:
+//            First line
+//            Second line
+//            Third line
+//
+//            Pre-Chorus:
+//            This is heading
+//            Straight toward the chorus
+//            
+//            Chorus:
+//            Chorus line 1
+//            Second chorus line
+//
+//            Verse 2:
+//            First line
+//            Second line
+//            Third line
+//
+//            Bridge:
+//            This bridge
+//            Has two lines
+//            """
+//        let styledText = Style.styledText(for: text)
+//        let 
+//    }
 }

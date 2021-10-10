@@ -6,6 +6,8 @@
 //  Copyright © 2019 Lennart Wisbar. All rights reserved.
 //
 
+// This class is not used at the moment.
+
 import UIKit
 
 class ButtonHeader: UIStackView {

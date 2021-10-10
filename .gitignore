@@ -46,3 +46,6 @@ Pods/Pods.xcodeproj/xcuserdata/lewisbar.xcuserdatad/xcschemes/xcschememanagement
 *.ipa
 *.dSYM.zip
 *.dSYM
+
+# Secret
+GoogleService-Info.plist
