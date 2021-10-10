@@ -8,9 +8,20 @@
 
 import UIKit
 
-class TextViewVC: UIViewController, ModalBarDelegate {
-
+class TextViewVC: UIViewController, ModalBarDelegate, DatabaseDependent {
+    var store: DBStore
+    let band: Band
     let songTextView = UITextView()
+    
+    init(store: DBStore, band: Band) {
+        self.store = store
+        self.band = band
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +42,8 @@ class TextViewVC: UIViewController, ModalBarDelegate {
         
         let topBar = ModalBar(delegate: self)
         
-        songTextView.backgroundColor = .black
-        songTextView.textColor = .white
+        songTextView.backgroundColor = PaintCode.dark
+        songTextView.textColor = PaintCode.light
         
         let stackView = UIStackView(arrangedSubviews: [topBar, songTextView])
         stackView.axis = .vertical
@@ -68,6 +79,10 @@ class TextViewVC: UIViewController, ModalBarDelegate {
         NSLayoutConstraint.activate(constraints)
     }
 
+    func databaseDidChange(changedItems: [DatabaseStorable]) {
+        // Implement in subclasses
+    }
+    
     // ModalBarDelegate
     func cancelButtonPressed() {
         songTextView.resignFirstResponder()  // Otherwise the keyboard disappears a bit after the AddVC

@@ -44,3 +44,6 @@ DerivedData
 *.ipa
 *.dSYM.zip
 *.dSYM
+
+# Secret
+GoogleService-Info.plist

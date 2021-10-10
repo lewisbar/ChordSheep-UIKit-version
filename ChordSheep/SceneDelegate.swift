@@ -12,7 +12,8 @@ import FirebaseUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
 
     var window: UIWindow?
-
+    let store = DBStore()
+    // var user: User?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -35,7 +36,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
                 window.rootViewController = authVC
             } else {
                 // try! Auth.auth().signOut()
-                window.rootViewController = MainVC()
+                window.rootViewController = MainVC(store: store)
             }
 
             self.window = window
@@ -47,20 +48,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, FUIAuthDelegate {
         if let error = error {
             print(error.localizedDescription)
         }
+        guard let userAuth = authDataResult?.user else { fatalError("Sign in didn't work. No user returned.") }  // TODO: Notify user and go back to sign in page to try again
         
-        guard let user = authDataResult?.user else { fatalError("Sign in didn't work. No user returned.") }  // TODO: Notify user and go back to sign in page to try again
-        let db = Firestore.firestore()
-        if authDataResult?.additionalUserInfo?.isNewUser ?? false {
-            print("Storing uid")
-            // db.collection("users").addDocument(data: ["uid": user.uid])
-            db.collection("users").document(user.uid).setData(["name": user.displayName ?? ""])  // TODO: Prompt user to enter display name if there is none
+        // Store user in database if it's a new user
+        if let isNewUser = authDataResult?.additionalUserInfo?.isNewUser, isNewUser {
+            store.store(user: User(id: userAuth.uid, name: userAuth.displayName ?? ""))
         }
+//        _ = User(
+//                name: userAuth.displayName ?? "",
+//                uid: userAuth.uid,
+//                isNew: authDataResult?.additionalUserInfo?.isNewUser ?? false
+//            )  // This also creates the user in the DB if new.
+            // TODO: Prompt user to enter display name if there is none
         
         // Show MainVC
-        window!.rootViewController = MainVC()
+        window!.rootViewController = MainVC(store: store)
         window!.makeKeyAndVisible()
-        
-        // TODO: Display songs and lists from the users's database
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
