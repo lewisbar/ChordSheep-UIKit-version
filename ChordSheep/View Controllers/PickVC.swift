@@ -9,7 +9,7 @@
 import UIKit
 import MobileCoreServices
 
-protocol PickVCDelegate {
+protocol PickVCDelegate: AnyObject {
     func pickVCWasHidden()
     func picked(song: Song)
 }
@@ -17,7 +17,7 @@ protocol PickVCDelegate {
 class PickVC: UITableViewController {
     let store: DBStore
 
-    var delegate: PickVCDelegate?
+    weak var delegate: PickVCDelegate?
     var band: Band?
     
     
